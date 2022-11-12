@@ -7,6 +7,7 @@ import {login} from './api/Login';
 import 'react-native-gesture-handler';
 import {NavigationContainer} from '@react-navigation/native';
 import DrawerNavigator from './navigation/DrawerNavigator';
+import { NotificationCard } from './components';
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -26,18 +27,22 @@ export default function App() {
 
   return (
     <>
-      {isLoading ? (
-        <SafeAreaView>
-          <Image source={LoadingImage} style={styles.loadingImage} />
-        </SafeAreaView>
-      ) : !isLoggedIn ? (
-        <Text>Login Page</Text>
-      ) : (
-        <NavigationContainer>
-          <DrawerNavigator />
-        </NavigationContainer>
-      )}
+      <NotificationCard/>
     </>
+   
+    // <>
+    //   {isLoading ? (
+    //     <SafeAreaView>
+    //       <Image source={LoadingImage} style={styles.loadingImage} />
+    //     </SafeAreaView>
+    //   ) : !isLoggedIn ? (
+    //     <Text>Login Page</Text>
+    //   ) : (
+    //     <NavigationContainer>
+    //       <DrawerNavigator />
+    //     </NavigationContainer>
+    //   )}
+    // </>
   );
 }
 
