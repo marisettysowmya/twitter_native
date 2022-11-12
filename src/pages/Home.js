@@ -16,6 +16,7 @@ import {FeedString, SortTypes, SortTypeString} from '../constants/Feed';
 import {useIsFocused} from '@react-navigation/native';
 
 // TODO - Add Sort Modal
+// UsecrollTOtop
 
 // const SortDropdown = props => {
 //   const {toggleDropdown} = props;
