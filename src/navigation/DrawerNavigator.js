@@ -3,6 +3,7 @@ import React from 'react';
 
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import TabNavigator from './TabNavigator';
+import {ProfilePage, SettingsPage} from '../pages';
 
 const Drawer = createDrawerNavigator();
 
@@ -14,9 +15,10 @@ const DrawerNavigator = () => {
   return (
     <Drawer.Navigator
       screenOptions={{headerShown: false}}
-      initialRouteName="Contact">
-      <Drawer.Screen name="Home" component={TabNavigator1} />
-      <Drawer.Screen name="Contact" component={TabNavigator} />
+      initialRouteName="Home">
+      <Drawer.Screen name="Home" component={TabNavigator} />
+      <Drawer.Screen name="Profile" component={ProfilePage} />
+      <Drawer.Screen name="Settings" component={SettingsPage} />
     </Drawer.Navigator>
   );
 };
