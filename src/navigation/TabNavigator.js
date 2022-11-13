@@ -3,7 +3,7 @@ import {Image, StyleSheet} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {BookMarkPage, Home, NotificationsPage} from '../pages';
 import {ProfilePicture} from '../assets';
-import {MessagesStackNavigator} from './StackNavigator';
+import {StackNavigator} from './StackNavigator';
 
 const Tab = createBottomTabNavigator();
 
@@ -37,7 +37,7 @@ const BottomTabNavigator = () => {
       />
       <Tab.Screen
         name="MessagesPage"
-        component={MessagesStackNavigator}
+        component={StackNavigator}
         options={{
           tabBarLabel: 'Messages',
           tabBarIcon: ({}) => (

@@ -1,4 +1,7 @@
 export const imageProfile = require('./contimage.jpg');
+export const CloseIcon = require('./close_button.png');
+export const BackButton = require('./back-button.png');
+export const AddIcon = require('./add-icon.png');
 export const imageTweet = require('./firsttweet.jpg');
 export const imageReply = require('./reply.png');
 export const imageRetweet = require('./retweet.png');

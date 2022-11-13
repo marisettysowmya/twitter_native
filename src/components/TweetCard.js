@@ -89,6 +89,7 @@ const styles = StyleSheet.create({
     borderColor: 'gray',
     flexDirection: 'row',
     marginVertical: 5,
+    margin: 5,
   },
   profileImage: {
     height: 70,
