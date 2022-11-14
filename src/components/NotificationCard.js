@@ -9,7 +9,6 @@ const NotificationCard = () => {
       <TouchableOpacity style={styles.notificationContainer}>
         <Image source={TwitterIcon} style={styles.imageTwitter}></Image>
         <View style={styles.notificationDetails}>
-          {/* <Image source={imageProfile} style={styles.notificationImage}></Image> */}
           <Text style={styles.notificationText}>
             Your Verification application was rejected
           </Text>

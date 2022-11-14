@@ -1,6 +1,7 @@
 import { View, Text, StyleSheet, TouchableOpacity, Image, TextInput, Dimensions } from 'react-native'
 import React from 'react'
 import { imageProfile, imageDefault, imagePlaceholder } from '../assets'
+import * as ImagePicker from 'react-native-image-picker';
 
 let profilepic = 'set';
 let isVerified = 'set';
@@ -8,6 +9,68 @@ const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
 
 const AddTweet = () => {
+
+  launchCamera = () => {
+    let options = {
+      storageOptions: {
+        skipBackup: true,
+        path: 'images',
+      },
+    };
+    ImagePicker.launchCamera(options, (response) => {
+      console.log('Response = ', response);
+
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      } else if (response.customButton) {
+        console.log('User tapped custom button: ', response.customButton);
+        alert(response.customButton);
+      } else {
+        const source = { uri: response.uri };
+        console.log('response', JSON.stringify(response));
+        this.setState({
+          filePath: response,
+          fileData: response.data,
+          fileUri: response.uri
+        });
+      }
+    });
+
+  }
+
+
+   launchImageLibrary = () => {
+    let options = {
+      storageOptions: {
+        skipBackup: true,
+        path: 'images',
+      },
+    };
+    ImagePicker.launchImageLibrary(options, (response) => {
+      console.log('Response = ', response);
+
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      } else if (response.customButton) {
+        console.log('User tapped custom button: ', response.customButton);
+        alert(response.customButton);
+      } else {
+        const source = { uri: response.uri };
+        console.log('response', JSON.stringify(response));
+        this.setState({
+          filePath: response,
+          fileData: response.data,
+          fileUri: response.uri
+        });
+      }
+    });
+
+  }
+
   return (
     <View style = {styles.container}>
       
@@ -27,7 +90,7 @@ const AddTweet = () => {
         <TextInput  placeholder="What's happening?" multiline style={styles.tweetInput} numberOfLines={8}></TextInput>
         </View>
       </View>
-      <TouchableOpacity style = {{marginLeft: 65, width: 65}}>
+      <TouchableOpacity style = {{marginLeft: 65, width: 65}} onPress={this.launchImageLibrary}>
       <Image style = {styles.insertImage} source = {imagePlaceholder}></Image>
       </TouchableOpacity>
       </View>

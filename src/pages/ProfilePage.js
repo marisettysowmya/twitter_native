@@ -54,7 +54,7 @@ export default function ProfilePage() {
                 borderWidth: 0.5,
                 marginRight: 20,
                 paddingLeft: 15,
-                paddingRight: 10,
+                paddingRight: 13,
                 paddingVertical: 5,
                 color: 'black',
                 fontWeight: 'bold',
