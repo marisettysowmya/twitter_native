@@ -7,7 +7,9 @@ import {login} from './api/Login';
 import 'react-native-gesture-handler';
 import {NavigationContainer} from '@react-navigation/native';
 import DrawerNavigator from './navigation/DrawerNavigator';
-import { NotificationCard } from './components';
+import { Login, NotificationCard, TweetCard } from './components';
+import { ProfilePage } from './pages';
+import AddTweet from './pages/AddTweet';
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -27,7 +29,11 @@ export default function App() {
 
   return (
     <>
-      <NotificationCard/>
+    {/* <Login /> */}
+      {/* <NotificationCard /> */}
+      {/* <TweetCard /> */}
+      <ProfilePage />
+      {/* <AddTweet /> */}
     </>
    
     // <>
