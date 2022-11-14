@@ -8,7 +8,7 @@ async function getToken() {
 }
 
 export const getUserNotifications = async data => {
-  const {userId, token} = getToken();
+  const {userId, token} = await getToken();
 
   return new Promise(resolve =>
     setTimeout(resolve, 5000, [

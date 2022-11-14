@@ -1,6 +1,7 @@
 import {SortTypes} from '../constants/Feed';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {AsyncStorageConstants} from '../constants/AsyncStorageConstants';
+import Axios from './Axios';
 
 async function getToken() {
   const userId = await AsyncStorage.getItem(AsyncStorageConstants.USER_ID);
@@ -9,18 +10,15 @@ async function getToken() {
 }
 
 export const getUserFeed = async data => {
-  const {userId, token} = getToken();
-  return new Promise(resolve =>
-    setTimeout(resolve, 5000, [
-      {id: 1, text: 'something is here'},
-      {id: 2, text: 'something is here1'},
-      {id: 3, text: 'something is here2'},
-    ]),
-  );
+  const {userId, token} = await getToken();
+
+  return Axios.get(`/user/${userId}/feeds`).then(res => {
+    return res.data;
+  });
 };
 
 export const getSortedFeed = async ({param}) => {
-  const {userId, token} = getToken();
+  const {userId, token} = await getToken();
 
   if (param === SortTypes.DATE) {
     const feed = await getUserFeed(userId);
@@ -39,7 +37,7 @@ export const getSortedFeed = async ({param}) => {
 };
 
 export const getUserBookmarkedFeed = async data => {
-  const {userId, token} = getToken();
+  const {userId, token} = await getToken();
 
   return new Promise(resolve =>
     setTimeout(resolve, 5000, [

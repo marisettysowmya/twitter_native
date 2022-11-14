@@ -10,6 +10,7 @@ import {Login} from './pages/index';
 import {AsyncStorageConstants} from './constants/AsyncStorageConstants';
 import AddTweet from './pages/AddTweet';
 import {TweetCard} from './components';
+import AdminDrawerNavigator from './navigation/AdminDrawerNavigator';
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
