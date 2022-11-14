@@ -2,7 +2,7 @@ import React from 'react';
 import {Image, StyleSheet} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {BookMarkPage, Home, NotificationsPage} from '../pages';
-import {ProfilePicture} from '../assets';
+import {bellIcon, Bookmark, HomeIcon, MessageIcon, NotificationIcon, ProfilePicture} from '../assets';
 import {StackNavigator} from './StackNavigator';
 
 const Tab = createBottomTabNavigator();
@@ -21,7 +21,7 @@ const BottomTabNavigator = () => {
         options={{
           tabBarLabel: 'Home',
           tabBarIcon: ({}) => (
-            <Image source={ProfilePicture} style={styles.icon} />
+            <Image source={HomeIcon} style={styles.icon} />
           ),
         }}
       />
@@ -31,7 +31,7 @@ const BottomTabNavigator = () => {
         options={{
           tabBarLabel: 'Notifications',
           tabBarIcon: ({}) => (
-            <Image source={ProfilePicture} style={styles.icon} />
+            <Image source={NotificationIcon} style={styles.icon} />
           ),
         }}
       />
@@ -41,7 +41,7 @@ const BottomTabNavigator = () => {
         options={{
           tabBarLabel: 'Messages',
           tabBarIcon: ({}) => (
-            <Image source={ProfilePicture} style={styles.icon} />
+            <Image source={MessageIcon} style={styles.icon} />
           ),
         }}
       />
@@ -51,7 +51,7 @@ const BottomTabNavigator = () => {
         options={{
           tabBarLabel: 'Bookmarks',
           tabBarIcon: ({}) => (
-            <Image source={ProfilePicture} style={styles.icon} />
+            <Image source={Bookmark} style={styles.icon} />
           ),
         }}
       />
