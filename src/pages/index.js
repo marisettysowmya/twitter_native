@@ -8,6 +8,9 @@ import SettingsPage from './SettingsPage';
 import Login from './Login';
 import ChatPage from './ChatPage';
 import AddTweetPage from './AddTweetPage';
+import SingleTweetPage from './SingleTweetPage';
+import AdminAllUsersPage from './AdminAllUsersPage';
+import AdminBlueTickRequestPage from './AdminBlueTickRequestPage';
 
 export {
   Home,
@@ -20,4 +23,7 @@ export {
   Login,
   ChatPage,
   AddTweetPage,
+  SingleTweetPage,
+  AdminAllUsersPage,
+  AdminBlueTickRequestPage,
 };

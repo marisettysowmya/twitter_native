@@ -2,12 +2,14 @@ import {Image, SafeAreaView, StyleSheet, Text} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {LoadingImage} from './assets';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import AsyncStorageConstants from './constants/AsyncStorageConstants';
 import {login} from './api/Login';
 import 'react-native-gesture-handler';
 import {NavigationContainer} from '@react-navigation/native';
 import DrawerNavigator from './navigation/DrawerNavigator';
 import {Login} from './pages/index';
+import {AsyncStorageConstants} from './constants/AsyncStorageConstants';
+import AddTweet from './pages/AddTweet';
+import {TweetCard} from './components';
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
