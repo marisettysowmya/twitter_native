@@ -1,6 +1,17 @@
-import { View, Text, StyleSheet, TouchableOpacity, Image, TextInput, Dimensions } from 'react-native'
-import React from 'react'
-import { imageProfile, imageDefault, imagePlaceholder } from '../assets'
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+  TextInput,
+  Dimensions,
+  PermissionsAndroid,
+  KeyboardAvoidingView,
+} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {imageProfile, imageDefault, imagePlaceholder, imageCamera} from '../assets';
+import * as ImagePicker from 'react-native-image-picker';
 
 let profilepic = 'set';
 let isVerified = 'set';
@@ -8,35 +19,64 @@ const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
 
 const AddTweet = () => {
-  launchCamera = () => {
+  const [filePath, setFilePath] = useState({
+    data: '',
+    uri: '',
+  });
+  const [fileData, setFileData] = useState('');
+  const [fileUri, setFileUri] = useState('');
+
+  useEffect(() => {
+    requestCameraPermission();
+  }, []);
+
+  const requestCameraPermission = async () => {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.CAMERA,
+        {
+          title: "App Camera Permission",
+          message:"App needs access to your camera ",
+          buttonNeutral: "Ask Me Later",
+          buttonNegative: "Cancel",
+          buttonPositive: "OK"
+        }
+      );
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        this.ImagePicker
+      } else {
+        console.log("Camera permission denied");
+      }
+    } catch (err) {
+      console.warn(err);
+    }
+  };
+
+  cameraLaunch = () => {
     let options = {
       storageOptions: {
         skipBackup: true,
         path: 'images',
       },
     };
-    ImagePicker.launchCamera(options, (response) => {
-      console.log('Response = ', response);
-
-      if (response.didCancel) {
+    ImagePicker.launchCamera(options, (res) => {
+      // console.log('Response = ', res);
+      if (res.didCancel) {
         console.log('User cancelled image picker');
-      } else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
-      } else if (response.customButton) {
-        console.log('User tapped custom button: ', response.customButton);
-        alert(response.customButton);
+      } else if (res.error) {
+        console.log('ImagePicker Error: ', res.error);
+      } else if (res.customButton) {
+        console.log('User tapped custom button: ', res.customButton);
+        alert(res.customButton);
       } else {
-        const source = { uri: response.uri };
-        console.log('response', JSON.stringify(response));
-        this.setState({
-          filePath: response,
-          fileData: response.data,
-          fileUri: response.uri
-        });
+        // console.log('response', JSON.stringify(res));
+        setFilePath(res);
+        setFileData(res.data);
+        setFileUri(res.assets[0].uri);
       }
     });
+}
 
-  }
   launchImageLibrary = () => {
     let options = {
       storageOptions: {
@@ -44,116 +84,152 @@ const AddTweet = () => {
         path: 'images',
       },
     };
-    ImagePicker.launchImageLibrary(options, (response) => {
-      console.log('Response = ', response);
+    ImagePicker.launchImageLibrary(options, response => {
+      // console.log('Response = ', response);
 
       if (response.didCancel) {
         console.log('User cancelled image picker');
       } else if (response.error) {
         console.log('ImagePicker Error: ', response.error);
-      } else if (response.customButton) {
-        console.log('User tapped custom button: ', response.customButton);
-        alert(response.customButton);
       } else {
-        const source = { uri: response.uri };
-        console.log('response', JSON.stringify(response));
-        this.setState({
-          filePath: response,
-          fileData: response.data,
-          fileUri: response.uri
-        });
+        const source = {uri: response.uri};
+        // console.log('response', JSON.stringify(response.assets[0].uri));
+
+        setFilePath(response);
+        setFileData(response.data);
+        setFileUri(response.assets[0].uri);
       }
     });
+  };
 
-  }
   return (
-    <View style = {styles.container}>
-      
-      <View style = {styles.cancelAndTweet}>
-        <TouchableOpacity style = {styles.cancelButton}>
-            <Text style = {{fontSize: 25, color: 'black'}}>X</Text>
+    <KeyboardAvoidingView style={styles.container}>
+      <View style={styles.cancelAndTweet}>
+        <TouchableOpacity style={styles.cancelButton}>
+          <Text style={{fontSize: 25, color: 'black'}}>X</Text>
         </TouchableOpacity>
-        <TouchableOpacity style = {styles.tweetButton}>
-            <Text style = {{fontSize: 20, color: 'white', fontWeight: 'bold'}}>Tweet</Text>
+        <TouchableOpacity style={styles.tweetButton}>
+          <Text style={{fontSize: 20, color: 'white', fontWeight: 'bold'}}>
+            Tweet
+          </Text>
         </TouchableOpacity>
       </View>
-      <View  style = {styles.tweetDetails}>
-      <Image
-        style={styles.profileImage}
-        source={profilepic == 'set' ? imageProfile : imageDefault}></Image>
+      <View style={styles.tweetDetails}>
+        <Image
+          style={styles.profileImage}
+          source={profilepic == 'set' ? imageProfile : imageDefault}></Image>
         <View>
-        <TextInput  placeholder="What's happening?" multiline style={styles.tweetInput} numberOfLines={8}></TextInput>
+          <TextInput
+            placeholder="What's happening?"
+            multiline
+            style={styles.tweetInput}
+            numberOfLines={8}></TextInput>
         </View>
       </View>
-      <TouchableOpacity style = {{marginLeft: 65, width: 65}}>
-      <Image style = {styles.insertImage} source = {imagePlaceholder}></Image>
+      <View>
+      <Image
+            source={ (fileUri) ? {uri:fileUri} : null }
+            style={styles.addTweetImage}
+          />
+      </View>
+      <View style={styles.iconsContainer}>
+      <TouchableOpacity
+        style={{marginLeft: 65, width: 65}}
+        onPress={this.launchImageLibrary}>
+        <Image style={styles.insertImage} source={imagePlaceholder}></Image>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={{marginLeft: 65, width: 65}}
+        onPress={this.cameraLaunch}>
+        <Image style={styles.cameraImage} source={imageCamera}></Image>
       </TouchableOpacity>
       </View>
-  )
-}
+      
+    </KeyboardAvoidingView>
+  );
+};
 
-const styles = StyleSheet.create ({
+const styles = StyleSheet.create({
+  container: {},
 
-    container: {
+  cancelAndTweet: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 20,
+    alignItems: 'center',
+  },
 
-    },
+  cancelButton: {
+    marginLeft: 20,
+  },
 
-    cancelAndTweet: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginTop: 20,
-        alignItems: 'center'
-    },
+  tweetButton: {
+    marginRight: 20,
+    borderRadius: 20,
+    paddingHorizontal: 20,
+    paddingVertical: 5,
+    backgroundColor: 'rgba(42,169,224,255)',
+    justifyContent: 'center',
+  },
 
-    cancelButton: {
-        marginLeft:20,
-    },
+  tweetDetails: {
+    flexDirection: 'row',
+    marginTop: 25,
+    marginLeft: 5,
+  },
 
-    tweetButton: {
-        marginRight: 20,
-        borderRadius:20,
-        paddingHorizontal: 20,
-        paddingVertical:5,
-        backgroundColor: 'rgba(42,169,224,255)',
-        justifyContent: 'center',
-    },
+  profileImage: {
+    height: 50,
+    width: 50,
+    borderRadius: 25,
+    marginVertical: 10,
+    marginLeft: 10,
+  },
 
-    tweetDetails: {
-        flexDirection: 'row',
-        marginTop:25,
-        marginLeft:5,
-    },
+  tweetInput: {
+    width: 300,
+    margin: 12,
+    color: 'black',
+    marginLeft: 10,
+    marginBottom: 20,
+    marginTop: 20,
+    fontSize: 20,
+  },
 
-    profileImage: {
-        height: 50,
-        width: 50,
-        borderRadius: 25,
-        marginVertical: 10,
-        marginLeft: 10,
-      },
+  tweetBody: {
+    justifyContent: 'space-between',
+  },
 
-      tweetInput: {
-        width: 300,
-        margin: 12,
-        color: 'black',
-        marginLeft: 10,
-        marginBottom: 20,
-        marginTop: 20,
-        fontSize: 20,
-      },
+  addTweetImage: {
+    width: 250,
+    height: 280,
+    borderColor: 'black',
+    // borderWidth: 1,
+    marginLeft: 70,
+    // alignSelf: 'center',
+    borderRadius: 10
+  },
 
-      tweetBody: {
-        justifyContent: 'space-between'
-      },
+  iconsContainer: {
+    flexDirection: 'row'
+  },
 
-      insertImage: {
-        height: 50,
-        width: 50,
-        resizeMode: 'contain',
-        marginVertical: 10,
-        marginLeft: 5,
-      }
+  insertImage: {
+    height: 50,
+    width: 50,
+    resizeMode: 'contain',
+    marginVertical: 10,
+    marginLeft: 5,
+  },
 
-})
+  cameraImage: {
+    height: 50,
+    width: 50,
+    resizeMode: 'contain',
+    marginVertical: 10,
+    marginLeft: 5,
+  },
 
-export default AddTweet
+});
+
+export default AddTweet;

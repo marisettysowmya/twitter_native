@@ -27,4 +27,6 @@ export const imageBirthday = require('./birthday6.png');
 
 export const imageJoined = require('./joined.png');
 
-export const imagePlaceholder = require('./imageIcon.png');
+export const imagePlaceholder = require("./imageIcon.png")
+
+export const imageCamera = require("./camera2.png")
