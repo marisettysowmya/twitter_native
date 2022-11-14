@@ -6,9 +6,7 @@ export default function AdminDrawerNavigator() {
   const Drawer = createDrawerNavigator();
 
   return (
-    <Drawer.Navigator
-      screenOptions={{headerShown: false}}
-      initialRouteName="Admin Requests Page">
+    <Drawer.Navigator screenOptions={{headerShown: false}}>
       <Drawer.Screen
         name="Admin ALl Users Page"
         component={AdminAllUsersPage}

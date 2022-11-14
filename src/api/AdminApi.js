@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {AsyncStorageConstants} from '../constants/AsyncStorageConstants';
+import Axios from './Axios';
 
 async function getToken() {
   const userId = await AsyncStorage.getItem(AsyncStorageConstants.USER_ID);
@@ -10,8 +11,9 @@ async function getToken() {
 export const getAllUsers = async => {
   const {userId, token} = getToken();
 
+  Axios.get('/user').then(data => console.log(data));
   return new Promise(resolve =>
-    setTimeout(resolve, 5000, [
+    setTimeout(resolve, 100, [
       {id: 1, text: 'something is here'},
       {id: 2, text: 'something is here1'},
       {id: 3, text: 'something is here2'},

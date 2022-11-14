@@ -8,7 +8,6 @@ import {NavigationContainer} from '@react-navigation/native';
 import DrawerNavigator from './navigation/DrawerNavigator';
 import {Login} from './pages/index';
 import {AsyncStorageConstants} from './constants/AsyncStorageConstants';
-import AdminDrawerNavigator from './navigation/AdminDrawerNavigator';
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);

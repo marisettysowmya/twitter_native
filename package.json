@@ -2,6 +2,7 @@
   "name": "twitter_native",
   "version": "0.0.1",
   "private": true,
+  "proxy": "https://d28c-182-156-218-98.in.ngrok.io",
   "scripts": {
     "android": "react-native run-android",
     "ios": "react-native run-ios",
@@ -16,6 +17,7 @@
     "@react-navigation/drawer": "^6.5.0",
     "@react-navigation/native": "^6.0.13",
     "@react-navigation/stack": "^6.3.4",
+    "axios": "^0.27.2",
     "react": "18.1.0",
     "react-native": "0.70.5",
     "react-native-date-picker": "^4.2.6",
