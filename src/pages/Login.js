@@ -112,8 +112,9 @@ const styles = StyleSheet.create({
 
     logoImage: {
         marginTop:20,
-        height:100,
-        width:120,
+        height:110,
+        width:110,
+        resizeMode: 'contain'
     },
   
     button: {

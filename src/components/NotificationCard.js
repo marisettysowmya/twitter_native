@@ -1,8 +1,9 @@
 import {Text, View, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import React from 'react';
-import {TwitterIcon, imageProfile, bellIcon} from '../assets';
+import {TwitterIcon, imageProfile, bellIcon, imageDefault} from '../assets';
 
 const NotificationCard = () => {
+  let profilepic = 'set';
   return (
     <View>
       <TouchableOpacity style={styles.notificationContainer}>
@@ -17,7 +18,9 @@ const NotificationCard = () => {
       <TouchableOpacity style={styles.notificationContainer}>
         <Image source={bellIcon} style={styles.imageTwitter}></Image>
         <View style={styles.notificationDetails}>
-          <Image source={imageProfile} style={styles.notificationImage}></Image>
+          <Image
+            source={profilepic == 'set' ? imageProfile : imageDefault}
+            style={styles.notificationImage}></Image>
           <Text style={styles.notificationText}>
             New Tweet notifications from Ganesh
           </Text>
@@ -49,7 +52,8 @@ const styles = StyleSheet.create({
 
   notificationText: {
     color: 'black',
-    marginTop: 5
+    marginTop: 5,
+    marginRight: 100,
   },
 
   notificationImage: {
