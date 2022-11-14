@@ -8,21 +8,62 @@ import {
   ScrollView,
   Animated,
   SafeAreaView,
+  Alert,
 } from 'react-native';
 import {imageBanner, imageBirthday, imageJoined, imageProfile} from '../assets';
 
 import React, {useEffect, useState} from 'react';
 import {TextInput} from 'react-native-gesture-handler';
+import {updateUserDetails} from '../api/User';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {AsyncStorageConstants} from '../constants/AsyncStorageConstants';
+import {uploadImageToAWS} from '../api/AWSImageApi';
 
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
 
-export default function EditProfilePage() {
+export default function EditProfilePage({navigation}) {
   const [name, setName] = useState('');
   const [handle, setHandle] = useState('');
   const [bio, setBio] = useState('');
+  const [imageData, setImageData] = useState({});
 
-  const handleSubmit = () => {};
+  const handleSubmit = async () => {
+    const user = await AsyncStorage.getItem(AsyncStorageConstants.USER_DETAILS);
+    const updatedUser = await updateUserDetails({...user, name, handle, bio});
+    if (!updatedUser) {
+      Alert.alert('Handle already exists.');
+      setHandle('');
+      return;
+    }
+    await AsyncStorage.setItem(
+      AsyncStorageConstants.USER_DETAILS,
+      JSON.stringify(updatedUser),
+    );
+    navigation.goBack();
+  };
+
+  const handleProfilePicUpdate = async () => {
+    const imageUrl = await uploadImageToAWS(imageData);
+    const user = await AsyncStorage.getItem(AsyncStorageConstants.USER_DETAILS);
+    const updatedUser = await updateUserDetails({...user, avatar: imageUrl});
+    await AsyncStorage.setItem(
+      AsyncStorageConstants.USER_DETAILS,
+      JSON.stringify(updatedUser),
+    );
+    navigation.goBack();
+  };
+
+  const handleBackgroundPicUpdate = async () => {
+    const imageUrl = await uploadImageToAWS(imageData);
+    const user = await AsyncStorage.getItem(AsyncStorageConstants.USER_DETAILS);
+    const updatedUser = await updateUserDetails({...user, bgPic: imageUrl});
+    await AsyncStorage.setItem(
+      AsyncStorageConstants.USER_DETAILS,
+      JSON.stringify(updatedUser),
+    );
+    navigation.goBack();
+  };
 
   return (
     <View style={styles.editProfileContainer}>
@@ -40,7 +81,8 @@ export default function EditProfilePage() {
           value={name}
           onChangeText={name => {
             setName(name);
-          }}></TextInput>
+          }}
+        />
       </View>
       <View style={styles.handleContainer}>
         <Text style={{fontSize: 20}}>Handle</Text>
@@ -50,7 +92,8 @@ export default function EditProfilePage() {
           value={handle}
           onChangeText={handle => {
             setHandle(handle);
-          }}></TextInput>
+          }}
+        />
       </View>
       <View style={styles.bioContainer}>
         <Text style={{fontSize: 20}}>Bio</Text>
@@ -60,7 +103,8 @@ export default function EditProfilePage() {
           value={bio}
           onChangeText={bio => {
             setBio(bio);
-          }}></TextInput>
+          }}
+        />
       </View>
       <TouchableOpacity
         style={styles.saveButton}

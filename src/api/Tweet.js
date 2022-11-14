@@ -36,3 +36,11 @@ export const postRetweet = async (tweetId, tweet) => {
     return res.data;
   });
 };
+
+export const postTweet = async tweet => {
+  const {userId, token} = await getToken();
+  return Axios.post(`/${userId}/tweets`, {tweet}).then(res => {
+    console.log(res.data);
+    return res.data;
+  });
+};

@@ -11,7 +11,6 @@ async function getToken() {
 
 export const getUserFeed = async data => {
   const {userId, token} = await getToken();
-
   return Axios.get(`/user/${userId}/feeds`).then(res => {
     return res.data;
   });
