@@ -8,6 +8,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import DrawerNavigator from './navigation/DrawerNavigator';
 import {Login} from './pages/index';
 import {AsyncStorageConstants} from './constants/AsyncStorageConstants';
+import AdminDrawerNavigator from './navigation/AdminDrawerNavigator';
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -26,8 +27,7 @@ export default function App() {
 
   return (
     <>
-      <AddTweet />
-      {/* {isLoading ? (
+      {isLoading ? (
         <SafeAreaView>
           <Image source={LoadingImage} style={styles.loadingImage} />
         </SafeAreaView>
@@ -37,7 +37,7 @@ export default function App() {
         <NavigationContainer>
           <DrawerNavigator />
         </NavigationContainer>
-      )} */}
+      )}
     </>
   );
 }

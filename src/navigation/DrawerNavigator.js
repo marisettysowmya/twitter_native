@@ -1,15 +1,9 @@
-import {Text} from 'react-native';
 import React from 'react';
-
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import TabNavigator from './TabNavigator';
 import {EditProfilePage, ProfilePage, SettingsPage} from '../pages';
 
 const Drawer = createDrawerNavigator();
-
-const TabNavigator1 = () => {
-  return <Text>Tab naivgaor screen 2</Text>;
-};
 
 const DrawerNavigator = () => {
   return (
