@@ -137,8 +137,7 @@ export default function ProfilePage() {
         </View>
       </ScrollView>
 
-      <TouchableOpacity
-        style={styles.addButton}>
+      <TouchableOpacity style={styles.addButton}>
         <Text
           style={{fontSize: 50, margin: -7, color: 'white', fontWeight: '100'}}>
           +

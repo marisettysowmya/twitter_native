@@ -1,4 +1,15 @@
-export const getAllUserMessages = async userId => {
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {AsyncStorageConstants} from '../constants/AsyncStorageConstants';
+
+async function getToken() {
+  const userId = await AsyncStorage.getItem(AsyncStorageConstants.USER_ID);
+  const token = await AsyncStorage.getItem(AsyncStorageConstants.TOKEN);
+  return {userId, token};
+}
+
+export const getAllUserMessages = async data => {
+  const {userId, token} = getToken();
+
   return new Promise(resolve =>
     setTimeout(resolve, 5000, [
       {text: 'something is here'},
@@ -8,7 +19,9 @@ export const getAllUserMessages = async userId => {
   );
 };
 
-export const getSingleChatMessages = async userId => {
+export const getSingleChatMessages = async data => {
+  const {userId, token} = getToken();
+
   return new Promise(resolve =>
     setTimeout(resolve, 5000, [
       {text: 'something is here'},
@@ -19,5 +32,7 @@ export const getSingleChatMessages = async userId => {
 };
 
 export const postMessage = async data => {
+  const {userId, token} = getToken();
+
   return new Promise(resolve => setTimeout(resolve, 5000, true));
 };

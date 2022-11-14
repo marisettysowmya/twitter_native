@@ -1,31 +1,46 @@
 import {Text, View, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import React from 'react';
 import {TwitterIcon, imageProfile, bellIcon, imageDefault} from '../assets';
+import {NotificationType} from '../constants/Feed';
 
-const NotificationCard = () => {
-  let profilepic = 'set';
+const props = {
+  data: {
+    type: NotificationType.RETWEET,
+    text: ' Your Verification application was rejected',
+    text1: 'New Tweet notifications from Ganesh',
+    profilePic: 'set',
+  },
+};
+const NotificationCard = ({navigation}) => {
   return (
     <View>
-      <TouchableOpacity style={styles.notificationContainer}>
-        <Image source={TwitterIcon} style={styles.imageTwitter}></Image>
-        <View style={styles.notificationDetails}>
-          {/* <Image source={imageProfile} style={styles.notificationImage}></Image> */}
-          <Text style={styles.notificationText}>
-            Your Verification application was rejected
-          </Text>
+      {props.data.type === NotificationType.BLUE_TICK ? (
+        <View style={styles.notificationContainer}>
+          <Image source={TwitterIcon} style={styles.imageTwitter} />
+          <View style={styles.notificationDetails}>
+            <Text style={styles.notificationText}>{props.data.text}</Text>
+          </View>
         </View>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.notificationContainer}>
-        <Image source={bellIcon} style={styles.imageTwitter}></Image>
-        <View style={styles.notificationDetails}>
-          <Image
-            source={profilepic == 'set' ? imageProfile : imageDefault}
-            style={styles.notificationImage}></Image>
-          <Text style={styles.notificationText}>
-            New Tweet notifications from Ganesh
-          </Text>
-        </View>
-      </TouchableOpacity>
+      ) : (
+        <TouchableOpacity
+          style={styles.notificationContainer}
+          onPress={() =>
+            navigation.navigate('MessagesPage', {
+              screen: 'Single Tweet Page',
+            })
+          }>
+          <Image source={bellIcon} style={styles.imageTwitter}></Image>
+          <View style={styles.notificationDetails}>
+            <Image
+              source={
+                props.data.profilePic === 'set' ? imageProfile : imageDefault
+              }
+              style={styles.notificationImage}
+            />
+            <Text style={styles.notificationText}>{props.data.text1}</Text>
+          </View>
+        </TouchableOpacity>
+      )}
     </View>
   );
 };
