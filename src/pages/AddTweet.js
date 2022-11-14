@@ -1,7 +1,6 @@
 import { View, Text, StyleSheet, TouchableOpacity, Image, TextInput, Dimensions } from 'react-native'
 import React from 'react'
 import { imageProfile, imageDefault, imagePlaceholder } from '../assets'
-import * as ImagePicker from 'react-native-image-picker';
 
 let profilepic = 'set';
 let isVerified = 'set';
@@ -9,7 +8,6 @@ const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
 
 const AddTweet = () => {
-
   launchCamera = () => {
     let options = {
       storageOptions: {
@@ -39,9 +37,7 @@ const AddTweet = () => {
     });
 
   }
-
-
-   launchImageLibrary = () => {
+  launchImageLibrary = () => {
     let options = {
       storageOptions: {
         skipBackup: true,
@@ -70,7 +66,6 @@ const AddTweet = () => {
     });
 
   }
-
   return (
     <View style = {styles.container}>
       
@@ -90,7 +85,7 @@ const AddTweet = () => {
         <TextInput  placeholder="What's happening?" multiline style={styles.tweetInput} numberOfLines={8}></TextInput>
         </View>
       </View>
-      <TouchableOpacity style = {{marginLeft: 65, width: 65}} onPress={this.launchImageLibrary}>
+      <TouchableOpacity style = {{marginLeft: 65, width: 65}}>
       <Image style = {styles.insertImage} source = {imagePlaceholder}></Image>
       </TouchableOpacity>
       </View>
