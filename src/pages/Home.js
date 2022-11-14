@@ -9,7 +9,13 @@ import {
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {LoadingImage, ProfilePicture, SortIcon, TwitterIcon} from '../assets';
+import {
+  AddIcon,
+  LoadingImage,
+  ProfilePicture,
+  SortIcon,
+  TwitterIcon,
+} from '../assets';
 import {TweetCard} from '../components';
 import {getSortedFeed, getUserFeed} from '../api/Feed';
 import {FeedString, SortTypes, SortTypeString} from '../constants/Feed';
@@ -44,7 +50,7 @@ import {useIsFocused} from '@react-navigation/native';
 // };
 
 const SortDropdown = props => {
-  const {showDropdown, toggleDropdown} = props;
+  const {showDropdown, toggleDropdown, fetchSortedFeed} = props;
 
   return (
     <View style={styles.sortDropdown}>
@@ -57,7 +63,7 @@ const SortDropdown = props => {
         <Text
           styles={styles.sortButton}
           onPress={() => {
-            getSortedFeed(SortTypes.DATE);
+            fetchSortedFeed(SortTypes.DATE);
             toggleDropdown(false);
           }}>
           {SortTypeString.DATE}
@@ -65,7 +71,7 @@ const SortDropdown = props => {
         <Text
           styles={styles.sortButton}
           onPress={() => {
-            getSortedFeed(SortTypes.POPULARITY);
+            fetchSortedFeed(SortTypes.POPULARITY);
             toggleDropdown(false);
           }}>
           {SortTypeString.POPULARITY}
@@ -121,6 +127,7 @@ export default function Home({navigation}) {
             <SortDropdown
               toggleDropdown={toggleDropdown}
               showDropdown={showDropdown}
+              fetchSortedFeed={fetchSortedFeed}
             />
           </View>
         )}
@@ -138,6 +145,14 @@ export default function Home({navigation}) {
               }
             />
           )}
+        </View>
+        <View style={styles.addTweetButtonContainer}>
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate('MessagesPage', {screen: 'Add Tweet Page'})
+            }>
+            <Image source={AddIcon} style={styles.addTweetButton} />
+          </TouchableOpacity>
         </View>
       </View>
     </>
@@ -178,5 +193,17 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: 'black',
     textAlign: 'center',
+  },
+  addTweetButtonContainer: {
+    position: 'absolute',
+    bottom: 12,
+    right: 12,
+    backgroundColor: 'blue',
+    borderRadius: 50,
+  },
+  addTweetButton: {
+    margin: 8,
+    height: 40,
+    width: 40,
   },
 });

@@ -7,9 +7,7 @@ import {login} from './api/Login';
 import 'react-native-gesture-handler';
 import {NavigationContainer} from '@react-navigation/native';
 import DrawerNavigator from './navigation/DrawerNavigator';
-import { Login, NotificationCard, TweetCard } from './components';
-import { ProfilePage } from './pages';
-import AddTweet from './pages/AddTweet';
+import {Login} from './pages/index';
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -19,7 +17,6 @@ export default function App() {
     const data = await AsyncStorage.getItem(AsyncStorageConstants.CREDENTIALS);
     const credentials = JSON.parse(data);
     const isSuccessful = await login(credentials);
-    console.log(isSuccessful, 'issusccefulle');
     setIsLoggedIn(isSuccessful);
     setIsLoading(false);
   }
@@ -29,26 +26,18 @@ export default function App() {
 
   return (
     <>
-    {/* <Login /> */}
-      {/* <NotificationCard /> */}
-      {/* <TweetCard /> */}
-      <ProfilePage />
-      {/* <AddTweet /> */}
+      {isLoading ? (
+        <SafeAreaView>
+          <Image source={LoadingImage} style={styles.loadingImage} />
+        </SafeAreaView>
+      ) : !isLoggedIn ? (
+        <Login />
+      ) : (
+        <NavigationContainer>
+          <DrawerNavigator />
+        </NavigationContainer>
+      )}
     </>
-   
-    // <>
-    //   {isLoading ? (
-    //     <SafeAreaView>
-    //       <Image source={LoadingImage} style={styles.loadingImage} />
-    //     </SafeAreaView>
-    //   ) : !isLoggedIn ? (
-    //     <Text>Login Page</Text>
-    //   ) : (
-    //     <NavigationContainer>
-    //       <DrawerNavigator />
-    //     </NavigationContainer>
-    //   )}
-    // </>
   );
 }
 

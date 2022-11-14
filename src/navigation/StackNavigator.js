@@ -1,10 +1,10 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
-import {MessagesPage} from '../pages';
+import {AddTweetPage, ChatPage, MessagesPage} from '../pages';
 
 const Stack = createStackNavigator();
 
-const MessagesStackNavigator = () => {
+const StackNavigator = () => {
   return (
     <Stack.Navigator>
       <Stack.Screen
@@ -24,11 +24,20 @@ const MessagesStackNavigator = () => {
       />
       <Stack.Screen
         name="Chat Page"
-        component={MessagesPage}
-        options={{title: 'My home'}}
+        component={ChatPage}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="Add Tweet Page"
+        component={AddTweetPage}
+        options={{
+          headerShown: false,
+        }}
       />
     </Stack.Navigator>
   );
 };
 
-export {MessagesStackNavigator};
+export {StackNavigator};
