@@ -1,13 +1,13 @@
-import {View, Text, FlatList, StyleSheet, Image} from 'react-native';
+import {Text, FlatList, StyleSheet, Image} from 'react-native';
 import React, {useEffect, useState} from 'react';
-import {ChatCard} from '../components';
+import {NotificationCard} from '../components';
 import {useIsFocused} from '@react-navigation/native';
 import {getUserNotifications} from '../api/Notifications';
 import {LoadingImage} from '../assets';
 import {FeedString} from '../constants/Feed';
 
 let userId = 1;
-export default function NotificationsPage() {
+export default function NotificationsPage({navigation}) {
   const [allNotifications, setAllNotifications] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -28,7 +28,13 @@ export default function NotificationsPage() {
       ) : (
         <FlatList
           data={allNotifications}
-          renderItem={({item}) => <ChatCard tweet={item} key={item.id} />}
+          renderItem={({item}) => (
+            <NotificationCard
+              tweet={item}
+              key={item.id}
+              navigation={navigation}
+            />
+          )}
           keyExtractor={item => item.id}
           ListEmptyComponent={
             <Text style={styles.emptyList}>

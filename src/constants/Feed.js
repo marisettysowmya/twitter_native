@@ -12,3 +12,7 @@ export const FeedString = {
   EMPTY_MESSAGES: 'You dont have any messages yet.',
   EMPTY_NOTIFICATIONS: `You don't have any new Notifications.`,
 };
+export const NotificationType = {
+  BLUE_TICK: 'blue tick',
+  RETWEET: 'retweet',
+};

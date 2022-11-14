@@ -78,12 +78,12 @@ function TweetCard(props) {
         </View>
       );
     } else if (noOfPics == 4) {
-        return (
+      return (
         <View style={styles.tweetImageContainer}>
-            <View style={styles.tweetImage2}>
+          <View style={styles.tweetImage2}>
             <Image style={styles.tweetImage4_1} source={imageTweet}></Image>
-          <Image style={styles.tweetImage4_2} source={imageTweet}></Image>
-            </View>
+            <Image style={styles.tweetImage4_2} source={imageTweet}></Image>
+          </View>
           <View style={styles.tweetImage2}>
             <Image style={styles.tweetImage4_3} source={imageTweet}></Image>
             <Image style={styles.tweetImage4_4} source={imageTweet}></Image>
@@ -247,7 +247,7 @@ const styles = StyleSheet.create({
     height: 123,
     width: 138,
     marginHorizontal: 2,
-    marginBottom:4,
+    marginBottom: 4,
     borderTopLeftRadius: 10,
     resizeMode: 'cover',
   },
@@ -261,7 +261,7 @@ const styles = StyleSheet.create({
   tweetImage4_3: {
     height: 123,
     width: 138,
-    marginBottom:4,
+    marginBottom: 4,
     marginHorizontal: 2,
     borderTopRightRadius: 10,
     resizeMode: 'cover',
@@ -273,7 +273,7 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 10,
     resizeMode: 'cover',
   },
-  
+
   tweetFooter: {
     width: 300,
     marginVertical: 10,
@@ -290,7 +290,7 @@ const styles = StyleSheet.create({
     height: 30,
     marginRight: 5,
     width: 30,
-    resizeMode: 'contain'
+    resizeMode: 'contain',
   },
   verifiedImage: {
     height: 20,

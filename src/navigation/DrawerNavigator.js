@@ -21,7 +21,11 @@ const DrawerNavigator = () => {
         component={TabNavigator}
         options={{drawerLabel: 'Home'}}
       />
-      <Drawer.Screen name="Profile" component={ProfilePage} />
+      <Drawer.Screen
+        name="Profile"
+        component={ProfilePage}
+        options={{drawerLabel: 'sahi wala khul jana'}}
+      />
       <Drawer.Screen name="Settings" component={SettingsPage} />
       <Drawer.Screen
         name="Edit Profile Page"
