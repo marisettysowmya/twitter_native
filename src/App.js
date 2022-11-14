@@ -28,8 +28,7 @@ export default function App() {
 
   return (
     <>
-      <TweetCard />
-      {/* {isLoading ? (
+      {isLoading ? (
         <SafeAreaView>
           <Image source={LoadingImage} style={styles.loadingImage} />
         </SafeAreaView>
@@ -39,7 +38,7 @@ export default function App() {
         <NavigationContainer>
           <DrawerNavigator />
         </NavigationContainer>
-      )} */}
+      )}
     </>
   );
 }
