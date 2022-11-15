@@ -9,13 +9,13 @@ async function getToken() {
 }
 
 export const getAllUserMessages = async data => {
-  const {userId, token} = getToken();
+  const {userId, token} = await getToken();
 
   return Axios.pod
 };
 
 export const getSingleChatMessages = async data => {
-  const {userId, token} = getToken();
+  const {userId, token} = await getToken();
 
   return new Promise(resolve =>
     setTimeout(resolve, 5000, [
@@ -27,7 +27,7 @@ export const getSingleChatMessages = async data => {
 };
 
 export const postMessage = async data => {
-  const {userId, token} = getToken();
+  const {userId, token} = await getToken();
 
   return new Promise(resolve => setTimeout(resolve, 5000, true));
 };

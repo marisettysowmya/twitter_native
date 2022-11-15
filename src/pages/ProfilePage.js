@@ -28,7 +28,6 @@ const animatedHeaderHeight = animatedHeaderValue.interpolate({
 
 animatedHeaderValue.addListener(({value}) => {
   this._value = value;
-  // console.log(_value);
 });
 
 export default function ProfilePage() {

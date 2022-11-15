@@ -8,14 +8,14 @@ async function getToken() {
 }
 
 export const updateSettings = async data => {
-  const {userId, token} = getToken();
+  const {userId, token} = await getToken();
 
   console.log(data);
   return new Promise(resolve => setTimeout(resolve, 100, true));
 };
 
 export const deactivateAccount = async data => {
-  const {userId, token} = getToken();
+  const {userId, token} = await getToken();
 
   console.log(data);
   return new Promise(resolve => setTimeout(resolve, 100, true));

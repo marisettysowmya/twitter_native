@@ -24,31 +24,6 @@ import {useIsFocused} from '@react-navigation/native';
 // TODO - Add Sort Modal
 // UsecrollTOtop
 
-// const SortDropdown = props => {
-//   const {toggleDropdown} = props;
-
-//   return (
-//     <View style={styles.sortDropdown}>
-//       <Text
-//         styles={styles.sortButton}
-//         onPress={() => {
-//           getSortedFeed(SortTypes.DATE);
-//           toggleDropdown(false);
-//         }}>
-//         {SortTypeString.DATE}
-//       </Text>
-//       <Text
-//         styles={styles.sortButton}
-//         onPress={() => {
-//           getSortedFeed(SortTypes.POPULARITY);
-//           toggleDropdown(false);
-//         }}>
-//         {SortTypeString.POPULARITY}
-//       </Text>
-//     </View>
-//   );
-// };
-
 const SortDropdown = props => {
   const {showDropdown, toggleDropdown, fetchSortedFeed} = props;
 
@@ -138,8 +113,10 @@ export default function Home({navigation}) {
           ) : (
             <FlatList
               data={feedData}
-              renderItem={({item}) => <TweetCard tweet={item} key={item.id} />}
-              keyExtractor={item => item.id}
+              renderItem={({item}) => (
+                <TweetCard tweet={item} key={item.tweetId} />
+              )}
+              keyExtractor={item => item.tweetId}
               ListEmptyComponent={
                 <Text style={styles.emptyList}>{FeedString.EMPTY_FEED}</Text>
               }

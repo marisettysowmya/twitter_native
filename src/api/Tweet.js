@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import AsyncStorageConstants from '../constants/AsyncStorageConstants';
+import {AsyncStorageConstants} from '../constants/AsyncStorageConstants';
+import Axios from './Axios';
 
 async function getToken() {
   const userId = await AsyncStorage.getItem(AsyncStorageConstants.USER_ID);
@@ -7,30 +8,39 @@ async function getToken() {
   return {userId, token};
 }
 
-export const likeTweet = async data => {
-  const {userId, token} = getToken();
+export const likeTweet = async tweetId => {
+  const {userId, token} = await getToken();
+  return Axios.post(`/${userId}/tweets/${tweetId}`, {}).then(res => {
+    console.log(res.data);
+    return res.data;
+  });
+};
 
-  console.log(data);
+export const postComment = async tweetId => {
+  const {userId, token} = await getToken();
+
+  console.log(tweetId);
   return new Promise(resolve => setTimeout(resolve, 100, true));
 };
 
-export const postComment = async data => {
-  const {userId, token} = getToken();
+export const getTweetData = async tweetId => {
+  const {userId, token} = await getToken();
 
-  console.log(data);
-  return new Promise(resolve => setTimeout(resolve, 100, true));
-};
-
-export const getTweetData = async data => {
-  const {userId, token} = getToken();
-
-  console.log(data);
   return new Promise(resolve => setTimeout(resolve, 100, {}));
 };
 
-export const postRetweet = async data => {
-  const {userId, token} = getToken();
+export const postRetweet = async (tweetId, tweet) => {
+  const {userId, token} = await getToken();
+  return Axios.post(`/${userId}/retweets`, {tweet}).then(res => {
+    console.log(res.data);
+    return res.data;
+  });
+};
 
-  console.log(data);
-  return new Promise(resolve => setTimeout(resolve, 100, {}));
+export const postTweet = async tweet => {
+  const {userId, token} = await getToken();
+  return Axios.post(`/${userId}/tweets`, {tweet}).then(res => {
+    console.log(res.data);
+    return res.data;
+  });
 };

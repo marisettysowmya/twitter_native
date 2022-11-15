@@ -8,9 +8,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import DrawerNavigator from './navigation/DrawerNavigator';
 import {AdminAllUsersPage, AdminBlueTickRequestPage, Login, Signup} from './pages/index';
 import {AsyncStorageConstants} from './constants/AsyncStorageConstants';
-import AddTweet from './pages/AddTweet';
-import {TweetCard} from './components';
-import AdminLoginPage from './pages/AdminLoginPage';
+import AdminDrawerNavigator from './navigation/AdminDrawerNavigator';
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
