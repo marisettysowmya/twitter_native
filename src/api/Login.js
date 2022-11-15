@@ -3,22 +3,6 @@ import {AsyncStorageConstants} from '../constants/AsyncStorageConstants';
 import Axios from './Axios';
 
 export const login = async data => {
-  fetch(
-    `https://e7e7-182-156-218-98.in.ngrok.io/login?username=foo&password=bar`,
-    {
-      method: 'POST',
-      mode: 'cors', // no-cors, *cors, same-origin
-      cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-      credentials: 'include', // include, *same-origin, omit
-      headers: {
-        'Content-Type': 'application/json',
-        cookie: 'JSESSIONID=81D736A0F0FFA7B6F78642E11F2D6BC4',
-        // 'Content-Type': 'application/x-www-form-urlencoded',
-      },
-    },
-  )
-    // .then(res => res.json())
-    .then(res => console.log('fetch'));
   const xy = await Axios.post(`/login?username=foo&password=bar`, {
     withCredentials: true,
   })
@@ -37,7 +21,9 @@ export const login = async data => {
   return new Promise(resolve => setTimeout(resolve, 100, true));
 };
 
-export const signUp = async data => {
-  console.log(data);
+export const signUp = async user => {
+  console.log(user);
+  Axios.post(`/signup/${user}`).then(res => console.log(res));
+  // console.log(res);
   return new Promise(resolve => setTimeout(resolve, 100, true));
 };
