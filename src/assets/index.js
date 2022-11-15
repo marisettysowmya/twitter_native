@@ -25,11 +25,8 @@ export const bellIcon = require("./bell_icon.png")
 
 export const imageJoined = require('./joined.png');
 
-<<<<<<< HEAD
 export const imageLog = require("./logo.png")
 
-=======
 export const imagePlaceholder = require('./imageIcon.png');
 
 export const imageCamera = require('./camera2.png');
->>>>>>> e6067495c8aad42aeddb6cf80bd818cf241e4c5e
