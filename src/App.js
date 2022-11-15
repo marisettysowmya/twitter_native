@@ -9,6 +9,7 @@ import DrawerNavigator from './navigation/DrawerNavigator';
 import {Login} from './pages/index';
 import {AsyncStorageConstants} from './constants/AsyncStorageConstants';
 import {LoginNavigator} from './navigation/LoginNavigator';
+import AdminDrawerNavigator from './navigation/AdminDrawerNavigator';
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -38,7 +39,7 @@ export default function App() {
         </NavigationContainer>
       ) : (
         <NavigationContainer>
-          <DrawerNavigator />
+          <AdminDrawerNavigator />
         </NavigationContainer>
       )}
     </>

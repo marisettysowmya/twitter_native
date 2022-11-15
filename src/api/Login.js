@@ -16,7 +16,7 @@ export const login = async data => {
     'JSESSIONID=F3002E8F28A3B75976111B62942D08F6',
   );
   await AsyncStorage.setItem(AsyncStorageConstants.USER_DETAILS, 'userObject');
-  return new Promise(resolve => setTimeout(resolve, 100, false));
+  return new Promise(resolve => setTimeout(resolve, 100, true));
 };
 
 export const signUp = async user => {

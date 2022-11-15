@@ -26,7 +26,9 @@ export default function AdminAllUsersPage() {
       ) : (
         <FlatList
           data={allUsers}
-          renderItem={({item}) => <AdminUserCard key={item.id} />}
+          renderItem={({item}) => (
+            <AdminUserCard key={item.userId} data={item} />
+          )}
           keyExtractor={item => item.id}
         />
       )}
