@@ -1,16 +1,35 @@
-import React, { useState } from "react";
-import { View, StyleSheet, TextInput, KeyboardAvoidingView, FlatList, Text } from "react-native";
+import { useIsFocused } from "@react-navigation/native";
+import React, { useEffect, useState } from "react";
+import { View, StyleSheet, TextInput, KeyboardAvoidingView, FlatList, Text, Image } from "react-native";
 // import { TextInput } from "react-native-gesture-handler";
 import CommentCard from "../components/CommentCard";
 import { FeedString } from "../constants/Feed";
+import { LoadingImage } from "../assets";
+import { getUserComment } from "../api/Tweet";
+
 export default function CommentPage(){
     const [commentFeed, setcommentFeed] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+
+    const isFocused = useIsFocused();
+    async function fetchComment(){
+        const data = await getUserComment();
+        console.log(data,'vhbjnk')
+        setcommentFeed(data);
+        setIsLoading(false);
+        console.log(data);
+    }
+    useEffect(()=>{
+        fetchComment();
+    }, []);
 
     return(
+        <>
         <View >
             {/* <CommentCard /> */}
-            <KeyboardAvoidingView>
-            
+            {isLoading ? (
+                <Image source={LoadingImage} style={styles.loading} />
+            ) : (
             <FlatList
                 data={commentFeed}
                 renderItem={({item}) => <CommentCard tweet={item} key={item.id} />}
@@ -21,12 +40,12 @@ export default function CommentPage(){
             </Text>
           }
         />
+            )}
             <TextInput
             placeholder="comment"
             style={styles.commentbox}/>
-            </KeyboardAvoidingView>
         </View>
-        
+       </>
     )
 }
 const styles=StyleSheet.create({

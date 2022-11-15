@@ -2,6 +2,7 @@ import React from 'react';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import TabNavigator from './TabNavigator';
 import {EditProfilePage, ProfilePage, SettingsPage} from '../pages';
+import CommentPage from '../pages/CommentPage';
 
 const Drawer = createDrawerNavigator();
 
@@ -12,7 +13,7 @@ const DrawerNavigator = () => {
       initialRouteName="Feed Page">
       <Drawer.Screen
         name="Feed Page"
-        component={TabNavigator}
+        component={CommentPage}
         options={{drawerLabel: 'Home'}}
       />
       <Drawer.Screen

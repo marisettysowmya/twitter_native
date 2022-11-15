@@ -15,6 +15,24 @@ export const likeTweet = async tweetId => {
     return res.data;
   });
 };
+// export const getUserComment = async data =>{
+//   const {userId, token} = await getToken();
+//   return new Promise(resolve=> 
+//     setTimeout(resolve, 5000,[
+//       {id: 1, text: 'something is here'},
+//       {id: 2, text: 'something is here1'},
+//       {id: 3, text: 'something is here2'},
+//     ]),
+//   ); 
+// };
+export const getUserComment = async data => {
+  const {userId, token} = await getToken();
+  const tweetId=9
+  return Axios.get(`/user/tweets/${tweetId}/comments`).then(res =>{
+    console.log(res.data);
+    return res.data;
+  });
+};
 
 export const postComment = async tweetId => {
   const {userId, token} = await getToken();

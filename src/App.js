@@ -27,18 +27,17 @@ export default function App() {
 
   return (
     <>
-    <Login />
       {/* {isLoading ? (
         <SafeAreaView>
           <Image source={LoadingImage} style={styles.loadingImage} />
         </SafeAreaView>
       ) : !isLoggedIn ? (
         <Login />
-      ) : (
+      ) : ( */}
         <NavigationContainer>
           <DrawerNavigator />
         </NavigationContainer>
-      )} */}
+      {/* )} */}
     </>
   );
 }
