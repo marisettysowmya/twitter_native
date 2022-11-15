@@ -11,6 +11,13 @@ export const LoadingImage = require('./loading_icon.png');
 export const ProfilePicture = require('./profile_pic.png');
 export const TwitterIcon = require('./twitter_icon.png');
 export const SortIcon = require('./sort_icon.png');
+export const HomeIcon = require('./homeicon.jpg');
+export const NotificationIcon = require('./notificationicon.png');
+export const MessageIcon = require('./messageicon.png');
+export const Bookmark = require('./bookmark.png')
+
+
+
 
 export const bellIcon = require("./bell_icon.png")
 

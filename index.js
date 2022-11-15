@@ -11,4 +11,4 @@ import CommentCard from './src/components/CommentCard';
 import CommentPage from './src/pages/CommentPage';
 
 
-AppRegistry.registerComponent(appName, () => CommentPage);
+AppRegistry.registerComponent(appName, () => App);
