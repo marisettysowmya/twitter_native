@@ -3,32 +3,12 @@ import React, {useState} from 'react';
 import {Text, View, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import {getTweetData, likeTweet, postComment, postRetweet} from '../api/Tweet';
 import {
-  imageProfile,
-  imageTweet,
   imageReply,
   imageRetweet,
   imageLike,
   imageDefault,
   imageVerified,
 } from '../assets/index';
-
-// handle case of long tweet messages card is getting distorted (use flex for design)
-// add a defualt profile picture in case user doesn't has one set
-// handle case of multiple images being tagged in a tweet
-// wrap image in a container and add resizeMode contain to images
-
-// instead of hard coded values use props for displaying data
-const props = {
-  tweet: {
-    name: '',
-    handle: '',
-    tweet: '',
-    images: ['', ''],
-    likes: 10,
-    retweets: 23,
-    commments: 876,
-  },
-};
 
 function TweetCard(props) {
   const [tweetData, setTweetData] = useState(props.tweet);
@@ -37,64 +17,75 @@ function TweetCard(props) {
     const tweet = await getTweetData();
     setTweetData(tweet);
   }
-  async function handleCommentButtonClick() {
-    await postComment();
-    await fetchTweet();
+  async function handleCommentButtonClick(tweetId) {
+    await postComment(tweetId);
+    // await fetchTweet(tweetId);
   }
-  async function handleRetweetButtonClick() {
+  async function handleRetweetButtonClick(tweetId, tweet) {
     // TODO - handle retweet click option
-    await postRetweet();
+    await postRetweet(tweetId, tweet);
   }
-  async function handleLikeButtonClick() {
-    try{
-      const response = await axios.get("/{userId}/search/{tweetId}");
-      console.log(response);
-    }
-    catch(error){
-      console.log(error);
-    }
-    // await likeTweet();r
-    await fetchTweet();
+  async function handleLikeButtonClick(tweetId) {
+    console.log('like buttonclicked');
+    await likeTweet(tweetId);
+    // await fetchTweet(tweetId);
   }
 
-  let profilepic = 'set';
-  let isVerified = 'set';
-
-  const TweetImageRendering = props => {
-    const noOfPics = props.noOfPics;
+  const TweetImageRendering = image => {
+    const noOfPics = 1;
     if (noOfPics == 1) {
       return (
         <View style={styles.tweetImageContainer}>
-          <Image style={styles.tweetImage} source={imageTweet}></Image>
+          <Image
+            style={styles.tweetImage}
+            source={{uri: `${image.images}`}}></Image>
         </View>
       );
     } else if (noOfPics == 2) {
       return (
         <View style={styles.tweetImageContainer}>
-          <Image style={styles.tweetImage2_1} source={imageTweet}></Image>
-          <Image style={styles.tweetImage2_2} source={imageTweet}></Image>
+          <Image
+            style={styles.tweetImage2_1}
+            source={{uri: `${image.images[0]}`}}></Image>
+          <Image
+            style={styles.tweetImage2_2}
+            source={{uri: `${image.images[0]}`}}></Image>
         </View>
       );
     } else if (noOfPics == 3) {
       return (
         <View style={styles.tweetImageContainer}>
-          <Image style={styles.tweetImage3_1} source={imageTweet}></Image>
+          <Image
+            style={styles.tweetImage3_1}
+            source={{uri: `${image.images[0]}`}}></Image>
           <View style={styles.tweetImage3}>
-            <Image style={styles.tweetImage3_2} source={imageTweet}></Image>
-            <Image style={styles.tweetImage3_3} source={imageTweet}></Image>
+            <Image
+              style={styles.tweetImage3_2}
+              source={{uri: `${image.images[0]}`}}></Image>
+            <Image
+              style={styles.tweetImage3_3}
+              source={{uri: `${image.images[0]}`}}></Image>
           </View>
         </View>
       );
     } else if (noOfPics == 4) {
-        return (
+      return (
         <View style={styles.tweetImageContainer}>
-            <View style={styles.tweetImage2}>
-            <Image style={styles.tweetImage4_1} source={imageTweet}></Image>
-          <Image style={styles.tweetImage4_2} source={imageTweet}></Image>
-            </View>
           <View style={styles.tweetImage2}>
-            <Image style={styles.tweetImage4_3} source={imageTweet}></Image>
-            <Image style={styles.tweetImage4_4} source={imageTweet}></Image>
+            <Image
+              style={styles.tweetImage4_1}
+              source={{uri: `${image.images[0]}`}}></Image>
+            <Image
+              style={styles.tweetImage4_2}
+              source={{uri: `${image.images[0]}`}}></Image>
+          </View>
+          <View style={styles.tweetImage2}>
+            <Image
+              style={styles.tweetImage4_3}
+              source={{uri: `${image.images[0]}`}}></Image>
+            <Image
+              style={styles.tweetImage4_4}
+              source={{uri: `${image.images[0]}`}}></Image>
           </View>
         </View>
       );
@@ -105,40 +96,48 @@ function TweetCard(props) {
     <View style={styles.tweetContainer}>
       <Image
         style={styles.profileImage}
-        source={profilepic == 'set' ? imageProfile : imageDefault}></Image>
+        source={
+          tweetData?.createdUser?.avatar
+            ? {uri: `${tweetData?.createdUser?.avatar}`}
+            : imageDefault
+        }></Image>
       <View style={styles.details}>
         <View style={styles.tweetHeader}>
-          <Text style={styles.username}>Nitesh</Text>
-          <Text style={styles.handle}>@Kadian</Text>
+          <Text style={styles.username}>{tweetData.createdUser?.name}</Text>
+          <Text style={styles.handle}>{tweetData.createdUser?.username}</Text>
           <Image
             style={styles.verifiedImage}
-            source={isVerified == 'set' ? imageVerified : ''}
+            source={tweetData?.createdUser?.isVerified ? imageVerified : ''}
           />
         </View>
         <View style={styles.tweet}>
           <View>
-            <Text style={styles.tweetMessage}>Hello World</Text>
+            <Text style={styles.tweetMessage}>{tweetData.text}</Text>
           </View>
-          <TweetImageRendering noOfPics={1} />
+          <TweetImageRendering noOfPics={1} images={tweetData.image} />
         </View>
         <View style={styles.tweetFooter}>
           <TouchableOpacity
             style={styles.footerFields}
-            onPress={handleCommentButtonClick}>
+            onPress={() => handleCommentButtonClick(tweetData.tweetId)}>
             <Image style={styles.tweetIcons} source={imageReply}></Image>
-            <Text>66</Text>
+            <Text>{tweetData.numberofComments || '0'}</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.footerFields}
-            onPress={handleRetweetButtonClick}>
+            onPress={() =>
+              handleRetweetButtonClick(tweetData.tweetId, tweetData)
+            }>
             <Image style={styles.tweetIcons} source={imageRetweet}></Image>
-            <Text>1,606</Text>
+            <Text>{tweetData.numberofTweets || '0'}</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.footerFields}
-            onPress={handleLikeButtonClick}>
+            onPress={() => {
+              handleLikeButtonClick(tweetData.tweetId);
+            }}>
             <Image style={styles.tweetIcons} source={imageLike}></Image>
-            <Text>27,808</Text>
+            <Text>{tweetData.numberofLikes || '0'}</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -255,7 +254,7 @@ const styles = StyleSheet.create({
     height: 123,
     width: 138,
     marginHorizontal: 2,
-    marginBottom:4,
+    marginBottom: 4,
     borderTopLeftRadius: 10,
     resizeMode: 'cover',
   },
@@ -269,7 +268,7 @@ const styles = StyleSheet.create({
   tweetImage4_3: {
     height: 123,
     width: 138,
-    marginBottom:4,
+    marginBottom: 4,
     marginHorizontal: 2,
     borderTopRightRadius: 10,
     resizeMode: 'cover',
@@ -281,7 +280,7 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 10,
     resizeMode: 'cover',
   },
-  
+
   tweetFooter: {
     width: 300,
     marginVertical: 10,
@@ -298,7 +297,7 @@ const styles = StyleSheet.create({
     height: 30,
     marginRight: 5,
     width: 30,
-    resizeMode: 'contain'
+    resizeMode: 'contain',
   },
   verifiedImage: {
     height: 20,

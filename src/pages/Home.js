@@ -116,8 +116,10 @@ export default function Home({navigation}) {
           ) : (
             <FlatList
               data={feedData}
-              renderItem={({item}) => <TweetCard tweet={item} key={item.id} />}
-              keyExtractor={item => item.id}
+              renderItem={({item}) => (
+                <TweetCard tweet={item} key={item.tweetId} />
+              )}
+              keyExtractor={item => item.tweetId}
               ListEmptyComponent={
                 <Text style={styles.emptyList}>{FeedString.EMPTY_FEED}</Text>
               }

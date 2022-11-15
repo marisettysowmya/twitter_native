@@ -8,10 +8,10 @@ async function getToken() {
   return {userId, token};
 }
 
-export const getAllUsers = async => {
-  const {userId, token} = getToken();
+export const getAllUsers = async () => {
+  const {userId, token} = await getToken();
 
-  Axios.get('/user').then(data => console.log(data));
+  // Axios.get('/user').then(data => console.log(data));
   return new Promise(resolve =>
     setTimeout(resolve, 100, [
       {id: 1, text: 'something is here'},
@@ -21,26 +21,23 @@ export const getAllUsers = async => {
   );
 };
 
-export const getAllBlueTickRequests = async => {
-  const {userId, token} = getToken();
-
-  return new Promise(resolve =>
-    setTimeout(resolve, 5000, [
-      {text: 'something is here'},
-      {text: 'something is here1'},
-      {text: 'something is here2'},
-    ]),
-  );
+export const getAllBlueTickRequests = async () => {
+  const {userId, token} = await getToken();
+  return Axios.get('/bluetick').then(res => {
+    return res.data;
+  });
 };
 
-export const acceptBlueTickRequests = async => {
-  const {userId, token} = getToken();
-
+export const acceptBlueTickRequests = async () => {
+  const {userId, token} = await getToken();
+  return Axios.get('/bluetick').then(res => {
+    return res.data;
+  });
   return new Promise(resolve => setTimeout(resolve, 5000, true));
 };
 
 export const rejectBlueTickRequests = async data => {
-  const {userId, token} = getToken();
+  const {userId, token} = await getToken();
 
   return new Promise(resolve => setTimeout(resolve, 5000, false));
 };
