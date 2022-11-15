@@ -11,9 +11,11 @@ async function getToken() {
 
 export const getUserFeed = async data => {
   const {userId, token} = await getToken();
-  return Axios.get(`/user/${userId}/feeds`).then(res => {
-    return res.data;
-  });
+  return Axios.get(`/user/${userId}/feeds`)
+    .then(res => {
+      return res.data;
+    })
+    .catch(e => console.log(e));
 };
 
 export const getSortedFeed = async ({param}) => {
@@ -38,11 +40,7 @@ export const getSortedFeed = async ({param}) => {
 export const getUserBookmarkedFeed = async data => {
   const {userId, token} = await getToken();
 
-  return new Promise(resolve =>
-    setTimeout(resolve, 5000, [
-      {id: 1, text: 'something is here'},
-      {id: 2, text: 'something is here1'},
-      {id: 3, text: 'something is here2'},
-    ]),
-  );
+  return Axios.get(`/user/bookmark/${userId}`).then(res => {
+    return res.data;
+  });
 };

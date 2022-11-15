@@ -20,6 +20,7 @@ export default function App() {
     setIsLoggedIn(isSuccessful);
     setIsLoading(false);
   }
+  
   useEffect(() => {
     handleLogin();
   }, []);

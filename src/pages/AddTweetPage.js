@@ -110,7 +110,7 @@ const AddTweetPage = ({navigation}) => {
   async function handleAddTweetClick() {
     const imageUrl = await uploadImageToAWS(imageData);
     const res = await postTweet({tweetText, image: imageUrl});
-    console.log(res);
+    // console.log(res);
     navigation.goBack();
   }
   return (
