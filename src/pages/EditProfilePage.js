@@ -5,12 +5,9 @@ import {
   Image,
   TouchableOpacity,
   Dimensions,
-  ScrollView,
-  Animated,
-  SafeAreaView,
   Alert,
 } from 'react-native';
-import {imageBanner, imageBirthday, imageJoined, imageProfile} from '../assets';
+import {imageBanner, imageProfile} from '../assets';
 
 import React, {useEffect, useState} from 'react';
 import {TextInput} from 'react-native-gesture-handler';
@@ -26,10 +23,26 @@ export default function EditProfilePage({navigation}) {
   const [name, setName] = useState('');
   const [handle, setHandle] = useState('');
   const [bio, setBio] = useState('');
+  const [avatar, setAvatar] = useState('');
+  const [banner, setBanner] = useState('');
   const [imageData, setImageData] = useState({});
 
+  async function fetchUserInfo() {
+    const data = await AsyncStorage.getItem(AsyncStorageConstants.USER_DETAILS);
+    const user = JSON.parse(data);
+    setName(user.name);
+    setHandle(user.handle);
+    setBio(user.bio);
+    setAvatar(user.avatar);
+    setBanner(user.banner);
+  }
+  useEffect(() => {
+    fetchUserInfo();
+  }, []);
+
   const handleSubmit = async () => {
-    const user = await AsyncStorage.getItem(AsyncStorageConstants.USER_DETAILS);
+    const data = await AsyncStorage.getItem(AsyncStorageConstants.USER_DETAILS);
+    const user = JSON.parse(data);
     const updatedUser = await updateUserDetails({...user, name, handle, bio});
     if (!updatedUser) {
       Alert.alert('Handle already exists.');
@@ -67,11 +80,18 @@ export default function EditProfilePage({navigation}) {
 
   return (
     <View style={styles.editProfileContainer}>
-      <TouchableOpacity>
-        <Image style={styles.bannerImage} source={imageBanner} />
+      <TouchableOpacity onPress={() => console.log('handleImage update')}>
+        <Image
+          style={styles.bannerImage}
+          source={banner ? banner : imageBanner}
+        />
       </TouchableOpacity>
-      <TouchableOpacity style={{marginLeft: 10, marginRight: 'auto'}}>
-        <Image source={imageProfile} style={styles.profileImage}></Image>
+      <TouchableOpacity
+        style={{marginLeft: 10, marginRight: 'auto'}}
+        onPress={() => console.log('handleImage update')}>
+        <Image
+          source={avatar ? avatar : imageProfile}
+          style={styles.profileImage}></Image>
       </TouchableOpacity>
       <View style={styles.nameContainer}>
         <Text style={{fontSize: 20}}>Name</Text>
