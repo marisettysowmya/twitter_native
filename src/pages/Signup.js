@@ -14,6 +14,7 @@ import React, {useState} from 'react';
 import LinearGradient from 'react-native-linear-gradient';
 import {imageLogo} from '../assets';
 import DatePicker from 'react-native-date-picker';
+import { signUp } from '../api/Login';
 
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
@@ -23,13 +24,34 @@ const image = {
 };
 
 const Signup = () => {
-  const [date, setDate] = useState(new Date());
+  const [dob, setDate] = useState(new Date());
   const [open, setOpen] = useState(false);
+  const [name, setName] = useState('');
+  const [userName, setUserName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('')
+  let user = {
+    userName,
+    name,
+    dob,
+    email,
+    password
+  }
+  const getDate = () => {
+    let tempDate = dob.toString().split(' ');
+    return dob !== ''
+      ? `${tempDate[0]} ${tempDate[1]} ${tempDate[2]} ${tempDate[3]}`
+      : '';
+  };
+
+  const handleSubmit = () => {
+    console.log(user)
+    signUp({user})
+  }
 
   return (
     <KeyboardAvoidingView>
-      <ScrollView>
-        <View style={styles.container}>
+        <ScrollView style={styles.container}>
           <ImageBackground
             source={image}
             resizeMode="cover"
@@ -49,18 +71,23 @@ const Signup = () => {
                 <View style={styles.inputs}>
                   {/* <Text style={{ fontSize: 18, fontWeight: 'bold', color: 'black', marginBottom: 60}}>SIGN-UP</Text> */}
                   <TextInput
-                    placeholder="Type your username..."
-                    style={styles.input}></TextInput>
+                    placeholder="Type your Name..."
+                    style={styles.input} value = {name} onChangeText={(name) => {setName(name)}}></TextInput>
+                    <TextInput
+                    placeholder="Type your Handle..."
+                    style={styles.input} value = {userName} onChangeText={(userName) => {setUserName(userName)}}></TextInput>
                   <TextInput
                     placeholder="Type your Email-id..."
-                    style={styles.input}></TextInput>
+                    style={styles.input} value = {email} onChangeText={(email) => {setEmail(email)}}></TextInput>
 
                   <View>
                     <TextInput
                       placeholder="Type your password..."
                       style={styles.input}
                       textContentType="newPassword"
-                      secureTextEntry></TextInput>
+                      secureTextEntry
+                      value = {password} onChangeText={(password) => {setPassword(password)}}
+                      ></TextInput>
                     <TouchableOpacity></TouchableOpacity>
                   </View>
                   <View>
@@ -71,7 +98,7 @@ const Signup = () => {
                       <DatePicker
                         modal
                         open={open}
-                        date={date}
+                        date={dob}
                         minimumDate={new Date()}
                         mode = "date"
                         // androidVariant='iosClone'
@@ -83,12 +110,13 @@ const Signup = () => {
                           setOpen(false);
                         }}
                       />
-                      <Text style = {styles.input}>Enter Date of Birth</Text>
+                      <TextInput placeholder='Enter Date...' value={getDate()} style = {styles.input}></TextInput>
+                      <Text style = {styles.button}>Enter Date of Birth</Text>
                     </TouchableOpacity>
                   </View>
 
                   <View>
-                    <TouchableOpacity style={styles.button}>
+                    <TouchableOpacity style={styles.button} onPress={() => { handleSubmit() }}>
                       <Text
                         style={{
                           fontSize: 18,
@@ -116,7 +144,6 @@ const Signup = () => {
               </View>
             </LinearGradient>
           </ImageBackground>
-        </View>
       </ScrollView>
     </KeyboardAvoidingView>
   );
@@ -124,17 +151,17 @@ const Signup = () => {
 
 const styles = StyleSheet.create({
   container: {
-    //   flex: 1
+      // flex: 1
   },
 
   welcome: {
-    flex: 2,
-    //   marginTop:50,
+    // flex: 2,
+      marginTop:30,
     justifyContent: 'center',
   },
 
   contentContainer: {
-    flex: 3,
+    // flex: 3,
     // borderRadius: 20,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
@@ -146,6 +173,7 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
     marginLeft: 20,
     marginRight: 20,
+    marginTop: 80,
   },
 
   dateButton: {

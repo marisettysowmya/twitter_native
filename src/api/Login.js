@@ -5,7 +5,7 @@ import Axios from './Axios';
 export const login = async data => {
   console.log(data);
   const xy = await Axios.post(
-    `https://d28c-182-156-218-98.in.ngrok.io/login?username=foo&password=bar`,
+    `/login?username=${name}&password=${password}`,
   )
     .then(res => {
       console.log(res.headers);
@@ -21,7 +21,9 @@ export const login = async data => {
   return new Promise(resolve => setTimeout(resolve, 100, true));
 };
 
-export const signUp = async data => {
-  console.log(data);
+export const signUp = async (user) => {
+  console.log(user)
+  Axios.post(`/signup/${user}`).then(res => console.log(res));
+  // console.log(res);
   return new Promise(resolve => setTimeout(resolve, 100, true));
 };

@@ -6,7 +6,7 @@ import {login} from './api/Login';
 import 'react-native-gesture-handler';
 import {NavigationContainer} from '@react-navigation/native';
 import DrawerNavigator from './navigation/DrawerNavigator';
-import {Login} from './pages/index';
+import {AdminAllUsersPage, AdminBlueTickRequestPage, Login, Signup} from './pages/index';
 import {AsyncStorageConstants} from './constants/AsyncStorageConstants';
 import AdminDrawerNavigator from './navigation/AdminDrawerNavigator';
 
@@ -27,7 +27,8 @@ export default function App() {
 
   return (
     <>
-      {isLoading ? (
+    <Login />
+      {/* {isLoading ? (
         <SafeAreaView>
           <Image source={LoadingImage} style={styles.loadingImage} />
         </SafeAreaView>
@@ -37,7 +38,7 @@ export default function App() {
         <NavigationContainer>
           <DrawerNavigator />
         </NavigationContainer>
-      )}
+      )} */}
     </>
   );
 }
