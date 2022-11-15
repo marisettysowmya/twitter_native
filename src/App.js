@@ -21,14 +21,14 @@ export default function App() {
     setIsLoggedIn(isSuccessful);
     setIsLoading(false);
   }
+  
   useEffect(() => {
     handleLogin();
   }, []);
 
   return (
     <>
-    <Login />
-      {/* {isLoading ? (
+      {isLoading ? (
         <SafeAreaView>
           <Image source={LoadingImage} style={styles.loadingImage} />
         </SafeAreaView>
@@ -38,7 +38,7 @@ export default function App() {
         <NavigationContainer>
           <DrawerNavigator />
         </NavigationContainer>
-      )} */}
+      )}
     </>
   );
 }

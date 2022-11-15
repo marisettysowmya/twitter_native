@@ -16,6 +16,7 @@ import {
 import {imageLogo} from '../assets';
 import LinearGradient from 'react-native-linear-gradient';
 import {login} from '../api/Login';
+import {decode as atob, encode as btoa} from 'base-64';
 
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
@@ -27,6 +28,11 @@ const loginBG = {
 const Login = () => {
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
+
+  let data = {
+    name,
+    password,
+  };
 
   return (
     <KeyboardAvoidingView
@@ -71,7 +77,7 @@ const Login = () => {
                 }}></TextInput>
               <TouchableOpacity
                 style={styles.button}
-                onPress={() => login(name, password)}>
+                onPress={() => login(data)}>
                 <Text
                   style={{fontSize: 18, fontWeight: 'bold', color: 'white'}}>
                   Login

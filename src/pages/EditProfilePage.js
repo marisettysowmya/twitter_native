@@ -15,6 +15,7 @@ import {updateUserDetails} from '../api/User';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {AsyncStorageConstants} from '../constants/AsyncStorageConstants';
 import {uploadImageToAWS} from '../api/AWSImageApi';
+import * as ImagePicker from 'react-native-image-picker';
 
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
@@ -56,6 +57,30 @@ export default function EditProfilePage({navigation}) {
     navigation.goBack();
   };
 
+  launchImageLibrary = val => {
+    let options = {
+      storageOptions: {
+        skipBackup: true,
+        path: 'images',
+      },
+    };
+    ImagePicker.launchImageLibrary(options, response => {
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      } else {
+        setImageData({
+          uri: response.assets[0].uri,
+          type: response.assets[0].type,
+          name: response.assets[0].fileName,
+        });
+        if (val === 'banner') setBanner(response.assets[0].uri);
+        if (val === 'avatar') setAvatar(response.assets[0].uri);
+      }
+    });
+  };
+
   const handleProfilePicUpdate = async () => {
     const imageUrl = await uploadImageToAWS(imageData);
     const user = await AsyncStorage.getItem(AsyncStorageConstants.USER_DETAILS);
@@ -80,17 +105,22 @@ export default function EditProfilePage({navigation}) {
 
   return (
     <View style={styles.editProfileContainer}>
-      <TouchableOpacity onPress={() => console.log('handleImage update')}>
+      <TouchableOpacity
+        onPress={() => {
+          this.launchImageLibrary('banner');
+        }}>
         <Image
           style={styles.bannerImage}
-          source={banner ? banner : imageBanner}
+          source={banner ? {uri: banner} : imageBanner}
         />
       </TouchableOpacity>
       <TouchableOpacity
         style={{marginLeft: 10, marginRight: 'auto'}}
-        onPress={() => console.log('handleImage update')}>
+        onPress={() => {
+          this.launchImageLibrary('avatar');
+        }}>
         <Image
-          source={avatar ? avatar : imageProfile}
+          source={avatar ? {uri: avatar} : imageProfile}
           style={styles.profileImage}></Image>
       </TouchableOpacity>
       <View style={styles.nameContainer}>
