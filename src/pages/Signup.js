@@ -30,18 +30,18 @@ const Signup = () => {
   const [userName, setUserName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('')
+  const [dobtext, setDobtext] = useState('')
   let user = {
-    userName,
-    name,
-    dob,
-    email,
-    password
+    userName: userName,
+    name: name,
+    password: password,
+    dob: dob
   }
   const getDate = () => {
     let tempDate = dob.toString().split(' ');
-    return dob !== ''
+    return dobtext !== ''
       ? `${tempDate[0]} ${tempDate[1]} ${tempDate[2]} ${tempDate[3]}`
-      : '';
+      : 'Enter Date Of Birth';
   };
 
   const handleSubmit = () => {
@@ -76,9 +76,9 @@ const Signup = () => {
                     <TextInput
                     placeholder="Type your Handle..."
                     style={styles.input} value = {userName} onChangeText={(userName) => {setUserName(userName)}}></TextInput>
-                  <TextInput
+                  {/* <TextInput
                     placeholder="Type your Email-id..."
-                    style={styles.input} value = {email} onChangeText={(email) => {setEmail(email)}}></TextInput>
+                    style={styles.input} value = {email} onChangeText={(email) => {setEmail(email)}}></TextInput> */}
 
                   <View>
                     <TextInput
@@ -99,24 +99,28 @@ const Signup = () => {
                         modal
                         open={open}
                         date={dob}
-                        minimumDate={new Date()}
                         mode = "date"
                         // androidVariant='iosClone'
                         onConfirm={date => {
                           setOpen(false);
                           setDate(date);
+                          setDobtext(date.toString());
                         }}
                         onCancel={() => {
                           setOpen(false);
                         }}
                       />
-                      <TextInput placeholder='Enter Date...' value={getDate()} style = {styles.input}></TextInput>
-                      <Text style = {styles.button}>Enter Date of Birth</Text>
+                      {/* <Text style={{
+                          fontSize: 18,
+                          fontWeight: 'bold',
+                          color: 'white',
+                        }}>Enter Date of Birth</Text> */}
+                      <Text style = {styles.input}>{getDate()}</Text>
                     </TouchableOpacity>
                   </View>
 
                   <View>
-                    <TouchableOpacity style={styles.button} onPress={() => { handleSubmit() }}>
+                    <TouchableOpacity style={styles.signupButton} onPress={() =>{ handleSubmit() }}>
                       <Text
                         style={{
                           fontSize: 18,
@@ -129,7 +133,7 @@ const Signup = () => {
                     <Text style={styles.innerText}>
                       Already have an account?
                     </Text>
-                    <TouchableOpacity style={styles.button2}>
+                    <TouchableOpacity style={styles.loginButton}>
                       <Text
                         style={{
                           fontSize: 18,
@@ -177,7 +181,8 @@ const styles = StyleSheet.create({
   },
 
   dateButton: {
-    
+     //   backgroundColor: 'rgba(121,163,223,255)',
+     
   },
 
   inputs: {
@@ -200,7 +205,7 @@ const styles = StyleSheet.create({
     width: 120,
   },
 
-  button: {
+  signupButton: {
     //   backgroundColor: 'rgba(121,163,223,255)',
     backgroundColor: 'rgba(41,39,38,255)',
     borderColor: 'rgba(0,0,0,0.5)',
@@ -215,7 +220,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
 
-  button2: {
+  loginButton: {
     //   backgroundColor: 'rgba(255,117,146,255)',
     backgroundColor: 'rgba(41,39,38,255)',
     borderColor: 'rgba(0,0,0,0.5)',

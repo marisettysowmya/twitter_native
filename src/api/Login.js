@@ -5,10 +5,10 @@ import Axios from './Axios';
 export const login = async data => {
   console.log(data);
   const xy = await Axios.post(
-    `/login?username=${name}&password=${password}`,
+    `/login?username=${data.name}&password=${data.password}`,
   )
     .then(res => {
-      console.log(res.headers);
+      console.log(res.data);
     })
     .catch(e => console.log(e));
 
@@ -21,9 +21,20 @@ export const login = async data => {
   return new Promise(resolve => setTimeout(resolve, 100, true));
 };
 
-export const signUp = async (user) => {
-  console.log(user)
-  Axios.post(`/signup/${user}`).then(res => console.log(res));
+export const signUp = async user => {
+  let usertemp = {
+    "dob": "2020-11-15T05:05:39.061Z",
+      "name": "kada",
+       "password": "kada",
+        "userName": "Kada"
+        }
+
+  console.log("sssssssssssaaaaa",usertemp);
+  console.log("sssssssssssaaaaa",user);
+
+  Axios.post('/user', user["user"])
+    .then(res => console.log("ssssssss",res.data))
+    .catch((error) => console.log( error.response.request._response ) );
   // console.log(res);
   return new Promise(resolve => setTimeout(resolve, 100, true));
 };
