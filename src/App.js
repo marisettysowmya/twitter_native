@@ -1,4 +1,4 @@
-import {Image, SafeAreaView, StyleSheet, Text} from 'react-native';
+import {Image, SafeAreaView, StyleSheet} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {LoadingImage} from './assets';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -6,9 +6,8 @@ import {login} from './api/Login';
 import 'react-native-gesture-handler';
 import {NavigationContainer} from '@react-navigation/native';
 import DrawerNavigator from './navigation/DrawerNavigator';
-import {AdminAllUsersPage, AdminBlueTickRequestPage, Login, Signup} from './pages/index';
+import {Login} from './pages/index';
 import {AsyncStorageConstants} from './constants/AsyncStorageConstants';
-import AdminDrawerNavigator from './navigation/AdminDrawerNavigator';
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -27,17 +26,17 @@ export default function App() {
 
   return (
     <>
-      {/* {isLoading ? (
+      {isLoading ? (
         <SafeAreaView>
           <Image source={LoadingImage} style={styles.loadingImage} />
         </SafeAreaView>
       ) : !isLoggedIn ? (
         <Login />
-      ) : ( */}
+      ) : (
         <NavigationContainer>
           <DrawerNavigator />
         </NavigationContainer>
-      {/* )} */}
+      )}
     </>
   );
 }
