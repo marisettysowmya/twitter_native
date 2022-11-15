@@ -3,12 +3,12 @@ import {AsyncStorageConstants} from '../constants/AsyncStorageConstants';
 import Axios from './Axios';
 
 export const login = async data => {
-  const xy = await Axios.post(`/login?username=foo&password=bar`, {
-    withCredentials: true,
-  })
+  console.log(data);
+  const xy = await Axios.post(
+    `/login?username=foo&password=bar`,
+  )
     .then(res => {
-      console.log('axios');
-      // console.log(res.request.responseHeaders);
+      console.log(res.data);
     })
     .catch(e => console.log(e));
 
@@ -22,8 +22,19 @@ export const login = async data => {
 };
 
 export const signUp = async user => {
-  console.log(user);
-  Axios.post(`/signup/${user}`).then(res => console.log(res));
+  let usertemp = {
+    "dob": "2020-11-15T05:05:39.061Z",
+      "name": "kada",
+       "password": "kada",
+        "userName": "Kada"
+        }
+
+  console.log("sssssssssssaaaaa",usertemp);
+  console.log("sssssssssssaaaaa",user);
+
+  Axios.post('/user', user["user"])
+    .then(res => console.log("ssssssss",res.data))
+    .catch((error) => console.log( error.response.request._response ) );
   // console.log(res);
   return new Promise(resolve => setTimeout(resolve, 100, true));
 };

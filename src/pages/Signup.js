@@ -30,18 +30,18 @@ const Signup = ({navigation}) => {
   const [userName, setUserName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [dobtext, setDobtext] = useState('');
   let user = {
-    userName,
-    name,
-    dob,
-    email,
-    password,
+    userName: userName,
+    name: name,
+    password: password,
+    dob: dob,
   };
   const getDate = () => {
     let tempDate = dob.toString().split(' ');
-    return dob !== ''
+    return dobtext !== ''
       ? `${tempDate[0]} ${tempDate[1]} ${tempDate[2]} ${tempDate[3]}`
-      : '';
+      : 'Enter Date Of Birth';
   };
 
   const handleSubmit = () => {
@@ -81,13 +81,9 @@ const Signup = ({navigation}) => {
                   onChangeText={userName => {
                     setUserName(userName);
                   }}></TextInput>
-                <TextInput
-                  placeholder="Type your Email-id..."
-                  style={styles.input}
-                  value={email}
-                  onChangeText={email => {
-                    setEmail(email);
-                  }}></TextInput>
+                {/* <TextInput
+                    placeholder="Type your Email-id..."
+                    style={styles.input} value = {email} onChangeText={(email) => {setEmail(email)}}></TextInput> */}
 
                 <View>
                   <TextInput
@@ -121,17 +117,50 @@ const Signup = ({navigation}) => {
                         setOpen(false);
                       }}
                     />
-                    <TextInput
-                      placeholder="Enter Date..."
-                      value={getDate()}
-                      style={styles.input}></TextInput>
-                    <Text style={styles.button}>Enter Date of Birth</Text>
+                  </TouchableOpacity>
+                  <TextInput
+                    placeholder="Type your password..."
+                    style={styles.input}
+                    textContentType="newPassword"
+                    secureTextEntry
+                    value={password}
+                    onChangeText={password => {
+                      setPassword(password);
+                    }}></TextInput>
+                  <TouchableOpacity></TouchableOpacity>
+                </View>
+                <View>
+                  <TouchableOpacity
+                    title="Open"
+                    onPress={() => setOpen(true)}
+                    style={styles.dateButton}>
+                    <DatePicker
+                      modal
+                      open={open}
+                      date={dob}
+                      mode="date"
+                      // androidVariant='iosClone'
+                      onConfirm={date => {
+                        setOpen(false);
+                        setDate(date);
+                        setDobtext(date.toString());
+                      }}
+                      onCancel={() => {
+                        setOpen(false);
+                      }}
+                    />
+                    {/* <Text style={{
+                          fontSize: 18,
+                          fontWeight: 'bold',
+                          color: 'white',
+                        }}>Enter Date of Birth</Text> */}
+                    <Text style={styles.input}>{getDate()}</Text>
                   </TouchableOpacity>
                 </View>
 
                 <View>
                   <TouchableOpacity
-                    style={styles.button}
+                    style={styles.signupButton}
                     onPress={() => {
                       handleSubmit();
                     }}>
@@ -146,7 +175,7 @@ const Signup = ({navigation}) => {
                   </TouchableOpacity>
                   <Text style={styles.innerText}>Already have an account?</Text>
                   <TouchableOpacity
-                    style={styles.button2}
+                    style={styles.loginButton}
                     onPress={() => navigation.navigate('Login Page')}>
                     <Text
                       style={{
@@ -160,6 +189,7 @@ const Signup = ({navigation}) => {
                 </View>
               </View>
             </View>
+            {/* </View> */}
           </LinearGradient>
         </ImageBackground>
       </ScrollView>
@@ -216,7 +246,7 @@ const styles = StyleSheet.create({
     width: 120,
   },
 
-  button: {
+  signupButton: {
     //   backgroundColor: 'rgba(121,163,223,255)',
     backgroundColor: 'rgba(41,39,38,255)',
     borderColor: 'rgba(0,0,0,0.5)',
@@ -231,7 +261,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
 
-  button2: {
+  loginButton: {
     //   backgroundColor: 'rgba(255,117,146,255)',
     backgroundColor: 'rgba(41,39,38,255)',
     borderColor: 'rgba(0,0,0,0.5)',
