@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AsyncStorageConstants from '../constants/AsyncStorageConstants';
+import Axios from './Axios';
 
 async function getToken() {
   const userId = await AsyncStorage.getItem(AsyncStorageConstants.USER_ID);
@@ -9,6 +10,11 @@ async function getToken() {
 
 export const likeTweet = async data => {
   const {userId, token} = getToken();
+
+  Axios.get('/{userId/search/{tweetId}')
+.then(function(response){
+  console.log(response)
+})
 
   console.log(data);
   return new Promise(resolve => setTimeout(resolve, 100, true));

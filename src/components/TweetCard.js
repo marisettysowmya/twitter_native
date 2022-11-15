@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, {useState} from 'react';
 import {Text, View, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import {getTweetData, likeTweet, postComment, postRetweet} from '../api/Tweet';
@@ -45,7 +46,14 @@ function TweetCard(props) {
     await postRetweet();
   }
   async function handleLikeButtonClick() {
-    await likeTweet();
+    try{
+      const response = await axios.get("/{userId}/search/{tweetId}");
+      console.log(response);
+    }
+    catch(error){
+      console.log(error);
+    }
+    // await likeTweet();r
     await fetchTweet();
   }
 
