@@ -1,32 +1,53 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Text, View, StyleSheet, Image, TouchableOpacity} from 'react-native';
-import {getTweetData, likeTweet, postComment, postRetweet} from '../api/Tweet';
+import {
+  addBookmark,
+  getTweetData,
+  likeTweet,
+  postComment,
+  postRetweet,
+} from '../api/Tweet';
 import {
   imageReply,
   imageRetweet,
   imageLike,
   imageDefault,
   imageVerified,
+  Bookmark,
 } from '../assets/index';
 
 function TweetCard(props) {
   const [tweetData, setTweetData] = useState(props.tweet);
-
-  async function fetchTweet() {
-    const tweet = await getTweetData();
+  async function fetchTweet(tweetId) {
+    const tweet = await getTweetData(tweetId);
+    console.log(tweet, 'reached');
     setTweetData(tweet);
   }
+  useEffect(() => {
+    console.log(props.tweet, 'single tweet page tweetcard');
+    if (props?.msg) {
+      fetchTweet(props?.tweet?.tweetId || props.tweetId);
+    }
+  }, []);
   async function handleCommentButtonClick(tweetId) {
     await postComment(tweetId);
     // await fetchTweet(tweetId);
   }
+  async function handleBookmarkButtonClick(tweetId) {
+    await addBookmark(tweetId);
+    // await fetchTweet(tweetId);
+  }
+
   async function handleRetweetButtonClick(tweetId, tweet) {
     // TODO - handle retweet click option
     await postRetweet(tweetId, tweet);
   }
   async function handleLikeButtonClick(tweetId) {
-    console.log('like buttonclicked');
-    await likeTweet(tweetId);
+    const updatedlLikes = await likeTweet(tweetId);
+    setTweetData({
+      ...tweetData,
+      numberofLikes: updatedlLikes,
+    });
     // await fetchTweet(tweetId);
   }
 
@@ -137,6 +158,13 @@ function TweetCard(props) {
             }}>
             <Image style={styles.tweetIcons} source={imageLike}></Image>
             <Text>{tweetData.numberofLikes || '0'}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.footerFields}
+            onPress={() => {
+              handleBookmarkButtonClick(tweetData.tweetId);
+            }}>
+            <Image style={styles.tweetIcons} source={Bookmark}></Image>
           </TouchableOpacity>
         </View>
       </View>

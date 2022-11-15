@@ -12,6 +12,7 @@ export const ProfilePicture = require('./profile_pic.png');
 export const TwitterIcon = require('./twitter_icon.png');
 export const SortIcon = require('./sort_icon.png');
 export const Blank = require('./blank.png');
+export const Bookmark = require('./bookmark.png');
 
 export const bellIcon = require('./bell_icon.png');
 
@@ -27,6 +28,6 @@ export const imageBirthday = require('./birthday6.png');
 
 export const imageJoined = require('./joined.png');
 
-export const imagePlaceholder = require("./imageIcon.png")
+export const imagePlaceholder = require('./imageIcon.png');
 
-export const imageCamera = require("./camera2.png")
+export const imageCamera = require('./camera2.png');
