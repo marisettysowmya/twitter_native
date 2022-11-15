@@ -149,7 +149,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    backgroundColor: 'blue',
+    backgroundColor: 'white',
   },
   headerIconContainer: {margin: 5},
   headerIcon: {height: 25, width: 25, resizeMode: 'contain', borderRadius: 50},

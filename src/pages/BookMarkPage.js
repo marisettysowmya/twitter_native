@@ -14,11 +14,13 @@ export default function BookMarkPage() {
   const isFocused = useIsFocused();
   async function fetchFeed() {
     const data = await getUserBookmarkedFeed(userId);
+    // console.log(data);
     setBookMarkFeed(data);
     setIsLoading(false);
   }
   useEffect(() => {
     fetchFeed();
+    console.log('called');
   }, [isFocused]);
 
   return (
@@ -28,7 +30,9 @@ export default function BookMarkPage() {
       ) : (
         <FlatList
           data={bookMarkFeed}
-          renderItem={({item}) => <TweetCard tweet={item} key={item.id} />}
+          renderItem={({item}) => (
+            <TweetCard msg={item.bookmarkId} key={item.id} tweet={item.tweet} />
+          )}
           keyExtractor={item => item.id}
           ListEmptyComponent={
             <Text style={styles.emptyList}>

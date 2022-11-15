@@ -23,17 +23,28 @@ export const getAllUsers = async () => {
 
 export const getAllBlueTickRequests = async () => {
   const {userId, token} = await getToken();
-  return Axios.get('/bluetick').then(res => {
-    return res.data;
-  });
+  return Axios.get('/user/bluetick')
+    .then(res => {
+      return res.data;
+    })
+    .catch(e => console.log(e, 'there is error in this request'));
 };
 
-export const acceptBlueTickRequests = async () => {
-  const {userId, token} = await getToken();
-  return Axios.get('/bluetick').then(res => {
+export const acceptBlueTickRequests = async data => {
+  const {userId} = data;
+  return Axios.put(
+    `bluetick/status/${userId}`,
+    {data},
+    {
+      auth: {
+        username: 'foo',
+        password: 'bar',
+      },
+    },
+  ).then(res => {
+    console.log(res);
     return res.data;
   });
-  return new Promise(resolve => setTimeout(resolve, 5000, true));
 };
 
 export const rejectBlueTickRequests = async data => {

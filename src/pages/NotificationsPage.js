@@ -28,10 +28,10 @@ export default function NotificationsPage({navigation}) {
       ) : (
         <FlatList
           data={allNotifications}
-          renderItem={({item}) => (
+          renderItem={({item}, index) => (
             <NotificationCard
               tweet={item}
-              key={item.id}
+              key={index}
               navigation={navigation}
             />
           )}

@@ -44,7 +44,7 @@ export default function AdminBlueTickRequestPage({navigation}) {
             <FlatList
               data={allBlueTickRequests}
               renderItem={({item}) => (
-                <AdminBlueTickRequestCard key={item.id} />
+                <AdminBlueTickRequestCard key={item.userId} data={item} />
               )}
               keyExtractor={item => item.id}
             />
