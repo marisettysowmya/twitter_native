@@ -11,7 +11,7 @@ async function getToken() {
 export const getAllUsers = async => {
   const {userId, token} = getToken();
 
-  Axios.get('/user').then(data => console.log(data));
+  // Axios.get('/user').then(data => console.log(data));
   return new Promise(resolve =>
     setTimeout(resolve, 100, [
       {id: 1, text: 'something is here'},
