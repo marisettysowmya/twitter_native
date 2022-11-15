@@ -29,7 +29,7 @@ const BottomTabNavigator = () => {
         name="NotificationsPage"
         component={NotificationsPage}
         options={{
-          tabBarLabel: 'Notification',
+          tabBarLabel: 'Notifications',
           tabBarIcon: ({}) => (
             <Image source={NotificationIcon} style={styles.icon} />
           ),
