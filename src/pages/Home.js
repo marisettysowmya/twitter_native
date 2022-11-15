@@ -6,6 +6,7 @@ import {
   Image,
   FlatList,
   Modal,
+  Pressable,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
@@ -13,6 +14,7 @@ import {
   AddIcon,
   LoadingImage,
   ProfilePicture,
+  HomeIcon,
   SortIcon,
   TwitterIcon,
 } from '../assets';
@@ -21,25 +23,26 @@ import {getSortedFeed, getUserFeed} from '../api/Feed';
 import {FeedString, SortTypes, SortTypeString} from '../constants/Feed';
 import {useIsFocused} from '@react-navigation/native';
 
-// TODO - Add Sort Modal
-// UsecrollTOtop
-
 const SortDropdown = props => {
   const {showDropdown, toggleDropdown, fetchSortedFeed} = props;
-
+  
   return (
     <View style={styles.sortDropdown}>
       <Modal
         visible={showDropdown}
         onRequestClose={() => {
           toggleDropdown(false);
+          console.log(close)
         }}
         transparent={true}>
+        
         <Text
           styles={styles.sortButton}
-          onPress={() => {
-            fetchSortedFeed(SortTypes.DATE);
-            toggleDropdown(false);
+          onPressOut={() => {
+            console.log(false,'fvgbhnjmk,l')
+
+            // fetchSortedFeed(SortTypes.DATE);
+            // toggleDropdown(false);
           }}>
           {SortTypeString.DATE}
         </Text>
@@ -99,7 +102,7 @@ export default function Home({navigation}) {
         </View>
         {showDropdown && (
           <View style={styles.sortDropdown}>
-            <SortDropdown
+            <SortDropdown 
               toggleDropdown={toggleDropdown}
               showDropdown={showDropdown}
               fetchSortedFeed={fetchSortedFeed}
@@ -128,7 +131,7 @@ export default function Home({navigation}) {
             onPress={() =>
               navigation.navigate('MessagesPage', {screen: 'Add Tweet Page'})
             }>
-            <Image source={AddIcon} style={styles.addTweetButton} />
+            <Text style={styles.addbutton}>+</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -161,6 +164,7 @@ const styles = StyleSheet.create({
     padding: 10,
     height: 50,
     width: 300,
+    alignItems: 'center'
   },
   sortButton: {},
   emptyList: {
@@ -175,12 +179,21 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 12,
     right: 12,
-    backgroundColor: 'blue',
+    backgroundColor: '#1DA1F2',
     borderRadius: 50,
+    padding: 10,
+    width: 70,
+    height: 70
   },
   addTweetButton: {
     margin: 8,
     height: 40,
     width: 40,
   },
+  addbutton:{
+    fontSize:50,
+    textAlign: 'center',
+    color: 'white',
+    marginTop: -10
+  }
 });

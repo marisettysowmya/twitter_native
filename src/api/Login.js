@@ -5,7 +5,7 @@ import Axios from './Axios';
 export const login = async data => {
   console.log(data);
   const xy = await Axios.post(
-    `/login?username=${data.name}&password=${data.password}`,
+    `/login?username=foo&password=bar`,
   )
     .then(res => {
       console.log(res.data);
