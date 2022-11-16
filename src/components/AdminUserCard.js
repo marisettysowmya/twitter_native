@@ -6,44 +6,42 @@ import {
   TouchableOpacity,
   Button,
 } from 'react-native';
-import React, {useState} from 'react';
-import {
-  imageProfile,
-  imageTweet,
-  imageReply,
-  imageRetweet,
-  imageLike,
-} from '../assets/index';
+import React, {useEffect, useState} from 'react';
+import {imageProfile} from '../assets/index';
 import {deleteUser} from '../api/AdminApi';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {AsyncStorageConstants} from '../constants/AsyncStorageConstants';
 
-const props = {
-  props: {
-    name: '',
-    handle: '',
-    tweet: '',
-    images: ['', ''],
-    likes: 10,
-    retweets: 23,
-    commments: 876,
-  },
-};
-async function handleFollowClick() {
-  console.log('followed');
-}
 export default function AdminUserCard(props) {
   const {data} = props;
   const [currentUser, setCurrentUser] = useState({});
+  const [userFollowing, setUserFollowing] = useState([]);
 
-  async function handleDeleteButtonClick() {
-    // send userid here
-    await deleteUser();
+  async function onLoad() {
+    const data2 = await AsyncStorage.getItem(
+      AsyncStorageConstants.USER_FOLLOWINGS,
+    );
+    const details1 = JSON.parse(data2);
+    setUserFollowing(details1);
     const data1 = await AsyncStorage.getItem(
       AsyncStorageConstants.USER_DETAILS,
     );
     const details = JSON.parse(data1);
     setCurrentUser(details);
+  }
+  useEffect(() => {
+    onLoad();
+  }, []);
+
+  async function handleFollowClick() {
+    await followUser(route.param.userId);
+    await AsyncStorage.setItem(
+      AsyncStorageConstants.USER_FOLLOWINGS,
+      JSON.stringify([...userFollowing, userData]),
+    );
+  }
+  async function handleDeleteButtonClick() {
+    await deleteUser(data.userName);
   }
   return (
     <View style={styles.tweetContainer}>
@@ -52,16 +50,20 @@ export default function AdminUserCard(props) {
       <View style={styles.details}>
         <View style={styles.tweetHeader}>
           <Text style={styles.username}>{data.name}</Text>
-          <Text style={styles.handle}>{data.username}</Text>
+          <Text style={styles.handle}>@{data.userName}</Text>
         </View>
         <View>
-          <Text style={styles.dob}>{data.dob}</Text>
+          <Text style={styles.dob}>dob: {data.dob}</Text>
         </View>
         <View>
-          <Text style={styles.followers}>{data.numberOfFollower}</Text>
+          <Text style={styles.followers}>
+            Followers: {data.numberOfFollower}
+          </Text>
         </View>
         <View>
-          <Text style={styles.following}>{data.numberOfFollowing}</Text>
+          <Text style={styles.following}>
+            Following: {data.numberOfFollowing}
+          </Text>
         </View>
       </View>
       {currentUser.roles ? (
@@ -81,10 +83,10 @@ export default function AdminUserCard(props) {
 
 const styles = StyleSheet.create({
   tweetContainer: {
-    borderBottomWidth: 0.5,
+    borderBottomWidth: 1,
     borderColor: 'gray',
     flexDirection: 'row',
-    marginVertical: 10,
+    marginVertical: 1,
     margin: 10,
     padding: 5,
   },
@@ -97,15 +99,17 @@ const styles = StyleSheet.create({
   },
   details: {
     marginRight: 10,
-    marginTop: 10,
+    // marginTop: 5,
+    padding: 5,
   },
   tweetHeader: {
     flexDirection: 'row',
     marginTop: 10,
+    padding: 5,
   },
   username: {
     alignSelf: 'center',
-    paddingLeft: 10,
+    paddingLeft: 5,
     paddingRight: 5,
     fontWeight: 'bold',
     color: 'black',
@@ -114,44 +118,7 @@ const styles = StyleSheet.create({
   handle: {
     alignSelf: 'center',
   },
-
-  tweet: {
-    marginHorizontal: 10,
-    marginVertical: 10,
-    padding: 5,
-  },
-
-  tweetMessage: {
-    color: 'black',
-  },
-  tweetImage: {
-    height: 280,
-    width: 280,
-    marginTop: 20,
-    borderRadius: 10,
-  },
-  tweetFooter: {
-    marginVertical: 10,
-    flexDirection: 'row',
-    marginHorizontal: 10,
-    justifyContent: 'space-between',
-  },
-  footerFields: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  tweetIcons: {
-    height: 30,
-    marginRight: 5,
-    width: 30,
-  },
   dob: {
-    color: 'black',
-    paddingLeft: 10,
-    paddingRight: 5,
-  },
-  email: {
     color: 'black',
     paddingLeft: 10,
     paddingRight: 5,
@@ -168,11 +135,13 @@ const styles = StyleSheet.create({
   },
 
   button: {
-    flex: 1,
-    alignContent: 'flex-end',
-    alignSelf: 'center',
-    justifyContent: 'flex-end',
-    flexDirection: 'row',
-    padding: 10,
+    // flex: 1,
+    // alignContent: 'flex-end',
+    // alignSelf: 'center',
+    // justifyContent: 'flex-end',
+    // flexDirection: 'row',
+    // padding: 10,
+    marginTop: 50,
+    marginLeft: -40,
   },
 });

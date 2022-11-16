@@ -15,6 +15,7 @@ import Signup from './Signup';
 import AdminLoginPage from './AdminLoginPage';
 import UserListPage from './UserListPage';
 import Logout from './Logout';
+import SearchPage from './SearchPage';
 export {
   Home,
   BookMarkPage,
@@ -33,4 +34,5 @@ export {
   AdminLoginPage,
   UserListPage,
   Logout,
+  SearchPage,
 };
