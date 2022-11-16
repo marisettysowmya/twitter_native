@@ -2,8 +2,9 @@ import React from 'react';
 import {Image, StyleSheet} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {BookMarkPage, Home, NotificationsPage} from '../pages';
-import {bellIcon, Bookmark, HomeIcon, MessageIcon, NotificationIcon, ProfilePicture} from '../assets';
+import {bellIcon, imageBookmark, imageHome, imageMessages, imageNotification, ProfilePicture} from '../assets';
 import {StackNavigator} from './StackNavigator';
+
 
 const Tab = createBottomTabNavigator();
 
@@ -14,6 +15,21 @@ const BottomTabNavigator = () => {
     <Tab.Navigator
       screenOptions={{
         headerShown: false,
+        tabBarActiveTintColor: 'rgba(42,169,224,255)',
+          tabBarInactiveTintColor: 'gray',
+          tabBarStyle:{
+            
+          },
+          tabBarItemStyle:{
+            // backgroundColor:'#00ff00',
+            // margin:5,
+            borderRadius:50,
+          },
+          tabBarActiveBackgroundColor: '#bcdcf7',
+          tabBarShowLabel: false
+          
+          // tabBarAllowFontScaling: true,
+          // tab
       }}>
       <Tab.Screen
         name="Home"
@@ -21,7 +37,7 @@ const BottomTabNavigator = () => {
         options={{
           tabBarLabel: 'Home',
           tabBarIcon: ({}) => (
-            <Image source={HomeIcon} style={styles.icon} />
+            <Image source={imageHome} style={styles.homeIcon} />
           ),
         }}
       />
@@ -31,7 +47,7 @@ const BottomTabNavigator = () => {
         options={{
           tabBarLabel: 'Notifications',
           tabBarIcon: ({}) => (
-            <Image source={NotificationIcon} style={styles.icon} />
+            <Image source={imageNotification} style={styles.notificationsIcon} />
           ),
         }}
       />
@@ -41,7 +57,7 @@ const BottomTabNavigator = () => {
         options={{
           tabBarLabel: 'Messages',
           tabBarIcon: ({}) => (
-            <Image source={MessageIcon} style={styles.icon} />
+            <Image source={imageMessages} style={styles.messagesIcon} />
           ),
         }}
       />
@@ -51,7 +67,7 @@ const BottomTabNavigator = () => {
         options={{
           tabBarLabel: 'Bookmarks',
           tabBarIcon: ({}) => (
-            <Image source={Bookmark} style={styles.icon} />
+            <Image source={imageBookmark} style={styles.bookmarksIcon} />
           ),
         }}
       />
@@ -62,5 +78,21 @@ const BottomTabNavigator = () => {
 export default BottomTabNavigator;
 
 const styles = StyleSheet.create({
-  icon: {height: 15, width: 15},
+
+  homeIcon: {
+    height: 25, width: 25
+  },
+  
+  notificationsIcon: {
+    height: 25, width: 25
+  },
+
+  messagesIcon:{
+    height: 30, width: 30,
+    resizeMode: 'contain'
+  },
+
+  bookmarksIcon: {
+    height: 25, width: 25
+  }
 });

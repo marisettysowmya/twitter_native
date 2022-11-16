@@ -15,6 +15,8 @@ import LinearGradient from 'react-native-linear-gradient';
 import {imageLogo} from '../assets';
 import DatePicker from 'react-native-date-picker';
 import {signUp} from '../api/Login';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {AsyncStorageConstants} from '../constants/AsyncStorageConstants';
 
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
@@ -44,9 +46,20 @@ const Signup = ({navigation}) => {
       : 'Enter Date Of Birth';
   };
 
-  const handleSubmit = () => {
-    console.log(user);
-    signUp({user});
+  const handleSubmit = async () => {
+    const userData = await signUp({user});
+    console.log(userData, 'new user detials');
+    if (userData) {
+      await AsyncStorage.setItem(
+        AsyncStorageConstants.USER_DETAILS,
+        JSON.stringify(userData),
+      );
+      await AsyncStorage.setItem(
+        AsyncStorageConstants.USER_ID,
+        userData.userId.toString(),
+      );
+      navigation.navigate('User Pages');
+    }
   };
 
   return (
@@ -81,54 +94,18 @@ const Signup = ({navigation}) => {
                   onChangeText={userName => {
                     setUserName(userName);
                   }}></TextInput>
-                {/* <TextInput
-                    placeholder="Type your Email-id..."
-                    style={styles.input} value = {email} onChangeText={(email) => {setEmail(email)}}></TextInput> */}
 
-                <View>
-                  <TextInput
-                    placeholder="Type your password..."
-                    style={styles.input}
-                    textContentType="newPassword"
-                    secureTextEntry
-                    value={password}
-                    onChangeText={password => {
-                      setPassword(password);
-                    }}></TextInput>
-                  <TouchableOpacity></TouchableOpacity>
-                </View>
-                <View>
-                  <TouchableOpacity
-                    title="Open"
-                    onPress={() => setOpen(true)}
-                    style={styles.dateButton}>
-                    <DatePicker
-                      modal
-                      open={open}
-                      date={dob}
-                      minimumDate={new Date()}
-                      mode="date"
-                      // androidVariant='iosClone'
-                      onConfirm={date => {
-                        setOpen(false);
-                        setDate(date);
-                      }}
-                      onCancel={() => {
-                        setOpen(false);
-                      }}
-                    />
-                  </TouchableOpacity>
-                  <TextInput
-                    placeholder="Type your password..."
-                    style={styles.input}
-                    textContentType="newPassword"
-                    secureTextEntry
-                    value={password}
-                    onChangeText={password => {
-                      setPassword(password);
-                    }}></TextInput>
-                  <TouchableOpacity></TouchableOpacity>
-                </View>
+                <TextInput
+                  placeholder="Type your password..."
+                  style={styles.input}
+                  textContentType="newPassword"
+                  secureTextEntry
+                  value={password}
+                  onChangeText={password => {
+                    setPassword(password);
+                  }}
+                />
+
                 <View>
                   <TouchableOpacity
                     title="Open"
@@ -149,11 +126,7 @@ const Signup = ({navigation}) => {
                         setOpen(false);
                       }}
                     />
-                    {/* <Text style={{
-                          fontSize: 18,
-                          fontWeight: 'bold',
-                          color: 'white',
-                        }}>Enter Date of Birth</Text> */}
+
                     <Text style={styles.input}>{getDate()}</Text>
                   </TouchableOpacity>
                 </View>

@@ -1,4 +1,4 @@
-import {View, Text, StyleSheet, Image, FlatList} from 'react-native';
+import {StyleSheet, Image, FlatList} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {useIsFocused} from '@react-navigation/native';
 import {getAllUsers} from '../api/AdminApi';

@@ -8,10 +8,13 @@ import {
   ScrollView,
   Animated,
   SafeAreaView,
+  FlatList,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {imageBanner, imageBirthday, imageJoined, imageProfile} from '../assets';
 import {TweetCard} from '../components';
+import {getUserData, getUserTweets} from '../api/User';
+import {FeedString} from '../constants/Feed';
 
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
@@ -30,9 +33,21 @@ animatedHeaderValue.addListener(({value}) => {
   this._value = value;
 });
 
-export default function ProfilePage() {
+export default function ProfilePage({navigation, route}) {
   const [isFocused, setFocus] = useState('tweets');
+  const [userData, setUserData] = useState({});
+  const [userTweets, setUserTweets] = useState([]);
 
+  const userId = route?.params?.userId;
+  async function fetchUserData() {
+    const data = await getUserData(userId);
+    const tweets = await getUserTweets(userId);
+    setUserData(data);
+    setUserTweets(tweets);
+  }
+  useEffect(() => {
+    fetchUserData();
+  }, []);
   useEffect(() => {
     stickyIndex();
   }, [animatedHeaderValue._value]);
@@ -47,7 +62,11 @@ export default function ProfilePage() {
         <Image style={styles.bannerImage} source={imageBanner} />
         <View style={styles.dpandedit}>
           <Image source={imageProfile} style={styles.profileImage}></Image>
-          <TouchableOpacity style={styles.editButton}>
+          <TouchableOpacity
+            style={styles.editButton}
+            onPress={() => {
+              navigation.navigate('Edit Profile Page');
+            }}>
             <Text
               style={{
                 borderWidth: 0.5,
@@ -65,27 +84,27 @@ export default function ProfilePage() {
           </TouchableOpacity>
         </View>
         <View style={styles.profileInfo}>
-          <Text style={styles.username}>Ficlodeon</Text>
-          <Text style={styles.handle}>@frustosees</Text>
-          <Text style={styles.bio}>We are FarEye</Text>
+          <Text style={styles.username}>{userData.name}</Text>
+          <Text style={styles.handle}>{userData.userName}</Text>
+          <Text style={styles.bio}>{userData.bio}</Text>
           <View style={styles.dates}>
             <Image style={styles.birthdayImage} source={imageBirthday}></Image>
-            <Text>Born 2 July, 1999</Text>
+            <Text>{userData?.dob?.substring(0, 10)}</Text>
             <Image style={styles.joinedImage} source={imageJoined}></Image>
-            <Text>Born 2 July, 1999</Text>
+            <Text>{userData?.createdAt?.substring(0, 10)}</Text>
           </View>
           <View style={styles.followInfo}>
             <TouchableOpacity style={styles.followingContainer}>
               <Text
                 style={{color: 'black', fontWeight: 'bold', marginRight: 5}}>
-                189
+                {userData.numberOfFollowing}
               </Text>
               <Text style={{marginRight: 15}}>Following</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.followersContainer}>
               <Text
                 style={{color: 'black', fontWeight: 'bold', marginRight: 5}}>
-                32
+                {userData.numberOfFollower}
               </Text>
               <Text style={{marginRight: 5}}>Followers</Text>
             </TouchableOpacity>
@@ -129,14 +148,26 @@ export default function ProfilePage() {
           </View>
         </View>
         <View>
-          <TweetCard />
-          <TweetCard />
-          <TweetCard />
-          <TweetCard />
+          <FlatList
+            data={userTweets}
+            renderItem={({item}) => (
+              <TweetCard key={item.tweetId} tweet={item} />
+            )}
+            keyExtractor={item => item.tweetId}
+            ListEmptyComponent={
+              <Text style={styles.emptyList}>
+                {FeedString.EMPTY_PROFILE_PAGE_TWEETS}
+              </Text>
+            }
+          />
         </View>
       </ScrollView>
 
-      <TouchableOpacity style={styles.addButton}>
+      <TouchableOpacity
+        style={styles.addButton}
+        onPress={() =>
+          navigation.navigate('MessagesPage', {screen: 'Add Tweet Page'})
+        }>
         <Text
           style={{fontSize: 50, margin: -7, color: 'white', fontWeight: '100'}}>
           +
@@ -301,5 +332,20 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 35,
     top: 700,
+    elevation: 10,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+  },
+  emptyList: {
+    fontWeight: 'bold',
+    alignSelf: 'center',
+    marginTop: 100,
+    fontSize: 20,
+    color: 'black',
+    textAlign: 'center',
   },
 });

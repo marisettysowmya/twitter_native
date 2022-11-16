@@ -6,12 +6,14 @@ import {
   Image,
   FlatList,
   Modal,
+  ActivityIndicator,
   Pressable,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {
   AddIcon,
+  imageDrawer,
   LoadingImage,
   ProfilePicture,
   HomeIcon,
@@ -25,21 +27,19 @@ import {useIsFocused} from '@react-navigation/native';
 
 const SortDropdown = props => {
   const {showDropdown, toggleDropdown, fetchSortedFeed} = props;
-  
+
   return (
     <View style={styles.sortDropdown}>
       <Modal
         visible={showDropdown}
         onRequestClose={() => {
           toggleDropdown(false);
-          console.log(close)
         }}
         transparent={true}>
-        
         <Text
           styles={styles.sortButton}
           onPressOut={() => {
-            console.log(false,'fvgbhnjmk,l')
+            console.log(false, 'fvgbhnjmk,l');
 
             // fetchSortedFeed(SortTypes.DATE);
             // toggleDropdown(false);
@@ -88,7 +88,7 @@ export default function Home({navigation}) {
           <TouchableOpacity
             style={styles.headerIconContainer}
             onPress={() => navigation.openDrawer()}>
-            <Image source={ProfilePicture} style={styles.headerIcon} />
+            <Image source={imageDrawer} style={styles.headerIcon} />
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.headerIconContainer}
@@ -98,12 +98,12 @@ export default function Home({navigation}) {
           <TouchableOpacity
             style={styles.headerIconContainer}
             onPress={() => toggleDropdown(prev => !prev)}>
-            <Image source={SortIcon} style={styles.headerIcon} />
+            <Image source={SortIcon} style={styles.headerIcon2} />
           </TouchableOpacity>
         </View>
         {showDropdown && (
           <View style={styles.sortDropdown}>
-            <SortDropdown 
+            <SortDropdown
               toggleDropdown={toggleDropdown}
               showDropdown={showDropdown}
               fetchSortedFeed={fetchSortedFeed}
@@ -113,12 +113,18 @@ export default function Home({navigation}) {
 
         <View style={styles.bodyContainer}>
           {isLoading ? (
-            <Image source={LoadingImage} style={styles.loading} />
-          ) : (
+            <View style = {{flex: 1,
+          justifyContent: "center"}}>
+          <ActivityIndicator size={"large"} color="rgba(42,169,224,255)"/>
+        </View>          ) : (
             <FlatList
               data={feedData}
               renderItem={({item}) => (
-                <TweetCard tweet={item} key={item.tweetId} />
+                <TweetCard
+                  tweet={item}
+                  key={item.tweetId}
+                  navigation={navigation}
+                />
               )}
               keyExtractor={item => item.tweetId}
               ListEmptyComponent={
@@ -127,14 +133,22 @@ export default function Home({navigation}) {
             />
           )}
         </View>
-        <View style={styles.addTweetButtonContainer}>
-          <TouchableOpacity
+        {/* <View style={styles.addTweetButtonContainer}> */}
+          {/* <TouchableOpacity
             onPress={() =>
               navigation.navigate('MessagesPage', {screen: 'Add Tweet Page'})
             }>
-            <Text style={styles.addbutton}>+</Text>
-          </TouchableOpacity>
-        </View>
+            <Image source={AddIcon} style={styles.addTweetButton} />
+          </TouchableOpacity> */}
+                  {/* </View> */}
+          <TouchableOpacity style={styles.addButton} onPress={() =>
+              navigation.navigate('MessagesPage', {screen: 'Add Tweet Page'})
+            }>
+        <Text
+          style={{fontSize: 50, margin: -7, color: 'white', fontWeight: '100'}}>
+          +
+        </Text>
+      </TouchableOpacity>
       </View>
     </>
   );
@@ -150,14 +164,15 @@ const styles = StyleSheet.create({
   },
   mainContainer: {flex: 1},
   headerContainer: {
-    flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
     backgroundColor: 'white',
   },
-  headerIconContainer: {margin: 5},
-  headerIcon: {height: 25, width: 25, resizeMode: 'contain', borderRadius: 50},
-  bodyContainer: {flex: 20, margin: 5, padding: 5},
+  headerIconContainer: {marginHorizontal: 10, marginVertical: 5},
+  headerIcon: {height: 45, width: 45, resizeMode: 'contain',},
+  headerIcon2: {height: 35, width: 35, resizeMode: 'contain', marginTop: 5},
+
+  bodyContainer: {flex: 20, margin: 5, padding: 5,},
   sortDropdown: {
     position: 'absolute',
     backgroundColor: 'white',
@@ -165,7 +180,7 @@ const styles = StyleSheet.create({
     padding: 10,
     height: 50,
     width: 300,
-    alignItems: 'center'
+    alignItems: 'center',
   },
   sortButton: {},
   emptyList: {
@@ -176,25 +191,43 @@ const styles = StyleSheet.create({
     color: 'black',
     textAlign: 'center',
   },
-  addTweetButtonContainer: {
+  // addTweetButtonContainer: {
+  //   position: 'absolute',
+  //   bottom: 12,
+  //   right: 12,
+  //   backgroundColor: 'rgba(42,169,224,255)',
+  //   borderRadius: 50,
+  // },
+  // addTweetButton: {
+  //   margin: 8,
+  //   height: 40,
+  //   width: 40,
+  // },
+
+  addButton: {
+    backgroundColor: 'rgba(42,169,224,255)',
+    borderColor: 'rgba(0,0,0,0.5)',
+    borderRadius: 30,
+    width: 60,
+    height: 60,
+    alignItems: 'center',
+    marginBottom: 20,
+    marginTop: 15,
     position: 'absolute',
-    bottom: 12,
-    right: 12,
-    backgroundColor: '#1DA1F2',
-    borderRadius: 50,
-    padding: 10,
-    width: 70,
-    height: 70
+    right: 35,
+    top: 700,
+    elevation: 10,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
   },
-  addTweetButton: {
-    margin: 8,
-    height: 40,
-    width: 40,
-  },
-  addbutton:{
-    fontSize:50,
+  addbutton: {
+    fontSize: 50,
     textAlign: 'center',
     color: 'white',
-    marginTop: -10
-  }
+    marginTop: -10,
+  },
 });

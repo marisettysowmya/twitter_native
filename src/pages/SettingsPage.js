@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
     padding: 5,
   },
   listTab: {
-    backgroundColor: 'lightgrey',
+    backgroundColor: '#bcdcf7',
     marginVertical: 20,
     marginHorizontal: 20,
     padding: 20,

@@ -22,7 +22,7 @@ const screenWidth = Dimensions.get('window').width;
 
 export default function EditProfilePage({navigation}) {
   const [name, setName] = useState('');
-  const [handle, setHandle] = useState('');
+  const [userName, setUserName] = useState('');
   const [bio, setBio] = useState('');
   const [avatar, setAvatar] = useState('');
   const [banner, setBanner] = useState('');
@@ -31,8 +31,10 @@ export default function EditProfilePage({navigation}) {
   async function fetchUserInfo() {
     const data = await AsyncStorage.getItem(AsyncStorageConstants.USER_DETAILS);
     const user = JSON.parse(data);
+    console.log('ttttttttttt', user);
+
     setName(user.name);
-    setHandle(user.handle);
+    setHandle(user.userName);
     setBio(user.bio);
     setAvatar(user.avatar);
     setBanner(user.banner);
@@ -44,10 +46,17 @@ export default function EditProfilePage({navigation}) {
   const handleSubmit = async () => {
     const data = await AsyncStorage.getItem(AsyncStorageConstants.USER_DETAILS);
     const user = JSON.parse(data);
-    const updatedUser = await updateUserDetails({...user, name, handle, bio});
+    const updatedUser = {
+      ...user,
+      name,
+      userName: handle,
+      bio,
+    };
+    // console.log(updatedUser, 'yghujk');
+    await updateUserDetails(updatedUser);
     if (!updatedUser) {
       Alert.alert('Handle already exists.');
-      setHandle('');
+      setUserName('');
       return;
     }
     await AsyncStorage.setItem(
@@ -139,9 +148,9 @@ export default function EditProfilePage({navigation}) {
         <TextInput
           placeholder=""
           style={{borderBottomWidth: 0.5, height: 40}}
-          value={handle}
-          onChangeText={handle => {
-            setHandle(handle);
+          value={userName}
+          onChangeText={userName => {
+            setUserName(userName);
           }}
         />
       </View>

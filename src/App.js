@@ -1,6 +1,6 @@
 import {Image, SafeAreaView, StyleSheet} from 'react-native';
 import React, {useEffect, useState} from 'react';
-import {LoadingImage} from './assets';
+import {imageLogo, LoadingImage} from './assets';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {login} from './api/Login';
 import 'react-native-gesture-handler';
@@ -16,13 +16,18 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(true);
 
   async function handleLogin() {
-    const data = await AsyncStorage.getItem(AsyncStorageConstants.CREDENTIALS);
+    const data = await AsyncStorage.getItem(AsyncStorageConstants.USER_DETAILS);
     const credentials = JSON.parse(data);
-    const isSuccessful = await login(credentials);
-    setIsLoggedIn(isSuccessful);
+
+    if (credentials) {
+      const isSuccessful = await login({
+        name: credentials.userName,
+        password: credentials.password,
+      });
+      setIsLoggedIn(isSuccessful);
+    }
     setIsLoading(false);
   }
-
   useEffect(() => {
     handleLogin();
   }, []);
@@ -30,16 +35,12 @@ export default function App() {
   return (
     <>
       {isLoading ? (
-        <SafeAreaView>
-          <Image source={LoadingImage} style={styles.loadingImage} />
+        <SafeAreaView style = {{flex: 1, justifyContent: 'center'}}>
+          <Image source={imageLogo} style={styles.loadingImage} />
         </SafeAreaView>
-      ) : !isLoggedIn ? (
-        <NavigationContainer>
-          <LoginNavigator />
-        </NavigationContainer>
       ) : (
         <NavigationContainer>
-          <DrawerNavigator />
+          {!isLoggedIn ? <LoginNavigator /> : <DrawerNavigator />}
         </NavigationContainer>
       )}
     </>
@@ -49,9 +50,10 @@ export default function App() {
 const styles = StyleSheet.create({
   loadingImage: {
     alignSelf: 'center',
-    height: 50,
-    width: 50,
+    height: 120,
+    width: 120,
     resizeMode: 'contain',
-    marginVertical: '50%',
+    // marginVertical: '50%',
+    // justifyContent: 'center'
   },
 });

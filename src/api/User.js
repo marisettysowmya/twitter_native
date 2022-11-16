@@ -10,7 +10,28 @@ async function getToken() {
 
 export const updateUserDetails = async user => {
   const {userId, token} = await getToken();
-  return Axios.post(`/${userId}/user`, {user}).then(res => {
+  console.log(user)
+  return Axios.post(`/user`, user).then(res => {
+    return res.data;
+  }).catch((error) => console.log( error.response.request._response ) );
+};
+
+export const getUserData = async user => {
+  let {userId, token} = await getToken();
+
+  if (user) userId = user;
+
+  return Axios.get(`/user/${userId}`).then(res => {
+    return res.data;
+  });
+};
+
+export const getUserTweets = async user => {
+  let {userId, token} = await getToken();
+
+  if (user) userId = user;
+
+  return Axios.get(`/user/${userId}/tweets`).then(res => {
     return res.data;
   });
 };
