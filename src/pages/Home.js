@@ -44,8 +44,6 @@ const SortDropdown = props => {
         <Text
           styles={styles.sortButton}
           onPressOut={() => {
-            console.log(false, 'fvgbhnjmk,l');
-
             // fetchSortedFeed(SortTypes.DATE);
             // toggleDropdown(false);
           }}>
@@ -118,10 +116,10 @@ export default function Home({navigation}) {
 
         <View style={styles.bodyContainer}>
           {isLoading ? (
-            <View style = {{flex: 1,
-          justifyContent: "center"}}>
-          <ActivityIndicator size={"large"} color="rgba(42,169,224,255)"/>
-        </View>          ) : (
+            <View style={{flex: 1, justifyContent: 'center'}}>
+              <ActivityIndicator size={'large'} color="rgba(42,169,224,255)" />
+            </View>
+          ) : (
             <FlatList
               data={feedData}
               renderItem={({item}) => (
@@ -139,21 +137,28 @@ export default function Home({navigation}) {
           )}
         </View>
         {/* <View style={styles.addTweetButtonContainer}> */}
-          {/* <TouchableOpacity
+        {/* <TouchableOpacity
             onPress={() =>
               navigation.navigate('MessagesPage', {screen: 'Add Tweet Page'})
             }>
             <Image source={AddIcon} style={styles.addTweetButton} />
           </TouchableOpacity> */}
-                  {/* </View> */}
-          <TouchableOpacity style={styles.addButton} onPress={() =>
-              navigation.navigate('MessagesPage', {screen: 'Add Tweet Page'})
-            }>
-        <Text
-          style={{fontSize: 50, margin: -7, color: 'white', fontWeight: '100'}}>
-          +
-        </Text>
-      </TouchableOpacity>
+        {/* </View> */}
+        <TouchableOpacity
+          style={styles.addButton}
+          onPress={() =>
+            navigation.navigate('MessagesPage', {screen: 'Add Tweet Page'})
+          }>
+          <Text
+            style={{
+              fontSize: 50,
+              margin: -7,
+              color: 'white',
+              fontWeight: '100',
+            }}>
+            +
+          </Text>
+        </TouchableOpacity>
       </View>
     </>
   );

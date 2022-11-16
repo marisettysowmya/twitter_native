@@ -21,7 +21,16 @@ export const login = async data => {
   }).then(res => {
     return res.data;
   });
-  console.log(userData, 'userData is here');
+  const userFollowers = await Axios.get(`/user/${userData.userId}/followers`, {
+    withCredentials: true,
+  }).then(res => {
+    return res.data;
+  });
+  const userFollowing = await Axios.get(`/user/${userData.userId}/followings`, {
+    withCredentials: true,
+  }).then(res => {
+    return res.data;
+  });
   await AsyncStorage.setItem(
     AsyncStorageConstants.USER_ID,
     userData.userId.toString(),
@@ -29,6 +38,14 @@ export const login = async data => {
   await AsyncStorage.setItem(
     AsyncStorageConstants.USER_DETAILS,
     JSON.stringify(userData),
+  );
+  await AsyncStorage.setItem(
+    AsyncStorageConstants.USER_FOLLOWERS,
+    JSON.stringify(userFollowers),
+  );
+  await AsyncStorage.setItem(
+    AsyncStorageConstants.USER_FOLLOWINGS,
+    JSON.stringify(userFollowing),
   );
   return xy;
 };

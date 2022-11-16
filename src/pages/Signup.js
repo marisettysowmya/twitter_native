@@ -48,7 +48,6 @@ const Signup = ({navigation}) => {
 
   const handleSubmit = async () => {
     const userData = await signUp({user});
-    console.log(userData, 'new user detials');
     if (userData) {
       await AsyncStorage.setItem(
         AsyncStorageConstants.USER_DETAILS,

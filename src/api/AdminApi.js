@@ -12,7 +12,6 @@ export const getAllUsers = async () => {
   const {userId, token} = await getToken();
 
   return Axios.get('/user').then(res => {
-    console.log(res.data);
     return res.data;
   });
 };

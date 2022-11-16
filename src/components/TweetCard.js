@@ -30,7 +30,6 @@ function TweetCard(props) {
 
   async function fetchTweet(tweetId) {
     const tweet = await getTweetData(tweetId);
-    console.log(tweet, 'reached');
     setTweetData(tweet);
   }
   useEffect(() => {
@@ -64,11 +63,10 @@ function TweetCard(props) {
   async function handleLikeButtonClick(tweetId) {
     toggleLiked(!isLiked);
     const updatedlLikes = await likeTweet(tweetId);
-    // setTweetData({
-    //   ...tweetData,
-    //   numberofLikes: updatedlLikes,
-    // });
-    // await fetchTweet(tweetId);
+    setTweetData({
+      ...tweetData,
+      numberofLikes: updatedlLikes,
+    });
   }
 
   const TweetImageRendering = image => {
@@ -144,13 +142,20 @@ function TweetCard(props) {
       />
       <View style={styles.details}>
         <View style={styles.tweetHeader}>
-          <TouchableOpacity onPress={() => {}}>
+          <TouchableOpacity
+            onPress={() => {
+              props.navigation.navigate('Profile', {
+                userId: tweetData.postedUserId,
+              });
+            }}>
             <Text style={styles.username}>{tweetData.createdUser?.name}</Text>
             <Text style={styles.handle}>{tweetData.createdUser?.userName}</Text>
           </TouchableOpacity>
           <Image
             style={styles.verifiedImage}
-            source={tweetData?.createdUser?.isVerified ? imageVerified : ''}
+            source={
+              tweetData?.createdUser?.isVerified === 3 ? imageVerified : ''
+            }
           />
         </View>
         <View style={styles.tweet}>

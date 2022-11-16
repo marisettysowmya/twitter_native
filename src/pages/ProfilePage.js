@@ -13,8 +13,11 @@ import {
 import React, {useEffect, useState} from 'react';
 import {imageBanner, imageBirthday, imageJoined, imageProfile} from '../assets';
 import {TweetCard} from '../components';
-import {getUserData, getUserTweets} from '../api/User';
+import {followUser, getUserData, getUserTweets} from '../api/User';
 import {FeedString} from '../constants/Feed';
+import {useIsFocused} from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {AsyncStorageConstants} from '../constants/AsyncStorageConstants';
 
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
@@ -37,17 +40,42 @@ export default function ProfilePage({navigation, route}) {
   const [isFocused, setFocus] = useState('tweets');
   const [userData, setUserData] = useState({});
   const [userTweets, setUserTweets] = useState([]);
+  const [userDetails, setUserDetials] = useState({});
+  const [userFollowing, setUserFollowing] = useState([]);
 
-  const userId = route?.params?.userId;
   async function fetchUserData() {
-    const data = await getUserData(userId);
-    const tweets = await getUserTweets(userId);
+    const data = await getUserData(
+      route?.params?.userId ? route?.params?.userId : null,
+    );
+    const tweets = await getUserTweets(
+      route?.params?.userId ? route?.params?.userId : null,
+    );
+    const data1 = await AsyncStorage.getItem(
+      AsyncStorageConstants.USER_DETAILS,
+    );
+    const details = JSON.parse(data1);
+    setUserDetials(details);
+    const data2 = await AsyncStorage.getItem(
+      AsyncStorageConstants.USER_FOLLOWINGS,
+    );
+    const details1 = JSON.parse(data2);
+    setUserFollowing(details1);
     setUserData(data);
     setUserTweets(tweets);
   }
+  async function handleFollowClick() {
+    await followUser(route.param.userId);
+    await AsyncStorage.setItem(
+      AsyncStorageConstants.USER_FOLLOWINGS,
+      JSON.stringify([...userFollowing, userData]),
+    );
+    setUserFollowing([...userFollowing, userData]);
+  }
+
+  const isOpened = useIsFocused();
   useEffect(() => {
     fetchUserData();
-  }, []);
+  }, [isOpened]);
   useEffect(() => {
     stickyIndex();
   }, [animatedHeaderValue._value]);
@@ -62,26 +90,36 @@ export default function ProfilePage({navigation, route}) {
         <Image style={styles.bannerImage} source={imageBanner} />
         <View style={styles.dpandedit}>
           <Image source={imageProfile} style={styles.profileImage}></Image>
-          <TouchableOpacity
-            style={styles.editButton}
-            onPress={() => {
-              navigation.navigate('Edit Profile Page');
-            }}>
-            <Text
-              style={{
-                borderWidth: 0.5,
-                marginRight: 20,
-                paddingLeft: 15,
-                paddingRight: 13,
-                paddingVertical: 5,
-                color: 'black',
-                fontWeight: 'bold',
-                borderRadius: 20,
-                borderColor: 'gray',
+          {route?.params?.userId === userDetails.userId ? (
+            <TouchableOpacity
+              style={styles.editButton}
+              onPress={() => {
+                navigation.navigate('Edit Profile Page');
               }}>
-              Edit profile
-            </Text>
-          </TouchableOpacity>
+              <Text
+                style={{
+                  borderWidth: 0.5,
+                  marginRight: 20,
+                  paddingLeft: 15,
+                  paddingRight: 13,
+                  paddingVertical: 5,
+                  color: 'black',
+                  fontWeight: 'bold',
+                  borderRadius: 20,
+                  borderColor: 'gray',
+                }}>
+                Edit profile
+              </Text>
+            </TouchableOpacity>
+          ) : userFollowing.find(
+              user => user.userId === route.params.userId,
+            ) ? (
+            <Text>Following</Text>
+          ) : (
+            <TouchableOpacity onPress={handleFollowClick}>
+              <Text>Follow</Text>
+            </TouchableOpacity>
+          )}
         </View>
         <View style={styles.profileInfo}>
           <Text style={styles.username}>{userData.name}</Text>
@@ -94,14 +132,22 @@ export default function ProfilePage({navigation, route}) {
             <Text>{userData?.createdAt?.substring(0, 10)}</Text>
           </View>
           <View style={styles.followInfo}>
-            <TouchableOpacity style={styles.followingContainer}>
+            <TouchableOpacity
+              style={styles.followingContainer}
+              onPress={() =>
+                navigation.navigate('Follower Page', {type: 'followings'})
+              }>
               <Text
                 style={{color: 'black', fontWeight: 'bold', marginRight: 5}}>
                 {userData.numberOfFollowing}
               </Text>
               <Text style={{marginRight: 15}}>Following</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.followersContainer}>
+            <TouchableOpacity
+              style={styles.followersContainer}
+              onPress={() =>
+                navigation.navigate('Follower Page', {type: 'followers'})
+              }>
               <Text
                 style={{color: 'black', fontWeight: 'bold', marginRight: 5}}>
                 {userData.numberOfFollower}
@@ -173,7 +219,6 @@ export default function ProfilePage({navigation, route}) {
           +
         </Text>
       </TouchableOpacity>
-      {/* </ScrollView> */}
     </SafeAreaView>
   );
 }
@@ -184,13 +229,10 @@ const styles = StyleSheet.create({
   },
   header: {
     flexDirection: 'column',
-    // left: 0,
-    // right: 0,
     position: 'absolute',
     left: 0,
     right: 0,
     top: 0,
-    // height: headerScrollHeight,
     width: '100%',
     overflow: 'hidden',
     zIndex: 999,

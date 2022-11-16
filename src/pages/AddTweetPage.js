@@ -114,7 +114,6 @@ const AddTweetPage = ({navigation}) => {
     await reference.putFile(imageData.uri);
 
     const res = await postTweet({tweetText, image: imageUrl});
-    // console.log(res);
     navigation.goBack();
   }
   return (

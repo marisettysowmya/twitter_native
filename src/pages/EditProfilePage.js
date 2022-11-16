@@ -31,8 +31,6 @@ export default function EditProfilePage({navigation}) {
   async function fetchUserInfo() {
     const data = await AsyncStorage.getItem(AsyncStorageConstants.USER_DETAILS);
     const user = JSON.parse(data);
-    console.log('ttttttttttt', user);
-
     setName(user.name);
     setHandle(user.userName);
     setBio(user.bio);
@@ -52,7 +50,6 @@ export default function EditProfilePage({navigation}) {
       userName: handle,
       bio,
     };
-    // console.log(updatedUser, 'yghujk');
     await updateUserDetails(updatedUser);
     if (!updatedUser) {
       Alert.alert('Handle already exists.');

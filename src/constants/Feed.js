@@ -12,6 +12,8 @@ export const FeedString = {
   EMPTY_MESSAGES: 'You dont have any messages yet.',
   EMPTY_NOTIFICATIONS: `You don't have any new Notifications.`,
   EMPTY_PROFILE_PAGE_TWEETS: `You don't have any tweets yet.`,
+  EMPTY_FOLLOWER_LIST: `You dont have any followers.`,
+  EMPTY_FOLLOWING_LIST: `You are not following anyone.`,
 };
 export const NotificationType = {
   BLUE_TICK: 'blue tick',

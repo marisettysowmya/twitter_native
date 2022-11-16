@@ -1,5 +1,3 @@
-// import { View, Text } from 'react-native'
-// import React from 'react'
 import {
   Text,
   View,
@@ -9,31 +7,40 @@ import {
   Button,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
-import {
-  imageProfile,
-  imageTweet,
-  imageReply,
-  imageRetweet,
-  imageLike,
-} from '../assets/index';
+import {imageProfile} from '../assets/index';
 import {deleteUser} from '../api/AdminApi';
-
-const props = {
-  props: {
-    name: '',
-    handle: '',
-    tweet: '',
-    images: ['', ''],
-    likes: 10,
-    retweets: 23,
-    commments: 876,
-  },
-};
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {AsyncStorageConstants} from '../constants/AsyncStorageConstants';
 
 export default function AdminUserCard(props) {
   const {data} = props;
+  const [currentUser, setCurrentUser] = useState({});
+  const [userFollowing, setUserFollowing] = useState([]);
+
+  async function onLoad() {
+    const data2 = await AsyncStorage.getItem(
+      AsyncStorageConstants.USER_FOLLOWINGS,
+    );
+    const details1 = JSON.parse(data2);
+    setUserFollowing(details1);
+    const data1 = await AsyncStorage.getItem(
+      AsyncStorageConstants.USER_DETAILS,
+    );
+    const details = JSON.parse(data1);
+    setCurrentUser(details);
+  }
+  useEffect(() => {
+    onLoad();
+  }, []);
+
+  async function handleFollowClick() {
+    await followUser(route.param.userId);
+    await AsyncStorage.setItem(
+      AsyncStorageConstants.USER_FOLLOWINGS,
+      JSON.stringify([...userFollowing, userData]),
+    );
+  }
   async function handleDeleteButtonClick() {
-    // send userid here
     await deleteUser(data.userName);
   }
   return (
@@ -49,15 +56,27 @@ export default function AdminUserCard(props) {
           <Text style={styles.dob}>dob: {data.dob}</Text>
         </View>
         <View>
-          <Text style={styles.followers}>Followers: {data.numberOfFollower}</Text>
+          <Text style={styles.followers}>
+            Followers: {data.numberOfFollower}
+          </Text>
         </View>
         <View>
-          <Text style={styles.following}>Following: {data.numberOfFollowing}</Text>
+          <Text style={styles.following}>
+            Following: {data.numberOfFollowing}
+          </Text>
         </View>
       </View>
-      <View style={styles.button}>
-        <Button title="delete" onPress={() => handleDeleteButtonClick()} />
-      </View>
+      {currentUser.roles ? (
+        <View style={styles.button}>
+          <Button title="delete" onPress={() => handleDeleteButtonClick()} />
+        </View>
+      ) : data.isFollowing ? (
+        <TouchableOpacity onPress={handleFollowClick}>
+          <Text>Follow</Text>
+        </TouchableOpacity>
+      ) : (
+        <Text>Following</Text>
+      )}
     </View>
   );
 }
@@ -81,12 +100,12 @@ const styles = StyleSheet.create({
   details: {
     marginRight: 10,
     // marginTop: 5,
-    padding: 5
+    padding: 5,
   },
   tweetHeader: {
     flexDirection: 'row',
     marginTop: 10,
-    padding: 5
+    padding: 5,
   },
   username: {
     alignSelf: 'center',
@@ -124,7 +143,5 @@ const styles = StyleSheet.create({
     // padding: 10,
     marginTop: 50,
     marginLeft: -40,
-    
-
   },
 });
