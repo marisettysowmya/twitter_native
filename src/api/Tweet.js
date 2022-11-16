@@ -66,18 +66,20 @@ export const postRetweet = async (tweetId, tweet) => {
   });
 };
 
-export const postTweet = async tweet => {
+export const postTweet = async tweetText => {
   const {userId, token} = await getToken();
-  return Axios.post(`/user/tweets`, {tweet}).then(res => {
-    console.log(res.data);
+  return Axios.post(`/user/tweets`, {
+    createdUserId: userId,
+    text: tweetText,
+   }).then(res => {
+      console.log(res.data, ' i am here')
     return res.data;
-  });
+  }).catch((error) => console.log( error.response.request._response ) );;
 };
 
 export const addBookmark = async tweetId => {
   const {userId, token} = await getToken();
   return Axios.post(`/user/bookmark`, {
-    userId: userId,
     tweetId: tweetId,
   }).then(res => {
     console.log(res.data);

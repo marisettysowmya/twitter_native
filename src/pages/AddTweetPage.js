@@ -8,6 +8,7 @@ import {
   Dimensions,
   PermissionsAndroid,
   KeyboardAvoidingView,
+  Alert,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {
@@ -18,7 +19,7 @@ import {
 } from '../assets';
 import * as ImagePicker from 'react-native-image-picker';
 import {uploadImageToAWS} from '../api/AWSImageApi';
-import {postTweet} from '../api/Tweet';
+import { postTweet } from '../api/Tweet';
 import storage from '@react-native-firebase/storage';
 
 let profilepic = 'set';
@@ -110,11 +111,11 @@ const AddTweetPage = ({navigation}) => {
 
   async function handleAddTweetClick() {
     // const imageUrl = await uploadImageToAWS(imageData);
-    const reference = storage().ref(imageData.name);
-    await reference.putFile(imageData.uri);
+    // const reference = storage().ref(imageData.name);
+    // await reference.putFile(imageData.uri);
 
-    const res = await postTweet({tweetText, image: imageUrl});
-    // console.log(res);
+    const data =  await postTweet(tweetText);
+    Alert.alert('New Tweet Added!')
     navigation.goBack();
   }
   return (
