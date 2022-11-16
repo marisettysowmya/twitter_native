@@ -332,6 +332,13 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 35,
     top: 700,
+    elevation: 10,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
   },
   emptyList: {
     fontWeight: 'bold',

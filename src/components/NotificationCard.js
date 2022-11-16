@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
     width: 40,
     borderRadius: 20,
     // marginLeft: 30,
-    marginTop: 5,
+    // marginTop: 5,
   },
 });
 

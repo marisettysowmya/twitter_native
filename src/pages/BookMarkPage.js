@@ -1,4 +1,11 @@
-import {Text, Image, FlatList, StyleSheet} from 'react-native';
+import {
+  Text,
+  Image,
+  FlatList,
+  StyleSheet,
+  ActivityIndicator,
+  View,
+} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {LoadingImage} from '../assets';
 import {TweetCard} from '../components';
@@ -26,7 +33,10 @@ export default function BookMarkPage() {
   return (
     <>
       {isLoading ? (
-        <Image source={LoadingImage} style={styles.loading} />
+        <View style = {{flex: 1,
+          justifyContent: "center"}}>
+          <ActivityIndicator size="large" color="rgba(42,169,224,255)"/>
+        </View>
       ) : (
         <FlatList
           data={bookMarkFeed}
