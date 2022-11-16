@@ -16,10 +16,14 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(true);
 
   async function handleLogin() {
-    const data = await AsyncStorage.getItem(AsyncStorageConstants.CREDENTIALS);
+    const data = await AsyncStorage.getItem(AsyncStorageConstants.USER_DETAILS);
     const credentials = JSON.parse(data);
+
     if (credentials) {
-      const isSuccessful = await login(credentials);
+      const isSuccessful = await login({
+        name: credentials.userName,
+        password: credentials.password,
+      });
       setIsLoggedIn(isSuccessful);
     }
     setIsLoading(false);

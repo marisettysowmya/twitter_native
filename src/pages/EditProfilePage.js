@@ -32,7 +32,7 @@ export default function EditProfilePage({navigation}) {
     const data = await AsyncStorage.getItem(AsyncStorageConstants.USER_DETAILS);
     const user = JSON.parse(data);
     setName(user.name);
-    setHandle(user.handle);
+    setHandle(user.userName);
     setBio(user.bio);
     setAvatar(user.avatar);
     setBanner(user.banner);
@@ -44,7 +44,14 @@ export default function EditProfilePage({navigation}) {
   const handleSubmit = async () => {
     const data = await AsyncStorage.getItem(AsyncStorageConstants.USER_DETAILS);
     const user = JSON.parse(data);
-    const updatedUser = await updateUserDetails({...user, name, handle, bio});
+    const updatedUser = {
+      ...user,
+      name,
+      userName: handle,
+      bio,
+    };
+    console.log(updatedUser, 'yghujk');
+    await updateUserDetails(updatedUser);
     if (!updatedUser) {
       Alert.alert('Handle already exists.');
       setHandle('');
