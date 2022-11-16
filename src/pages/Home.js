@@ -8,6 +8,7 @@ import {
   Modal,
   ActivityIndicator,
   Pressable,
+  Dimensions,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
@@ -25,6 +26,10 @@ import {getSortedFeed, getUserFeed} from '../api/Feed';
 import {FeedString, SortTypes, SortTypeString} from '../constants/Feed';
 import {useIsFocused} from '@react-navigation/native';
 
+
+const screenHeight = Dimensions.get('window').height;
+const screenWidth = Dimensions.get('window').width;
+
 const SortDropdown = props => {
   const {showDropdown, toggleDropdown, fetchSortedFeed} = props;
 
@@ -39,8 +44,6 @@ const SortDropdown = props => {
         <Text
           styles={styles.sortButton}
           onPressOut={() => {
-            console.log(false, 'fvgbhnjmk,l');
-
             // fetchSortedFeed(SortTypes.DATE);
             // toggleDropdown(false);
           }}>
@@ -113,10 +116,10 @@ export default function Home({navigation}) {
 
         <View style={styles.bodyContainer}>
           {isLoading ? (
-            <View style = {{flex: 1,
-          justifyContent: "center"}}>
-          <ActivityIndicator size={"large"} color="rgba(42,169,224,255)"/>
-        </View>          ) : (
+            <View style={{flex: 1, justifyContent: 'center'}}>
+              <ActivityIndicator size={'large'} color="rgba(42,169,224,255)" />
+            </View>
+          ) : (
             <FlatList
               data={feedData}
               renderItem={({item}) => (
@@ -134,21 +137,28 @@ export default function Home({navigation}) {
           )}
         </View>
         {/* <View style={styles.addTweetButtonContainer}> */}
-          {/* <TouchableOpacity
+        {/* <TouchableOpacity
             onPress={() =>
               navigation.navigate('MessagesPage', {screen: 'Add Tweet Page'})
             }>
             <Image source={AddIcon} style={styles.addTweetButton} />
           </TouchableOpacity> */}
-                  {/* </View> */}
-          <TouchableOpacity style={styles.addButton} onPress={() =>
-              navigation.navigate('MessagesPage', {screen: 'Add Tweet Page'})
-            }>
-        <Text
-          style={{fontSize: 50, margin: -7, color: 'white', fontWeight: '100'}}>
-          +
-        </Text>
-      </TouchableOpacity>
+        {/* </View> */}
+        <TouchableOpacity
+          style={styles.addButton}
+          onPress={() =>
+            navigation.navigate('MessagesPage', {screen: 'Add Tweet Page'})
+          }>
+          <Text
+            style={{
+              fontSize: 50,
+              margin: -7,
+              color: 'white',
+              fontWeight: '100',
+            }}>
+            +
+          </Text>
+        </TouchableOpacity>
       </View>
     </>
   );
@@ -162,17 +172,20 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
     marginVertical: '50%',
   },
-  mainContainer: {flex: 1},
+  mainContainer: {flex: 1, width: screenWidth},
+
   headerContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     backgroundColor: 'white',
+    borderBottomWidth: 0.5,
+    borderColor: 'gray'
   },
-  headerIconContainer: {marginHorizontal: 10, marginVertical: 5},
+  headerIconContainer: {marginHorizontal: 10},
   headerIcon: {height: 45, width: 45, resizeMode: 'contain',},
   headerIcon2: {height: 35, width: 35, resizeMode: 'contain', marginTop: 5},
 
-  bodyContainer: {flex: 20, margin: 5, padding: 5,},
+  bodyContainer: {},
   sortDropdown: {
     position: 'absolute',
     backgroundColor: 'white',
@@ -224,10 +237,5 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
   },
-  addbutton: {
-    fontSize: 50,
-    textAlign: 'center',
-    color: 'white',
-    marginTop: -10,
-  },
+  
 });

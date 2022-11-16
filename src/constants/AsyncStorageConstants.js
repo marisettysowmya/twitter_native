@@ -3,4 +3,6 @@ export const AsyncStorageConstants = {
   TOKEN: 'token',
   USER_DETAILS: 'userDetails',
   CREDENTIALS: 'credentials',
+  USER_FOLLOWERS: 'userFollowers',
+  USER_FOLLOWINGS: 'userFollowings',
 };

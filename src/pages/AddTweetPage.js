@@ -114,8 +114,7 @@ const AddTweetPage = ({navigation}) => {
     // const reference = storage().ref(imageData.name);
     // await reference.putFile(imageData.uri);
 
-    const data =  await postTweet(tweetText);
-    Alert.alert('New Tweet Added!')
+    const res = await postTweet({tweetText, image: imageUrl});
     navigation.goBack();
   }
   return (

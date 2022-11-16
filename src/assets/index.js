@@ -11,8 +11,10 @@ export const imageRetweeted = require('./retweeted2.png');
 export const imageProfilePageIcon = require('./profile2.png');
 export const imageSettings = require('./settings.png');
 export const imageEditProfile = require('./imageEditProfile.png');
+export const imageBirthday = require('./birthday6.png');
 
 
+export const loginBG2 = require('./loginBG3.jpg');
 
 export const imageLike = require('./like5.png');
 export const imageLiked = require('./liked2.png');

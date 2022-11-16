@@ -14,7 +14,7 @@ import {
   Image,
   Alert,
 } from 'react-native';
-import {imageLogo} from '../assets';
+import {imageLogo, loginBG2} from '../assets';
 import LinearGradient from 'react-native-linear-gradient';
 import {login} from '../api/Login';
 import {decode as atob, encode as btoa} from 'base-64';
@@ -50,7 +50,7 @@ const Login = ({navigation}) => {
     >
       <ScrollView>
         <ImageBackground
-          source={loginBG}
+          source={loginBG2}
           resizeMode="cover"
           style={styles.image}>
           <View style={styles.adminButton}>
@@ -87,9 +87,11 @@ const Login = ({navigation}) => {
                 placeholder="Type your password..."
                 style={styles.input}
                 value={password}
+                secureTextEntry={true}
                 onChangeText={password => {
                   setPassword(password);
-                }}></TextInput>
+                }}
+              />
               <TouchableOpacity
                 style={styles.button}
                 onPress={async () => {

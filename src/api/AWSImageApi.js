@@ -10,7 +10,6 @@ const config = {
 };
 
 export const uploadImageToAWS = async file => {
-  console.log(file, config, 'dehte hai');
   return RNS3.put(file, config)
     .then(response => {
       if (response.status !== 201)

@@ -21,6 +21,7 @@ import {
 } from '../assets/index';
 
 function TweetCard(props) {
+  console.log(props);
   const [tweetData, setTweetData] = useState(props.tweet);
   const [isBookmarked, toggleBookmark] = useState(false);
   const [isLiked, toggleLiked] = useState(false);
@@ -29,38 +30,43 @@ function TweetCard(props) {
 
   async function fetchTweet(tweetId) {
     const tweet = await getTweetData(tweetId);
-    console.log(tweet, 'reached');
     setTweetData(tweet);
   }
   useEffect(() => {
-    if (props?.msg) {
+    if (props.tweet?.msg) {
       fetchTweet(props?.tweet?.tweetId || props.tweetId);
     }
   }, []);
   async function handleCommentButtonClick(tweetId) {
-    toggleReply(!isReplied)
-    await postComment(tweetId);
+    toggleReply(!isReplied);
+
+    // await postComment(tweetId);
+    console.log(tweetId);
+    props.navigation.navigate('MessagesPage', {
+      screen: 'Comment Page',
+      params: {tweetId},
+    });
+
     // await fetchTweet(tweetId);
   }
   async function handleBookmarkButtonClick(tweetId) {
-    toggleBookmark(!isBookmarked)
+    toggleBookmark(!isBookmarked);
     await addBookmark(tweetId);
     // await fetchTweet(tweetId);
   }
 
   async function handleRetweetButtonClick(tweetId, tweet) {
-    toggleRetweet(!isRetweeted)
+    toggleRetweet(!isRetweeted);
     // TODO - handle retweet click option
     await postRetweet(tweetId, tweet);
   }
   async function handleLikeButtonClick(tweetId) {
-    toggleLiked(!isLiked)
+    toggleLiked(!isLiked);
     const updatedlLikes = await likeTweet(tweetId);
-    // setTweetData({
-    //   ...tweetData,
-    //   numberofLikes: updatedlLikes,
-    // });
-    // await fetchTweet(tweetId);
+    setTweetData({
+      ...tweetData,
+      numberofLikes: updatedlLikes,
+    });
   }
 
   const TweetImageRendering = image => {
@@ -136,13 +142,20 @@ function TweetCard(props) {
       />
       <View style={styles.details}>
         <View style={styles.tweetHeader}>
-          <TouchableOpacity onPress={() => {}}>
+          <TouchableOpacity
+            onPress={() => {
+              props.navigation.navigate('Profile', {
+                userId: tweetData.postedUserId,
+              });
+            }}>
             <Text style={styles.username}>{tweetData.createdUser?.name}</Text>
             <Text style={styles.handle}>{tweetData.createdUser?.userName}</Text>
           </TouchableOpacity>
           <Image
             style={styles.verifiedImage}
-            source={tweetData?.createdUser?.isVerified ? imageVerified : ''}
+            source={
+              tweetData?.createdUser?.isVerified === 3 ? imageVerified : ''
+            }
           />
         </View>
         <View style={styles.tweet}>
@@ -155,7 +168,9 @@ function TweetCard(props) {
           <TouchableOpacity
             style={styles.footerFields}
             onPress={() => handleCommentButtonClick(tweetData.tweetId)}>
-            <Image style={styles.tweetIcons} source={(isReplied)?imageReplied:imageReply}></Image>
+            <Image
+              style={styles.tweetIcons}
+              source={isReplied ? imageReplied : imageReply}></Image>
             <Text>{tweetData.numberofComments || '0'}</Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -163,7 +178,9 @@ function TweetCard(props) {
             onPress={() =>
               handleRetweetButtonClick(tweetData.tweetId, tweetData)
             }>
-            <Image style={styles.tweetIcons} source={(isRetweeted)?imageRetweeted:imageRetweet}></Image>
+            <Image
+              style={styles.tweetIcons}
+              source={isRetweeted ? imageRetweeted : imageRetweet}></Image>
             <Text>{tweetData.numberofTweets || '0'}</Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -171,7 +188,9 @@ function TweetCard(props) {
             onPress={() => {
               handleLikeButtonClick(tweetData.tweetId);
             }}>
-            <Image style={styles.tweetIcons} source={(isLiked)?imageLiked:imageLike}></Image>
+            <Image
+              style={styles.tweetIcons}
+              source={isLiked ? imageLiked : imageLike}></Image>
             <Text>{tweetData.numberofLikes || '0'}</Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -179,7 +198,9 @@ function TweetCard(props) {
             onPress={() => {
               handleBookmarkButtonClick(tweetData.tweetId);
             }}>
-            <Image style={styles.tweetIcons} source={(isBookmarked)?Bookmarked:Bookmark}></Image>
+            <Image
+              style={styles.tweetIcons}
+              source={isBookmarked ? Bookmarked : Bookmark}></Image>
           </TouchableOpacity>
         </View>
       </View>
@@ -192,8 +213,9 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0.5,
     borderColor: 'gray',
     flexDirection: 'row',
-    marginVertical: 5,
-    margin: 5,
+    // marginVertical: 5,
+    // margin: 5,
+    backgroundColor: 'white',
   },
   profileImage: {
     height: 70,
@@ -223,7 +245,7 @@ const styles = StyleSheet.create({
   },
 
   tweet: {
-    marginHorizontal: 10,
+    // marginHorizontal: 10,
     marginVertical: 0,
     paddingRight: 5,
   },
