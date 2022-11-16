@@ -7,6 +7,7 @@ import {
   FlatList,
   Modal,
   ActivityIndicator,
+  Pressable,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
@@ -15,6 +16,7 @@ import {
   imageDrawer,
   LoadingImage,
   ProfilePicture,
+  HomeIcon,
   SortIcon,
   TwitterIcon,
 } from '../assets';
@@ -22,9 +24,6 @@ import {TweetCard} from '../components';
 import {getSortedFeed, getUserFeed} from '../api/Feed';
 import {FeedString, SortTypes, SortTypeString} from '../constants/Feed';
 import {useIsFocused} from '@react-navigation/native';
-
-// TODO - Add Sort Modal
-// UsecrollTOtop
 
 const SortDropdown = props => {
   const {showDropdown, toggleDropdown, fetchSortedFeed} = props;
@@ -39,9 +38,11 @@ const SortDropdown = props => {
         transparent={true}>
         <Text
           styles={styles.sortButton}
-          onPress={() => {
-            fetchSortedFeed(SortTypes.DATE);
-            toggleDropdown(false);
+          onPressOut={() => {
+            console.log(false, 'fvgbhnjmk,l');
+
+            // fetchSortedFeed(SortTypes.DATE);
+            // toggleDropdown(false);
           }}>
           {SortTypeString.DATE}
         </Text>
@@ -118,7 +119,11 @@ export default function Home({navigation}) {
             <FlatList
               data={feedData}
               renderItem={({item}) => (
-                <TweetCard tweet={item} key={item.tweetId} />
+                <TweetCard
+                  tweet={item}
+                  key={item.tweetId}
+                  navigation={navigation}
+                />
               )}
               keyExtractor={item => item.tweetId}
               ListEmptyComponent={
@@ -174,6 +179,7 @@ const styles = StyleSheet.create({
     padding: 10,
     height: 50,
     width: 300,
+    alignItems: 'center',
   },
   sortButton: {},
   emptyList: {
@@ -216,5 +222,11 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
+  },
+  addbutton: {
+    fontSize: 50,
+    textAlign: 'center',
+    color: 'white',
+    marginTop: -10,
   },
 });

@@ -8,6 +8,8 @@ import {NavigationContainer} from '@react-navigation/native';
 import DrawerNavigator from './navigation/DrawerNavigator';
 import {Login} from './pages/index';
 import {AsyncStorageConstants} from './constants/AsyncStorageConstants';
+import {LoginNavigator} from './navigation/LoginNavigator';
+import AdminDrawerNavigator from './navigation/AdminDrawerNavigator';
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -16,8 +18,10 @@ export default function App() {
   async function handleLogin() {
     const data = await AsyncStorage.getItem(AsyncStorageConstants.CREDENTIALS);
     const credentials = JSON.parse(data);
-    const isSuccessful = await login(credentials);
-    setIsLoggedIn(isSuccessful);
+    if (credentials) {
+      const isSuccessful = await login(credentials);
+      setIsLoggedIn(isSuccessful);
+    }
     setIsLoading(false);
   }
   useEffect(() => {
@@ -30,11 +34,9 @@ export default function App() {
         <SafeAreaView style = {{flex: 1, justifyContent: 'center'}}>
           <Image source={imageLogo} style={styles.loadingImage} />
         </SafeAreaView>
-      ) : !isLoggedIn ? (
-        <Login />
       ) : (
         <NavigationContainer>
-          <DrawerNavigator />
+          {!isLoggedIn ? <LoginNavigator /> : <DrawerNavigator />}
         </NavigationContainer>
       )}
     </>

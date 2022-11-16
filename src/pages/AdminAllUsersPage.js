@@ -1,4 +1,4 @@
-import {View, Text, StyleSheet, Image, FlatList} from 'react-native';
+import {StyleSheet, Image, FlatList} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {useIsFocused} from '@react-navigation/native';
 import {getAllUsers} from '../api/AdminApi';
@@ -26,7 +26,9 @@ export default function AdminAllUsersPage() {
       ) : (
         <FlatList
           data={allUsers}
-          renderItem={({item}) => <AdminUserCard key={item.id} />}
+          renderItem={({item}) => (
+            <AdminUserCard key={item.userId} data={item} />
+          )}
           keyExtractor={item => item.id}
         />
       )}

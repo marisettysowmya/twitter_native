@@ -11,8 +11,9 @@ import AddTweetPage from './AddTweetPage';
 import SingleTweetPage from './SingleTweetPage';
 import AdminAllUsersPage from './AdminAllUsersPage';
 import AdminBlueTickRequestPage from './AdminBlueTickRequestPage';
-import Signup from './Signup'
+import Signup from './Signup';
 import AdminLoginPage from './AdminLoginPage';
+import UserListPage from './UserListPage';
 export {
   Home,
   BookMarkPage,
@@ -28,5 +29,6 @@ export {
   AdminAllUsersPage,
   AdminBlueTickRequestPage,
   Signup,
-  AdminLoginPage
+  AdminLoginPage,
+  UserListPage,
 };

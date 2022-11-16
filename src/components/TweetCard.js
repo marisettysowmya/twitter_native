@@ -33,7 +33,6 @@ function TweetCard(props) {
     setTweetData(tweet);
   }
   useEffect(() => {
-    console.log(props.tweet, 'single tweet page tweetcard');
     if (props?.msg) {
       fetchTweet(props?.tweet?.tweetId || props.tweetId);
     }
@@ -133,11 +132,14 @@ function TweetCard(props) {
           tweetData?.createdUser?.avatar
             ? {uri: `${tweetData?.createdUser?.avatar}`}
             : imageDefault
-        }></Image>
+        }
+      />
       <View style={styles.details}>
         <View style={styles.tweetHeader}>
-          <Text style={styles.username}>{tweetData.createdUser?.name}</Text>
-          <Text style={styles.handle}>{tweetData.createdUser?.username}</Text>
+          <TouchableOpacity onPress={() => {}}>
+            <Text style={styles.username}>{tweetData.createdUser?.name}</Text>
+            <Text style={styles.handle}>{tweetData.createdUser?.userName}</Text>
+          </TouchableOpacity>
           <Image
             style={styles.verifiedImage}
             source={tweetData?.createdUser?.isVerified ? imageVerified : ''}
