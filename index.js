@@ -14,4 +14,4 @@ import { ChatPage, Home } from './src/pages';
 import UserMessagePage from './src/pages/UserMessagePage';
 
 
-AppRegistry.registerComponent(appName, () => ChatPage);
+AppRegistry.registerComponent(appName, () => App);
