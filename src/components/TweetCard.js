@@ -210,7 +210,7 @@ function TweetCard(props) {
 
 const styles = StyleSheet.create({
   tweetContainer: {
-    borderBottomWidth: 0.5,
+    borderBottomWidth: 1,
     borderColor: 'gray',
     flexDirection: 'row',
     // marginVertical: 5,
@@ -236,6 +236,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     paddingLeft: 10,
     paddingRight: 5,
+    paddingTop: 8,
     fontWeight: 'bold',
     color: 'black',
   },
@@ -252,7 +253,8 @@ const styles = StyleSheet.create({
 
   tweetMessage: {
     color: 'black',
-    marginRight: 95,
+    // marginRight: ,
+    fontSize: 15,
   },
   tweetImageContainer: {
     flexDirection: 'row',
