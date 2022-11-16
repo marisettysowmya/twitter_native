@@ -240,6 +240,7 @@ const styles = StyleSheet.create({
     borderBottomColor: '#EFEFF4',
     borderBottomWidth: 2,
     height: animatedHeaderHeight,
+    backgroundColor: 'white'
     // padding: 10,
     // position: 'absolute'
   },
@@ -331,11 +332,13 @@ const styles = StyleSheet.create({
 
   tabs: {
     flexDirection: 'row',
-    marginTop: 10,
-    height: 30,
+    // marginTop: 10,
+    height: 40,
+    // paddingTop: 10,
     borderBottomWidth: 0.5,
     borderColor: 'gray',
-    // alignItems: 'center'
+    backgroundColor: 'white',
+    alignItems: 'center',
   },
 
   tweetText: {

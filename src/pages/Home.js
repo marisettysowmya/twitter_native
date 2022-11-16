@@ -8,6 +8,7 @@ import {
   Modal,
   ActivityIndicator,
   Pressable,
+  Dimensions,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
@@ -24,6 +25,10 @@ import {TweetCard} from '../components';
 import {getSortedFeed, getUserFeed} from '../api/Feed';
 import {FeedString, SortTypes, SortTypeString} from '../constants/Feed';
 import {useIsFocused} from '@react-navigation/native';
+
+
+const screenHeight = Dimensions.get('window').height;
+const screenWidth = Dimensions.get('window').width;
 
 const SortDropdown = props => {
   const {showDropdown, toggleDropdown, fetchSortedFeed} = props;
@@ -167,17 +172,20 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
     marginVertical: '50%',
   },
-  mainContainer: {flex: 1},
+  mainContainer: {flex: 1, width: screenWidth},
+
   headerContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     backgroundColor: 'white',
+    borderBottomWidth: 0.5,
+    borderColor: 'gray'
   },
-  headerIconContainer: {marginHorizontal: 10, marginVertical: 5},
-  headerIcon: {height: 45, width: 45, resizeMode: 'contain'},
+  headerIconContainer: {marginHorizontal: 10},
+  headerIcon: {height: 45, width: 45, resizeMode: 'contain',},
   headerIcon2: {height: 35, width: 35, resizeMode: 'contain', marginTop: 5},
 
-  bodyContainer: {flex: 20, margin: 5, padding: 5},
+  bodyContainer: {},
   sortDropdown: {
     position: 'absolute',
     backgroundColor: 'white',
@@ -229,10 +237,5 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
   },
-  addbutton: {
-    fontSize: 50,
-    textAlign: 'center',
-    color: 'white',
-    marginTop: -10,
-  },
+  
 });

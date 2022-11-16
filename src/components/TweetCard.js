@@ -21,6 +21,7 @@ import {
 } from '../assets/index';
 
 function TweetCard(props) {
+  console.log(props);
   const [tweetData, setTweetData] = useState(props.tweet);
   const [isBookmarked, toggleBookmark] = useState(false);
   const [isLiked, toggleLiked] = useState(false);
@@ -32,13 +33,20 @@ function TweetCard(props) {
     setTweetData(tweet);
   }
   useEffect(() => {
-    if (props?.msg) {
+    if (props.tweet?.msg) {
       fetchTweet(props?.tweet?.tweetId || props.tweetId);
     }
   }, []);
   async function handleCommentButtonClick(tweetId) {
     toggleReply(!isReplied);
-    await postComment(tweetId);
+
+    // await postComment(tweetId);
+    console.log(tweetId);
+    props.navigation.navigate('MessagesPage', {
+      screen: 'Comment Page',
+      params: {tweetId},
+    });
+
     // await fetchTweet(tweetId);
   }
   async function handleBookmarkButtonClick(tweetId) {
@@ -205,8 +213,9 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0.5,
     borderColor: 'gray',
     flexDirection: 'row',
-    marginVertical: 5,
-    margin: 5,
+    // marginVertical: 5,
+    // margin: 5,
+    backgroundColor: 'white',
   },
   profileImage: {
     height: 70,
@@ -236,7 +245,7 @@ const styles = StyleSheet.create({
   },
 
   tweet: {
-    marginHorizontal: 10,
+    // marginHorizontal: 10,
     marginVertical: 0,
     paddingRight: 5,
   },
