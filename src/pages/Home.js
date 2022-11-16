@@ -232,10 +232,5 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
   },
-  addbutton: {
-    fontSize: 50,
-    textAlign: 'center',
-    color: 'white',
-    marginTop: -10,
-  },
+  
 });

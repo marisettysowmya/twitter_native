@@ -296,7 +296,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0.5,
     borderColor: 'gray',
     backgroundColor: 'white',
-    alignItems: 'center'
+    alignItems: 'center',
   },
 
   tweetText: {

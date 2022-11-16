@@ -34,15 +34,19 @@ function TweetCard(props) {
     setTweetData(tweet);
   }
   useEffect(() => {
-    if (props?.msg) {
+    if (props.tweet?.msg) {
       fetchTweet(props?.tweet?.tweetId || props.tweetId);
     }
   }, []);
   async function handleCommentButtonClick(tweetId) {
     toggleReply(!isReplied);
-    
-    await postComment(tweetId);
-    props.navigation.navigate('MessagesPage', {screen: 'Comment Page'}, {tweetId});
+
+    // await postComment(tweetId);
+    console.log(tweetId);
+    props.navigation.navigate('MessagesPage', {
+      screen: 'Comment Page',
+      params: {tweetId},
+    });
 
     // await fetchTweet(tweetId);
   }

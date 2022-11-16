@@ -1,64 +1,122 @@
-import { useIsFocused } from "@react-navigation/native";
-import React, { useEffect, useState } from "react";
-import { View, StyleSheet, TextInput, KeyboardAvoidingView, FlatList, Text, Image } from "react-native";
+import {useIsFocused} from '@react-navigation/native';
+import React, {useEffect, useState} from 'react';
+import {
+  View,
+  StyleSheet,
+  TextInput,
+  KeyboardAvoidingView,
+  FlatList,
+  Text,
+  Image,
+  ActivityIndicator,
+  TouchableOpacity,
+  Keyboard,
+} from 'react-native';
 // import { TextInput } from "react-native-gesture-handler";
-import CommentCard from "../components/CommentCard";
-import { FeedString } from "../constants/Feed";
-import { LoadingImage } from "../assets";
-import { getUserComment } from "../api/Tweet";
+import CommentCard from '../components/CommentCard';
+import {FeedString} from '../constants/Feed';
+import {LoadingImage} from '../assets';
+import {getUserComment, postComment} from '../api/Tweet';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {AsyncStorageConstants} from '../constants/AsyncStorageConstants';
 
-export default function CommentPage({route}){
-    const {tweetId} = route.params; 
-    const [commentFeed, setcommentFeed] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
+export default function CommentPage({route}) {
+  const {tweetId} = route.params;
+  console.log('zzzzzzzzzzzzzzzzzzzz', tweetId);
 
-    const isFocused = useIsFocused();
-    async function fetchComment(){
-        const data = await getUserComment();
-        console.log(data,'vhbjnk')
-        setcommentFeed(data);
-        setIsLoading(false);
-        console.log(data);
-    }
-    useEffect(()=>{
-        fetchComment();
-    }, []);
+  const [commentFeed, setcommentFeed] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [commentText, setCommentText] = useState('');
 
-    return(
-        <>
-        <View >
-            {/* <CommentCard /> */}
-            {isLoading ? (
-                <View style = {{flex: 1,
-                    justifyContent: "center"}}>
-                    <ActivityIndicator size={"large"} color="rgba(42,169,224,255)"/>
-                  </View>  
-            ) : (
-            <FlatList
-                data={commentFeed}
-                renderItem={({item}) => <CommentCard tweet={item} key={item.id} />}
-                keyExtractor={item => item.id}
-                ListEmptyComponent={
-            <Text style={styles.emptyList}>
-              {FeedString.EMPTY_BOOKMARK_FEED}
-            </Text>
-          }
+  const isFocused = useIsFocused();
+  async function fetchComment() {
+    const data = await getUserComment();
+    console.log(data, 'vhbjnk');
+    setcommentFeed(data);
+    setIsLoading(false);
+    // console.log(data);
+  }
+  useEffect(() => {
+    fetchComment();
+  }, [isFocused]);
+
+  const handleCommentSubmit = async () => {
+    const userId = await AsyncStorage.getItem(AsyncStorageConstants.USER_ID);
+    let data = {
+      commentText: commentText,
+      userId: userId,
+      tweetId: tweetId,
+    };
+    await postComment(data);
+    await fetchComment();
+    Keyboard.dismiss();
+    // this.flatList.scrollToEnd({animated: true})
+  };
+
+  return (
+    <>
+      <View style={{flex: 1}}>
+        {/* <CommentCard /> */}
+        {isLoading ? (
+          <View style={{flex: 1, justifyContent: 'center'}}>
+            <ActivityIndicator size={'large'} color="rgba(42,169,224,255)" />
+          </View>
+        ) : (
+          <FlatList
+            inverted
+            ref={ref => (this.flatList = ref)}
+            onLayout={() => this.flatList.scrollToEnd({animated: true})}
+            data={commentFeed}
+            renderItem={({item}) => <CommentCard tweet={item} key={item.id} />}
+            keyExtractor={item => item.id}
+            ListEmptyComponent={
+              <Text style={styles.emptyList}>
+                {FeedString.EMPTY_BOOKMARK_FEED}
+              </Text>
+            }
+          />
+        )}
+        <TextInput
+          placeholder="Comment..."
+          style={styles.commentbox}
+          value={commentText}
+          onChangeText={commentText => {
+            setCommentText(commentText);
+          }}
         />
-            )}
-            <TextInput
-            placeholder="comment"
-            style={styles.commentbox}/>
-        </View>
-       </>
-    )
+        <TouchableOpacity
+          style={styles.commentButton}
+          onPress={handleCommentSubmit}>
+          <Text style={{fontSize: 18, fontWeight: 'bold', color: 'white'}}>
+            Send
+          </Text>
+        </TouchableOpacity>
+      </View>
+    </>
+  );
 }
-const styles=StyleSheet.create({
-    commentbox:{
-        backgroundColor: '#fff',
-        padding: 10,
-        color: '#000',
-        borderRadius: 10,
-        borderWidth: 1,
-        // marginTop: 625
-    }
-})
+const styles = StyleSheet.create({
+  commentbox: {
+    backgroundColor: '#fff',
+    padding: 10,
+    color: '#000',
+    borderRadius: 50,
+    borderWidth: 0.5,
+    marginHorizontal: 20,
+    // marginTop: 625
+  },
+
+  commentButton: {
+    backgroundColor: 'rgba(42,169,224,255)',
+    borderColor: 'rgba(0,0,0,0.5)',
+    borderRadius: 25,
+    padding: 10,
+    // borderWidth: 2,
+    width: 185,
+    alignItems: 'center',
+    marginLeft: '30',
+    // marginRight: 'auto',
+    marginBottom: 20,
+    marginTop: 15,
+  },
+});
