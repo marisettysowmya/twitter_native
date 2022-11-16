@@ -3,27 +3,61 @@ import {AsyncStorageConstants} from '../constants/AsyncStorageConstants';
 import Axios from './Axios';
 
 export const login = async data => {
-  console.log(data);
+  console.log(data.name, data.password);
   const xy = await Axios.post(
-    `/login?username=${name}&password=${password}`,
+    `/login?username=${data.name}&password=${data.password}`,
+    {
+      withCredentials: true,
+    },
   )
     .then(res => {
-      console.log(res.headers);
+      return true;
     })
-    .catch(e => console.log(e));
-
-  await AsyncStorage.setItem(AsyncStorageConstants.USER_ID, '13');
+    .catch(e => {
+      console.log(e);
+      return false;
+    });
+  if (!xy) return xy;
+  const userData = await Axios.get(`/user/username/${data.name}`, {
+    withCredentials: true,
+  }).then(res => {
+    return res.data;
+  });
+  const userFollowers = await Axios.get(`/user/${userData.userId}/followers`, {
+    withCredentials: true,
+  }).then(res => {
+    return res.data;
+  });
+  const userFollowing = await Axios.get(`/user/${userData.userId}/followings`, {
+    withCredentials: true,
+  }).then(res => {
+    return res.data;
+  });
   await AsyncStorage.setItem(
-    AsyncStorageConstants.TOKEN,
-    'JSESSIONID=F3002E8F28A3B75976111B62942D08F6',
+    AsyncStorageConstants.USER_ID,
+    userData.userId.toString(),
   );
-  await AsyncStorage.setItem(AsyncStorageConstants.USER_DETAILS, 'userObject');
-  return new Promise(resolve => setTimeout(resolve, 100, true));
+  await AsyncStorage.setItem(
+    AsyncStorageConstants.USER_DETAILS,
+    JSON.stringify(userData),
+  );
+  await AsyncStorage.setItem(
+    AsyncStorageConstants.USER_FOLLOWERS,
+    JSON.stringify(userFollowers),
+  );
+  await AsyncStorage.setItem(
+    AsyncStorageConstants.USER_FOLLOWINGS,
+    JSON.stringify(userFollowing),
+  );
+  return xy;
 };
 
-export const signUp = async (user) => {
-  console.log(user)
-  Axios.post(`/signup/${user}`).then(res => console.log(res));
-  // console.log(res);
-  return new Promise(resolve => setTimeout(resolve, 100, true));
+export const signUp = async user => {
+  return Axios.post('/signup', user['user'])
+    .then(res => {
+      return res.data;
+    })
+    .catch(error => {
+      return error.response.status;
+    });
 };

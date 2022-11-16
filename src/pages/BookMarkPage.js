@@ -1,6 +1,12 @@
-import {Text, Image, FlatList, StyleSheet} from 'react-native';
+import {
+  Text,
+  Image,
+  FlatList,
+  StyleSheet,
+  ActivityIndicator,
+  View,
+} from 'react-native';
 import React, {useEffect, useState} from 'react';
-import {LoadingImage} from '../assets';
 import {TweetCard} from '../components';
 import {getUserBookmarkedFeed} from '../api/Feed';
 import {useIsFocused} from '@react-navigation/native';
@@ -24,11 +30,15 @@ export default function BookMarkPage() {
   return (
     <>
       {isLoading ? (
-        <Image source={LoadingImage} style={styles.loading} />
+        <View style={{flex: 1, justifyContent: 'center'}}>
+          <ActivityIndicator size="large" color="rgba(42,169,224,255)" />
+        </View>
       ) : (
         <FlatList
           data={bookMarkFeed}
-          renderItem={({item}) => <TweetCard tweet={item} key={item.id} />}
+          renderItem={({item}) => (
+            <TweetCard msg={item.bookmarkId} key={item.id} tweet={item.tweet} />
+          )}
           keyExtractor={item => item.id}
           ListEmptyComponent={
             <Text style={styles.emptyList}>

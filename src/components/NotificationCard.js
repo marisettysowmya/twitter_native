@@ -11,7 +11,7 @@ const props = {
     profilePic: 'set',
   },
 };
-const NotificationCard = ({navigation}) => {
+const NotificationCard = ({navigation, tweet}) => {
   return (
     <View>
       {props.data.type === NotificationType.BLUE_TICK ? (
@@ -27,6 +27,9 @@ const NotificationCard = ({navigation}) => {
           onPress={() =>
             navigation.navigate('MessagesPage', {
               screen: 'Single Tweet Page',
+              params: {
+                tweet,
+              },
             })
           }>
           <Image source={bellIcon} style={styles.imageTwitter}></Image>
@@ -76,7 +79,7 @@ const styles = StyleSheet.create({
     width: 40,
     borderRadius: 20,
     // marginLeft: 30,
-    marginTop: 5,
+    // marginTop: 5,
   },
 });
 

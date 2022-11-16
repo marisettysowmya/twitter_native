@@ -11,8 +11,13 @@ import AddTweetPage from './AddTweetPage';
 import SingleTweetPage from './SingleTweetPage';
 import AdminAllUsersPage from './AdminAllUsersPage';
 import AdminBlueTickRequestPage from './AdminBlueTickRequestPage';
-import Signup from './Signup'
+import Signup from './Signup';
 import AdminLoginPage from './AdminLoginPage';
+import UserListPage from './UserListPage';
+import CommentPage from './CommentPage';
+import Logout from './Logout';
+import SearchPage from './SearchPage';
+import ForgotPasswordPage from './ForgotPasswordPage';
 export {
   Home,
   BookMarkPage,
@@ -28,5 +33,10 @@ export {
   AdminAllUsersPage,
   AdminBlueTickRequestPage,
   Signup,
-  AdminLoginPage
+  AdminLoginPage,
+  UserListPage,
+  CommentPage,
+  Logout,
+  SearchPage,
+  ForgotPasswordPage,
 };

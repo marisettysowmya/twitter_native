@@ -1,33 +1,71 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Text, View, StyleSheet, Image, TouchableOpacity} from 'react-native';
-import {getTweetData, likeTweet, postComment, postRetweet} from '../api/Tweet';
+import {
+  addBookmark,
+  getTweetData,
+  likeTweet,
+  postComment,
+  postRetweet,
+} from '../api/Tweet';
 import {
   imageReply,
   imageRetweet,
   imageLike,
   imageDefault,
   imageVerified,
+  Bookmark,
+  Bookmarked,
+  imageLiked,
+  imageRetweeted,
+  imageReplied,
 } from '../assets/index';
 
 function TweetCard(props) {
   const [tweetData, setTweetData] = useState(props.tweet);
+  const [isBookmarked, toggleBookmark] = useState(false);
+  const [isLiked, toggleLiked] = useState(false);
+  const [isRetweeted, toggleRetweet] = useState(false);
+  const [isReplied, toggleReply] = useState(false);
 
-  async function fetchTweet() {
-    const tweet = await getTweetData();
+  async function fetchTweet(tweetId) {
+    const tweet = await getTweetData(tweetId);
     setTweetData(tweet);
   }
+  useEffect(() => {
+    if (props.tweet?.msg) {
+      fetchTweet(props?.tweet?.tweetId || props.tweetId);
+    }
+  }, []);
   async function handleCommentButtonClick(tweetId) {
-    await postComment(tweetId);
+    toggleReply(!isReplied);
+
+    // await postComment(tweetId);
+    console.log(tweetId);
+    props.navigation.navigate('MessagesPage', {
+      screen: 'Comment Page',
+      params: {tweetId},
+    });
+
     // await fetchTweet(tweetId);
   }
+  async function handleBookmarkButtonClick(tweetId) {
+    toggleBookmark(!isBookmarked);
+    await addBookmark(tweetId);
+    // await fetchTweet(tweetId);
+  }
+
   async function handleRetweetButtonClick(tweetId, tweet) {
+    toggleRetweet(!isRetweeted);
     // TODO - handle retweet click option
     await postRetweet(tweetId, tweet);
   }
   async function handleLikeButtonClick(tweetId) {
-    console.log('like buttonclicked');
-    await likeTweet(tweetId);
-    // await fetchTweet(tweetId);
+    toggleLiked(!isLiked);
+    const updatedlLikes = await likeTweet(tweetId);
+    setTweetData({
+      ...tweetData,
+      numberofLikes: updatedlLikes,
+    });
   }
 
   const TweetImageRendering = image => {
@@ -99,27 +137,43 @@ function TweetCard(props) {
           tweetData?.createdUser?.avatar
             ? {uri: `${tweetData?.createdUser?.avatar}`}
             : imageDefault
-        }></Image>
+        }
+      />
       <View style={styles.details}>
         <View style={styles.tweetHeader}>
-          <Text style={styles.username}>{tweetData.createdUser?.name}</Text>
-          <Text style={styles.handle}>{tweetData.createdUser?.username}</Text>
+          <TouchableOpacity
+            onPress={() => {
+              props.navigation.navigate('Profile', {
+                userId: tweetData.postedUserId,
+              });
+            }}>
+            <Text style={styles.username}>{tweetData.createdUser?.name}</Text>
+            <Text style={styles.handle}>
+              @{tweetData.createdUser?.userName}
+            </Text>
+          </TouchableOpacity>
           <Image
             style={styles.verifiedImage}
-            source={tweetData?.createdUser?.isVerified ? imageVerified : ''}
+            source={
+              tweetData?.createdUser?.isVerified === 3 ? imageVerified : ''
+            }
           />
         </View>
         <View style={styles.tweet}>
           <View>
             <Text style={styles.tweetMessage}>{tweetData.text}</Text>
           </View>
-          <TweetImageRendering noOfPics={1} images={tweetData.image} />
+          {tweetData.image && (
+            <TweetImageRendering noOfPics={1} images={tweetData.image} />
+          )}
         </View>
         <View style={styles.tweetFooter}>
           <TouchableOpacity
             style={styles.footerFields}
             onPress={() => handleCommentButtonClick(tweetData.tweetId)}>
-            <Image style={styles.tweetIcons} source={imageReply}></Image>
+            <Image
+              style={styles.tweetIcons}
+              source={isReplied ? imageReplied : imageReply}></Image>
             <Text>{tweetData.numberofComments || '0'}</Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -127,7 +181,9 @@ function TweetCard(props) {
             onPress={() =>
               handleRetweetButtonClick(tweetData.tweetId, tweetData)
             }>
-            <Image style={styles.tweetIcons} source={imageRetweet}></Image>
+            <Image
+              style={styles.tweetIcons}
+              source={isRetweeted ? imageRetweeted : imageRetweet}></Image>
             <Text>{tweetData.numberofTweets || '0'}</Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -135,8 +191,19 @@ function TweetCard(props) {
             onPress={() => {
               handleLikeButtonClick(tweetData.tweetId);
             }}>
-            <Image style={styles.tweetIcons} source={imageLike}></Image>
+            <Image
+              style={styles.tweetIcons}
+              source={isLiked ? imageLiked : imageLike}></Image>
             <Text>{tweetData.numberofLikes || '0'}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.footerFields}
+            onPress={() => {
+              handleBookmarkButtonClick(tweetData.tweetId);
+            }}>
+            <Image
+              style={styles.tweetIcons}
+              source={isBookmarked ? Bookmarked : Bookmark}></Image>
           </TouchableOpacity>
         </View>
       </View>
@@ -146,11 +213,12 @@ function TweetCard(props) {
 
 const styles = StyleSheet.create({
   tweetContainer: {
-    borderBottomWidth: 0.5,
+    borderBottomWidth: 1,
     borderColor: 'gray',
     flexDirection: 'row',
-    marginVertical: 5,
-    margin: 5,
+    // marginVertical: 5,
+    // margin: 5,
+    backgroundColor: 'white',
   },
   profileImage: {
     height: 70,
@@ -171,6 +239,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     paddingLeft: 10,
     paddingRight: 5,
+    paddingTop: 8,
     fontWeight: 'bold',
     color: 'black',
   },
@@ -180,14 +249,15 @@ const styles = StyleSheet.create({
   },
 
   tweet: {
-    marginHorizontal: 10,
+    // marginHorizontal: 10,
     marginVertical: 0,
     paddingRight: 5,
   },
 
   tweetMessage: {
     color: 'black',
-    marginRight: 95,
+    // marginRight: ,
+    fontSize: 15,
   },
   tweetImageContainer: {
     flexDirection: 'row',
@@ -281,16 +351,18 @@ const styles = StyleSheet.create({
   },
 
   tweetFooter: {
-    width: 300,
+    // width: 300,
+    // borderWidth: 2,
     marginVertical: 10,
     flexDirection: 'row',
     marginHorizontal: 10,
     justifyContent: 'space-between',
   },
   footerFields: {
-    flex: 1,
+    // flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
+    // borderWidth: 2
   },
   tweetIcons: {
     height: 30,

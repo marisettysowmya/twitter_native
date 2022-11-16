@@ -9,12 +9,15 @@ import {
   KeyboardAvoidingView,
   Dimensions,
   Image,
+  Alert,
 } from 'react-native';
 import React, {useState} from 'react';
 import LinearGradient from 'react-native-linear-gradient';
 import {imageLogo} from '../assets';
 import DatePicker from 'react-native-date-picker';
-import { signUp } from '../api/Login';
+import {signUp} from '../api/Login';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {AsyncStorageConstants} from '../constants/AsyncStorageConstants';
 
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
@@ -23,127 +26,148 @@ const image = {
   uri: 'https://img.freepik.com/free-photo/gradient-blue-abstract-background-smooth-dark-blue-with-black-vignette-studio_1258-53634.jpg?w=740&t=st=1668187272~exp=1668187872~hmac=33656eceaa60cba5a52189321212c1eded1a06622ef818cef8226bb835d01c7f',
 };
 
-const Signup = () => {
+const Signup = ({navigation}) => {
   const [dob, setDate] = useState(new Date());
   const [open, setOpen] = useState(false);
   const [name, setName] = useState('');
   const [userName, setUserName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('')
+  const [password, setPassword] = useState('');
+  const [dobtext, setDobtext] = useState('');
   let user = {
-    userName,
-    name,
-    dob,
-    email,
-    password
-  }
+    userName: userName,
+    name: name,
+    password: password,
+    dob: dob,
+  };
   const getDate = () => {
     let tempDate = dob.toString().split(' ');
-    return dob !== ''
+    return dobtext !== ''
       ? `${tempDate[0]} ${tempDate[1]} ${tempDate[2]} ${tempDate[3]}`
-      : '';
+      : 'Enter Date Of Birth';
   };
 
-  const handleSubmit = () => {
-    console.log(user)
-    signUp({user})
-  }
+  const handleSubmit = async () => {
+    const userData = await signUp({user});
+    if (userData === 400) {
+      Alert.alert('Twitter Handle already exists.');
+      return;
+    }
+    if (userData) {
+      await AsyncStorage.setItem(
+        AsyncStorageConstants.USER_DETAILS,
+        JSON.stringify(userData),
+      );
+      await AsyncStorage.setItem(
+        AsyncStorageConstants.USER_ID,
+        userData.userId.toString(),
+      );
+      navigation.navigate('User Pages');
+    }
+  };
 
   return (
     <KeyboardAvoidingView>
-        <ScrollView style={styles.container}>
-          <ImageBackground
-            source={image}
-            resizeMode="cover"
-            style={styles.image}>
-            <View style={styles.welcome}>
-              <Image style={styles.logoImage} source={imageLogo} />
-            </View>
+      <ScrollView style={styles.container}>
+        <ImageBackground source={image} resizeMode="cover" style={styles.image}>
+          <View style={styles.welcome}>
+            <Image style={styles.logoImage} source={imageLogo} />
+          </View>
 
-            <LinearGradient
-              colors={[
-                'rgba(85,173,238,0.9)',
-                'rgba(85,173,238,0.8)',
-                'rgba(85,173,238,0.1)',
-              ]}
-              style={styles.contentContainer}>
-              <View>
-                <View style={styles.inputs}>
-                  {/* <Text style={{ fontSize: 18, fontWeight: 'bold', color: 'black', marginBottom: 60}}>SIGN-UP</Text> */}
-                  <TextInput
-                    placeholder="Type your Name..."
-                    style={styles.input} value = {name} onChangeText={(name) => {setName(name)}}></TextInput>
-                    <TextInput
-                    placeholder="Type your Handle..."
-                    style={styles.input} value = {userName} onChangeText={(userName) => {setUserName(userName)}}></TextInput>
-                  <TextInput
-                    placeholder="Type your Email-id..."
-                    style={styles.input} value = {email} onChangeText={(email) => {setEmail(email)}}></TextInput>
+          <LinearGradient
+            colors={[
+              'rgba(85,173,238,0.9)',
+              'rgba(85,173,238,0.8)',
+              'rgba(85,173,238,0.1)',
+            ]}
+            style={styles.contentContainer}>
+            <View>
+              <View style={styles.inputs}>
+                {/* <Text style={{ fontSize: 18, fontWeight: 'bold', color: 'black', marginBottom: 60}}>SIGN-UP</Text> */}
+                <TextInput
+                  placeholder="Type your Name..."
+                  style={styles.input}
+                  value={name}
+                  onChangeText={name => {
+                    setName(name);
+                  }}></TextInput>
+                <TextInput
+                  placeholder="Type your Handle..."
+                  style={styles.input}
+                  value={userName}
+                  onChangeText={userName => {
+                    setUserName(userName);
+                  }}></TextInput>
 
-                  <View>
-                    <TextInput
-                      placeholder="Type your password..."
-                      style={styles.input}
-                      textContentType="newPassword"
-                      secureTextEntry
-                      value = {password} onChangeText={(password) => {setPassword(password)}}
-                      ></TextInput>
-                    <TouchableOpacity></TouchableOpacity>
-                  </View>
-                  <View>
-                    <TouchableOpacity
-                      title="Open"
-                      onPress={() => setOpen(true)}
-                      style={styles.dateButton}>
-                      <DatePicker
-                        modal
-                        open={open}
-                        date={dob}
-                        minimumDate={new Date()}
-                        mode = "date"
-                        // androidVariant='iosClone'
-                        onConfirm={date => {
-                          setOpen(false);
-                          setDate(date);
-                        }}
-                        onCancel={() => {
-                          setOpen(false);
-                        }}
-                      />
-                      <TextInput placeholder='Enter Date...' value={getDate()} style = {styles.input}></TextInput>
-                      <Text style = {styles.button}>Enter Date of Birth</Text>
-                    </TouchableOpacity>
-                  </View>
+                <TextInput
+                  placeholder="Type your password..."
+                  style={styles.input}
+                  textContentType="newPassword"
+                  secureTextEntry
+                  value={password}
+                  onChangeText={password => {
+                    setPassword(password);
+                  }}
+                />
 
-                  <View>
-                    <TouchableOpacity style={styles.button} onPress={() => { handleSubmit() }}>
-                      <Text
-                        style={{
-                          fontSize: 18,
-                          fontWeight: 'bold',
-                          color: 'white',
-                        }}>
-                        Submit
-                      </Text>
-                    </TouchableOpacity>
-                    <Text style={styles.innerText}>
-                      Already have an account?
+                <View>
+                  <TouchableOpacity
+                    title="Open"
+                    onPress={() => setOpen(true)}
+                    style={styles.dateButton}>
+                    <DatePicker
+                      modal
+                      open={open}
+                      date={dob}
+                      mode="date"
+                      // androidVariant='iosClone'
+                      onConfirm={date => {
+                        setOpen(false);
+                        setDate(date);
+                        setDobtext(date.toString());
+                      }}
+                      onCancel={() => {
+                        setOpen(false);
+                      }}
+                    />
+
+                    <Text style={styles.input}>{getDate()}</Text>
+                  </TouchableOpacity>
+                </View>
+
+                <View>
+                  <TouchableOpacity
+                    style={styles.signupButton}
+                    onPress={() => {
+                      handleSubmit();
+                    }}>
+                    <Text
+                      style={{
+                        fontSize: 18,
+                        fontWeight: 'bold',
+                        color: 'white',
+                      }}>
+                      Submit
                     </Text>
-                    <TouchableOpacity style={styles.button2}>
-                      <Text
-                        style={{
-                          fontSize: 18,
-                          fontWeight: 'bold',
-                          color: 'white',
-                        }}>
-                        Login
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
+                  </TouchableOpacity>
+                  <Text style={styles.innerText}>Already have an account?</Text>
+                  <TouchableOpacity
+                    style={styles.loginButton}
+                    onPress={() => navigation.navigate('Login Page')}>
+                    <Text
+                      style={{
+                        fontSize: 18,
+                        fontWeight: 'bold',
+                        color: 'white',
+                      }}>
+                      Login
+                    </Text>
+                  </TouchableOpacity>
                 </View>
               </View>
-            </LinearGradient>
-          </ImageBackground>
+            </View>
+            {/* </View> */}
+          </LinearGradient>
+        </ImageBackground>
       </ScrollView>
     </KeyboardAvoidingView>
   );
@@ -151,12 +175,12 @@ const Signup = () => {
 
 const styles = StyleSheet.create({
   container: {
-      // flex: 1
+    // flex: 1
   },
 
   welcome: {
     // flex: 2,
-      marginTop:30,
+    marginTop: 30,
     justifyContent: 'center',
   },
 
@@ -176,9 +200,7 @@ const styles = StyleSheet.create({
     marginTop: 80,
   },
 
-  dateButton: {
-    
-  },
+  dateButton: {},
 
   inputs: {
     // borderWidth: 2,
@@ -200,7 +222,7 @@ const styles = StyleSheet.create({
     width: 120,
   },
 
-  button: {
+  signupButton: {
     //   backgroundColor: 'rgba(121,163,223,255)',
     backgroundColor: 'rgba(41,39,38,255)',
     borderColor: 'rgba(0,0,0,0.5)',
@@ -215,7 +237,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
 
-  button2: {
+  loginButton: {
     //   backgroundColor: 'rgba(255,117,146,255)',
     backgroundColor: 'rgba(41,39,38,255)',
     borderColor: 'rgba(0,0,0,0.5)',

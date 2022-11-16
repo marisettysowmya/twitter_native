@@ -2,15 +2,10 @@ import {View, Text, StyleSheet} from 'react-native';
 import React from 'react';
 import {acceptBlueTickRequests, rejectBlueTickRequests} from '../api/AdminApi';
 
-const props = {
-  data: {
-    name: 'Kushagra Singh',
-    userId: 1,
-  },
-};
-export default function AdminBlueTickRequestCard() {
+export default function AdminBlueTickRequestCard(props) {
+  const {data} = props;
   async function handleAcceptButtonClick() {
-    acceptBlueTickRequests();
+    await acceptBlueTickRequests(data);
   }
   async function handleDeclineButtonClick() {
     rejectBlueTickRequests();
@@ -24,7 +19,7 @@ export default function AdminBlueTickRequestCard() {
       <View style={styles.buttonContainer}>
         <Text
           onPress={() => {
-            handleAcceptButtonClick;
+            handleAcceptButtonClick();
           }}
           style={{color: 'green', fontWeight: 'bold'}}>
           Accept

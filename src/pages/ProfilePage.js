@@ -8,10 +8,16 @@ import {
   ScrollView,
   Animated,
   SafeAreaView,
+  FlatList,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {imageBanner, imageBirthday, imageJoined, imageProfile} from '../assets';
 import {TweetCard} from '../components';
+import {followUser, getUserData, getUserTweets} from '../api/User';
+import {FeedString} from '../constants/Feed';
+import {useIsFocused} from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {AsyncStorageConstants} from '../constants/AsyncStorageConstants';
 
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
@@ -30,9 +36,46 @@ animatedHeaderValue.addListener(({value}) => {
   this._value = value;
 });
 
-export default function ProfilePage() {
+export default function ProfilePage({navigation, route}) {
   const [isFocused, setFocus] = useState('tweets');
+  const [userData, setUserData] = useState({});
+  const [userTweets, setUserTweets] = useState([]);
+  const [userDetails, setUserDetials] = useState({});
+  const [userFollowing, setUserFollowing] = useState([]);
 
+  async function fetchUserData() {
+    const data = await getUserData(
+      route?.params?.userId ? route?.params?.userId : null,
+    );
+    const tweets = await getUserTweets(
+      route?.params?.userId ? route?.params?.userId : null,
+    );
+    const data1 = await AsyncStorage.getItem(
+      AsyncStorageConstants.USER_DETAILS,
+    );
+    const details = JSON.parse(data1);
+    setUserDetials(details);
+    const data2 = await AsyncStorage.getItem(
+      AsyncStorageConstants.USER_FOLLOWINGS,
+    );
+    const details1 = JSON.parse(data2);
+    setUserFollowing(details1);
+    setUserData(data);
+    setUserTweets(tweets);
+  }
+  async function handleFollowClick() {
+    await followUser(route.param.userId);
+    await AsyncStorage.setItem(
+      AsyncStorageConstants.USER_FOLLOWINGS,
+      JSON.stringify([...userFollowing, userData]),
+    );
+    setUserFollowing([...userFollowing, userData]);
+  }
+
+  const isOpened = useIsFocused();
+  useEffect(() => {
+    fetchUserData();
+  }, [isOpened]);
   useEffect(() => {
     stickyIndex();
   }, [animatedHeaderValue._value]);
@@ -47,45 +90,68 @@ export default function ProfilePage() {
         <Image style={styles.bannerImage} source={imageBanner} />
         <View style={styles.dpandedit}>
           <Image source={imageProfile} style={styles.profileImage}></Image>
-          <TouchableOpacity style={styles.editButton}>
-            <Text
-              style={{
-                borderWidth: 0.5,
-                marginRight: 20,
-                paddingLeft: 15,
-                paddingRight: 13,
-                paddingVertical: 5,
-                color: 'black',
-                fontWeight: 'bold',
-                borderRadius: 20,
-                borderColor: 'gray',
+          {route?.params?.userId === userDetails.userId ? (
+            <TouchableOpacity
+              style={styles.editButton}
+              onPress={() => {
+                navigation.navigate('Edit Profile Page');
               }}>
-              Edit profile
-            </Text>
-          </TouchableOpacity>
+              <Text
+                style={{
+                  borderWidth: 0.5,
+                  marginRight: 20,
+                  paddingLeft: 15,
+                  paddingRight: 13,
+                  paddingVertical: 5,
+                  color: 'black',
+                  fontWeight: 'bold',
+                  borderRadius: 20,
+                  borderColor: 'gray',
+                }}>
+                Edit profile
+              </Text>
+            </TouchableOpacity>
+          ) : userFollowing.find(
+              user => user.userId === route?.params?.userId,
+            ) ? (
+            <Text>Following</Text>
+          ) : (
+            <TouchableOpacity onPress={handleFollowClick}>
+              <Text>Follow</Text>
+            </TouchableOpacity>
+          )}
         </View>
         <View style={styles.profileInfo}>
-          <Text style={styles.username}>Ficlodeon</Text>
-          <Text style={styles.handle}>@frustosees</Text>
-          <Text style={styles.bio}>We are FarEye</Text>
+          <Text style={styles.username}>{userData.name}</Text>
+          <Text style={styles.handle}>{userData.userName}</Text>
+          <Text style={styles.bio}>{userData.bio}</Text>
           <View style={styles.dates}>
             <Image style={styles.birthdayImage} source={imageBirthday}></Image>
-            <Text>Born 2 July, 1999</Text>
+            <Text>{userData?.dob?.substring(0, 10)}</Text>
             <Image style={styles.joinedImage} source={imageJoined}></Image>
-            <Text>Born 2 July, 1999</Text>
+            <Text>{userData?.createdAt?.substring(0, 10)}</Text>
           </View>
           <View style={styles.followInfo}>
-            <TouchableOpacity style={styles.followingContainer}>
+            <TouchableOpacity
+              style={styles.followingContainer}
+              onPress={() =>
+                navigation.navigate('Follower Page', {type: 'followings'})
+              }>
               <Text
                 style={{color: 'black', fontWeight: 'bold', marginRight: 5}}>
-                189
+                {userData.numberOfFollowing}
+                {34}
               </Text>
               <Text style={{marginRight: 15}}>Following</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.followersContainer}>
+            <TouchableOpacity
+              style={styles.followersContainer}
+              onPress={() =>
+                navigation.navigate('Follower Page', {type: 'followers'})
+              }>
               <Text
                 style={{color: 'black', fontWeight: 'bold', marginRight: 5}}>
-                32
+                {userData.numberOfFollower}
               </Text>
               <Text style={{marginRight: 5}}>Followers</Text>
             </TouchableOpacity>
@@ -129,20 +195,31 @@ export default function ProfilePage() {
           </View>
         </View>
         <View>
-          <TweetCard />
-          <TweetCard />
-          <TweetCard />
-          <TweetCard />
+          <FlatList
+            data={userTweets}
+            renderItem={({item}) => (
+              <TweetCard key={item.tweetId} tweet={item} />
+            )}
+            keyExtractor={item => item.tweetId}
+            ListEmptyComponent={
+              <Text style={styles.emptyList}>
+                {FeedString.EMPTY_PROFILE_PAGE_TWEETS}
+              </Text>
+            }
+          />
         </View>
       </ScrollView>
 
-      <TouchableOpacity style={styles.addButton}>
+      <TouchableOpacity
+        style={styles.addButton}
+        onPress={() =>
+          navigation.navigate('MessagesPage', {screen: 'Add Tweet Page'})
+        }>
         <Text
           style={{fontSize: 50, margin: -7, color: 'white', fontWeight: '100'}}>
           +
         </Text>
       </TouchableOpacity>
-      {/* </ScrollView> */}
     </SafeAreaView>
   );
 }
@@ -153,13 +230,10 @@ const styles = StyleSheet.create({
   },
   header: {
     flexDirection: 'column',
-    // left: 0,
-    // right: 0,
     position: 'absolute',
     left: 0,
     right: 0,
     top: 0,
-    // height: headerScrollHeight,
     width: '100%',
     overflow: 'hidden',
     zIndex: 999,
@@ -167,6 +241,7 @@ const styles = StyleSheet.create({
     borderBottomColor: '#EFEFF4',
     borderBottomWidth: 2,
     height: animatedHeaderHeight,
+    backgroundColor: 'white'
     // padding: 10,
     // position: 'absolute'
   },
@@ -258,11 +333,13 @@ const styles = StyleSheet.create({
 
   tabs: {
     flexDirection: 'row',
-    marginTop: 10,
-    height: 30,
+    // marginTop: 10,
+    height: 40,
+    // paddingTop: 10,
     borderBottomWidth: 0.5,
     borderColor: 'gray',
-    // alignItems: 'center'
+    backgroundColor: 'white',
+    alignItems: 'center',
   },
 
   tweetText: {
@@ -301,5 +378,20 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 35,
     top: 700,
+    elevation: 10,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+  },
+  emptyList: {
+    fontWeight: 'bold',
+    alignSelf: 'center',
+    marginTop: 100,
+    fontSize: 20,
+    color: 'black',
+    textAlign: 'center',
   },
 });

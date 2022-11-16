@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   ImageBackground,
   ScrollView,
@@ -12,10 +12,15 @@ import {
   TouchableOpacity,
   KeyboardAvoidingView,
   Image,
+  Alert,
 } from 'react-native';
-import {imageLogo} from '../assets';
+import {imageLogo, loginBG2} from '../assets';
 import LinearGradient from 'react-native-linear-gradient';
 import {login} from '../api/Login';
+import {decode as atob, encode as btoa} from 'base-64';
+import {useIsFocused} from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {AsyncStorageConstants} from '../constants/AsyncStorageConstants';
 
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
@@ -24,9 +29,20 @@ const loginBG = {
   uri: 'https://img.freepik.com/free-photo/gradient-blue-abstract-background-smooth-dark-blue-with-black-vignette-studio_1258-53634.jpg?w=740&t=st=1668187272~exp=1668187872~hmac=33656eceaa60cba5a52189321212c1eded1a06622ef818cef8226bb835d01c7f',
 };
 
-const Login = () => {
+const Login = ({navigation}) => {
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
+
+  let data = {
+    name,
+    password,
+  };
+  const isFocused = useIsFocused();
+  async function checkCredentials() {
+    const data = await AsyncStorage.getItem(AsyncStorageConstants.CREDENTIALS);
+    const credentials = JSON.parse(data);
+  }
+  useEffect(() => {}, []);
 
   return (
     <KeyboardAvoidingView
@@ -34,13 +50,18 @@ const Login = () => {
     >
       <ScrollView>
         <ImageBackground
-          source={loginBG}
+          source={loginBG2}
           resizeMode="cover"
           style={styles.image}>
           <View style={styles.adminButton}>
             <Text style={{color: 'white'}}>Are you an admin?</Text>
             <TouchableOpacity>
-              <Text style={{color: 'rgba(42,169,224,255)'}}> Login</Text>
+              <Text
+                onPress={() => navigation.navigate('Admin Login Page')}
+                style={{color: 'rgba(42,169,224,255)'}}>
+                {' '}
+                Login
+              </Text>
             </TouchableOpacity>
           </View>
           <View style={styles.welcome}>
@@ -66,21 +87,42 @@ const Login = () => {
                 placeholder="Type your password..."
                 style={styles.input}
                 value={password}
+                secureTextEntry={true}
                 onChangeText={password => {
                   setPassword(password);
-                }}></TextInput>
+                }}
+              />
               <TouchableOpacity
                 style={styles.button}
-                onPress={() => login(name, password)}>
+                onPress={async () => {
+                  const res = await login({name, password});
+                  if (res) {
+                    navigation.navigate('User Pages');
+                    setName('');
+                    setPassword('');
+                  } else {
+                    Alert.alert('Login Failed', 'Invalid Username or Password');
+                    setName('');
+                    setPassword('');
+                  }
+                }}>
                 <Text
                   style={{fontSize: 18, fontWeight: 'bold', color: 'white'}}>
                   Login
                 </Text>
               </TouchableOpacity>
+              <TouchableOpacity style={styles.forgotButton}>
+                <Text
+                  style={{fontSize: 12, color: 'white'}}
+                  onPress={() => navigation.navigate('Forgot Password Page')}>
+                  Forgot Password..?
+                </Text>
+              </TouchableOpacity>
               <Text style={styles.innerText}>Don't have an account?</Text>
               <TouchableOpacity style={styles.button2}>
                 <Text
-                  style={{fontSize: 18, fontWeight: 'bold', color: 'white'}}>
+                  style={{fontSize: 18, fontWeight: 'bold', color: 'white'}}
+                  onPress={() => navigation.navigate('Signup Page')}>
                   Sign Up
                 </Text>
               </TouchableOpacity>
@@ -96,7 +138,9 @@ const styles = StyleSheet.create({
   container: {
     //   flex: 1
   },
-
+  forgotButton: {
+    alignSelf: 'center',
+  },
   adminButton: {
     marginTop: 20,
     flexDirection: 'row',
