@@ -25,7 +25,6 @@ export default function BookMarkPage() {
   }
   useEffect(() => {
     fetchFeed();
-    console.log('called');
   }, [isFocused]);
 
   return (
