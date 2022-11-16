@@ -39,7 +39,7 @@ export default function App() {
         </NavigationContainer>
       ) : (
         <NavigationContainer>
-          <AdminDrawerNavigator />
+          <DrawerNavigator />
         </NavigationContainer>
       )}
     </>
