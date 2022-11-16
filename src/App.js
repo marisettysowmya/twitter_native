@@ -1,6 +1,6 @@
 import {Image, SafeAreaView, StyleSheet} from 'react-native';
 import React, {useEffect, useState} from 'react';
-import {LoadingImage} from './assets';
+import {imageLogo, LoadingImage} from './assets';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {login} from './api/Login';
 import 'react-native-gesture-handler';
@@ -24,7 +24,6 @@ export default function App() {
     }
     setIsLoading(false);
   }
-
   useEffect(() => {
     handleLogin();
   }, []);
@@ -32,8 +31,8 @@ export default function App() {
   return (
     <>
       {isLoading ? (
-        <SafeAreaView>
-          <Image source={LoadingImage} style={styles.loadingImage} />
+        <SafeAreaView style = {{flex: 1, justifyContent: 'center'}}>
+          <Image source={imageLogo} style={styles.loadingImage} />
         </SafeAreaView>
       ) : (
         <NavigationContainer>
@@ -47,9 +46,10 @@ export default function App() {
 const styles = StyleSheet.create({
   loadingImage: {
     alignSelf: 'center',
-    height: 50,
-    width: 50,
+    height: 120,
+    width: 120,
     resizeMode: 'contain',
-    marginVertical: '50%',
+    // marginVertical: '50%',
+    // justifyContent: 'center'
   },
 });
