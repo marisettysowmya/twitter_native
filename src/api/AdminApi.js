@@ -51,6 +51,11 @@ export const rejectBlueTickRequests = async data => {
 
 export const deleteUser = async data => {
   const {userId, token} = await getToken();
+  // return Axios.delete(`/user/${userId}`,
+  // {data},
+  // ).then(res => {
+  //   return res.data;
+  // })
 
-  return new Promise(resolve => setTimeout(resolve, 5000, false));
+  // return new Promise(resolve => setTimeout(resolve, 5000, false));
 };

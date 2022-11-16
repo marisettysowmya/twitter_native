@@ -16,19 +16,27 @@ export const login = async data => {
       return false;
     });
   if (!xy) return xy;
-  await AsyncStorage.setItem(AsyncStorageConstants.USER_ID, '13');
+  const userData = await Axios.get(`/user/username/${data.name}`, {
+    withCredentials: true,
+  }).then(res => {
+    return res.data;
+  });
+  console.log(userData, 'userData is here');
   await AsyncStorage.setItem(
-    AsyncStorageConstants.TOKEN,
-    'JSESSIONID=F3002E8F28A3B75976111B62942D08F6',
+    AsyncStorageConstants.USER_ID,
+    userData.userId.toString(),
   );
-  await AsyncStorage.setItem(AsyncStorageConstants.USER_DETAILS, 'userObject');
-  // return new Promise(resolve => setTimeout(resolve, 100, true));
+  await AsyncStorage.setItem(
+    AsyncStorageConstants.USER_DETAILS,
+    JSON.stringify(userData),
+  );
   return xy;
 };
 
 export const signUp = async user => {
-  Axios.post('/signup', user['user'])
-    .then(res => console.log('ssssssss', res.data))
+  return Axios.post('/signup', user['user'])
+    .then(res => {
+      return res.data;
+    })
     .catch(error => console.log(error.response.request._response));
-  return new Promise(resolve => setTimeout(resolve, 100, true));
 };

@@ -31,11 +31,11 @@ export default function EditProfilePage({navigation}) {
   async function fetchUserInfo() {
     const data = await AsyncStorage.getItem(AsyncStorageConstants.USER_DETAILS);
     const user = JSON.parse(data);
-    console.log("ttttttttttt",user)
+    console.log('ttttttttttt', user);
 
     setName(user.name);
-    setUserName(user.userName);
-    // setBio(user.bio);
+    setHandle(user.userName);
+    setBio(user.bio);
     setAvatar(user.avatar);
     setBanner(user.banner);
   }
@@ -46,7 +46,14 @@ export default function EditProfilePage({navigation}) {
   const handleSubmit = async () => {
     const data = await AsyncStorage.getItem(AsyncStorageConstants.USER_DETAILS);
     const user = JSON.parse(data);
-    const updatedUser = await updateUserDetails({...user, name, userName});
+    const updatedUser = {
+      ...user,
+      name,
+      userName: handle,
+      bio,
+    };
+    // console.log(updatedUser, 'yghujk');
+    await updateUserDetails(updatedUser);
     if (!updatedUser) {
       Alert.alert('Handle already exists.');
       setUserName('');
@@ -176,7 +183,6 @@ export default function EditProfilePage({navigation}) {
           Save
         </Text>
       </TouchableOpacity>
-      
     </View>
   );
 }
