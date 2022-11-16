@@ -67,17 +67,16 @@ export const postRetweet = async (tweetId, tweet) => {
   });
 };
 
-export const postTweet = async tweet => {
+export const postTweet = async tweetText => {
   const {userId, token} = await getToken();
   return Axios.post(`/user/tweets`, {tweet}).then(res => {
     return res.data;
-  });
+  }).catch((error) => console.log( error.response.request._response ) );;
 };
 
 export const addBookmark = async tweetId => {
   const {userId, token} = await getToken();
   return Axios.post(`/user/bookmark`, {
-    userId: userId,
     tweetId: tweetId,
   }).then(res => {
     return res.data;

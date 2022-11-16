@@ -162,7 +162,7 @@ function TweetCard(props) {
           <View>
             <Text style={styles.tweetMessage}>{tweetData.text}</Text>
           </View>
-          <TweetImageRendering noOfPics={1} images={tweetData.image} />
+          {tweetData.image &&<TweetImageRendering noOfPics={1} images={tweetData.image} />}
         </View>
         <View style={styles.tweetFooter}>
           <TouchableOpacity
