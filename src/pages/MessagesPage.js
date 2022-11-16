@@ -13,7 +13,7 @@ export default function MessagesPage({navigation}) {
   const [isLoading, setIsLoading] = useState(true);
 
   const isFocused = useIsFocused();
-
+  
   async function fetchAllUserMessages() {
     const data = await getAllUserMessages(userId);
     setallMessages(data);

@@ -1,7 +1,8 @@
 import React from 'react';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import TabNavigator from './TabNavigator';
-import {EditProfilePage, ProfilePage, SettingsPage} from '../pages';
+import {AdminAllUsersPage, EditProfilePage, ProfilePage, SettingsPage} from '../pages';
+import { AdminUserCard } from '../components';
 import { Image, StyleSheet } from 'react-native';
 import { imageEditProfile, imageHome, imageProfilePageIcon, imageSettings } from '../assets';
 

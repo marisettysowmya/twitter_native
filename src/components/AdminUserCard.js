@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   Button,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   imageProfile,
   imageTweet,
@@ -34,7 +34,7 @@ export default function AdminUserCard(props) {
   const {data} = props;
   async function handleDeleteButtonClick() {
     // send userid here
-    await deleteUser();
+    await deleteUser(data.userName);
   }
   return (
     <View style={styles.tweetContainer}>
@@ -43,16 +43,16 @@ export default function AdminUserCard(props) {
       <View style={styles.details}>
         <View style={styles.tweetHeader}>
           <Text style={styles.username}>{data.name}</Text>
-          <Text style={styles.handle}>{data.username}</Text>
+          <Text style={styles.handle}>@{data.userName}</Text>
         </View>
         <View>
-          <Text style={styles.dob}>{data.dob}</Text>
+          <Text style={styles.dob}>dob: {data.dob}</Text>
         </View>
         <View>
-          <Text style={styles.followers}>{data.numberOfFollower}</Text>
+          <Text style={styles.followers}>Followers: {data.numberOfFollower}</Text>
         </View>
         <View>
-          <Text style={styles.following}>{data.numberOfFollowing}</Text>
+          <Text style={styles.following}>Following: {data.numberOfFollowing}</Text>
         </View>
       </View>
       <View style={styles.button}>
@@ -64,10 +64,10 @@ export default function AdminUserCard(props) {
 
 const styles = StyleSheet.create({
   tweetContainer: {
-    borderBottomWidth: 0.5,
+    borderBottomWidth: 1,
     borderColor: 'gray',
     flexDirection: 'row',
-    marginVertical: 10,
+    marginVertical: 1,
     margin: 10,
     padding: 5,
   },
@@ -80,15 +80,17 @@ const styles = StyleSheet.create({
   },
   details: {
     marginRight: 10,
-    marginTop: 10,
+    // marginTop: 5,
+    padding: 5
   },
   tweetHeader: {
     flexDirection: 'row',
     marginTop: 10,
+    padding: 5
   },
   username: {
     alignSelf: 'center',
-    paddingLeft: 10,
+    paddingLeft: 5,
     paddingRight: 5,
     fontWeight: 'bold',
     color: 'black',
@@ -97,44 +99,7 @@ const styles = StyleSheet.create({
   handle: {
     alignSelf: 'center',
   },
-
-  tweet: {
-    marginHorizontal: 10,
-    marginVertical: 10,
-    padding: 5,
-  },
-
-  tweetMessage: {
-    color: 'black',
-  },
-  tweetImage: {
-    height: 280,
-    width: 280,
-    marginTop: 20,
-    borderRadius: 10,
-  },
-  tweetFooter: {
-    marginVertical: 10,
-    flexDirection: 'row',
-    marginHorizontal: 10,
-    justifyContent: 'space-between',
-  },
-  footerFields: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  tweetIcons: {
-    height: 30,
-    marginRight: 5,
-    width: 30,
-  },
   dob: {
-    color: 'black',
-    paddingLeft: 10,
-    paddingRight: 5,
-  },
-  email: {
     color: 'black',
     paddingLeft: 10,
     paddingRight: 5,
@@ -151,11 +116,15 @@ const styles = StyleSheet.create({
   },
 
   button: {
-    flex: 1,
-    alignContent: 'flex-end',
-    alignSelf: 'center',
-    justifyContent: 'flex-end',
-    flexDirection: 'row',
-    padding: 10,
+    // flex: 1,
+    // alignContent: 'flex-end',
+    // alignSelf: 'center',
+    // justifyContent: 'flex-end',
+    // flexDirection: 'row',
+    // padding: 10,
+    marginTop: 50,
+    marginLeft: -40,
+    
+
   },
 });
