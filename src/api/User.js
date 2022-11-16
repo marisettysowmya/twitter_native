@@ -14,3 +14,23 @@ export const updateUserDetails = async user => {
     return res.data;
   });
 };
+
+export const getUserData = async user => {
+  let {userId, token} = await getToken();
+
+  if (user) userId = user;
+
+  return Axios.get(`/user/${userId}`).then(res => {
+    return res.data;
+  });
+};
+
+export const getUserTweets = async user => {
+  let {userId, token} = await getToken();
+
+  if (user) userId = user;
+
+  return Axios.get(`/user/${userId}/tweets`).then(res => {
+    return res.data;
+  });
+};

@@ -2,6 +2,7 @@ import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import {AdminLoginPage, Login, Signup} from '../pages';
 import AdminDrawerNavigator from './AdminDrawerNavigator';
+import DrawerNavigator from './DrawerNavigator';
 
 const Stack = createStackNavigator();
 
@@ -32,6 +33,13 @@ const LoginNavigator = () => {
       <Stack.Screen
         name="Admin Pages"
         component={AdminDrawerNavigator}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="User Pages"
+        component={DrawerNavigator}
         options={{
           headerShown: false,
         }}

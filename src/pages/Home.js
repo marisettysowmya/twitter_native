@@ -25,21 +25,19 @@ import {useIsFocused} from '@react-navigation/native';
 
 const SortDropdown = props => {
   const {showDropdown, toggleDropdown, fetchSortedFeed} = props;
-  
+
   return (
     <View style={styles.sortDropdown}>
       <Modal
         visible={showDropdown}
         onRequestClose={() => {
           toggleDropdown(false);
-          console.log(close)
         }}
         transparent={true}>
-        
         <Text
           styles={styles.sortButton}
           onPressOut={() => {
-            console.log(false,'fvgbhnjmk,l')
+            console.log(false, 'fvgbhnjmk,l');
 
             // fetchSortedFeed(SortTypes.DATE);
             // toggleDropdown(false);
@@ -102,7 +100,7 @@ export default function Home({navigation}) {
         </View>
         {showDropdown && (
           <View style={styles.sortDropdown}>
-            <SortDropdown 
+            <SortDropdown
               toggleDropdown={toggleDropdown}
               showDropdown={showDropdown}
               fetchSortedFeed={fetchSortedFeed}
@@ -117,7 +115,11 @@ export default function Home({navigation}) {
             <FlatList
               data={feedData}
               renderItem={({item}) => (
-                <TweetCard tweet={item} key={item.tweetId} />
+                <TweetCard
+                  tweet={item}
+                  key={item.tweetId}
+                  navigation={navigation}
+                />
               )}
               keyExtractor={item => item.tweetId}
               ListEmptyComponent={
@@ -164,7 +166,7 @@ const styles = StyleSheet.create({
     padding: 10,
     height: 50,
     width: 300,
-    alignItems: 'center'
+    alignItems: 'center',
   },
   sortButton: {},
   emptyList: {
@@ -183,17 +185,17 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     padding: 10,
     width: 70,
-    height: 70
+    height: 70,
   },
   addTweetButton: {
     margin: 8,
     height: 40,
     width: 40,
   },
-  addbutton:{
-    fontSize:50,
+  addbutton: {
+    fontSize: 50,
     textAlign: 'center',
     color: 'white',
-    marginTop: -10
-  }
+    marginTop: -10,
+  },
 });

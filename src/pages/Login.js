@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   ImageBackground,
   ScrollView,
@@ -12,11 +12,15 @@ import {
   TouchableOpacity,
   KeyboardAvoidingView,
   Image,
+  Alert,
 } from 'react-native';
 import {imageLogo} from '../assets';
 import LinearGradient from 'react-native-linear-gradient';
 import {login} from '../api/Login';
 import {decode as atob, encode as btoa} from 'base-64';
+import {useIsFocused} from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {AsyncStorageConstants} from '../constants/AsyncStorageConstants';
 
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
@@ -33,6 +37,12 @@ const Login = ({navigation}) => {
     name,
     password,
   };
+  const isFocused = useIsFocused();
+  async function checkCredentials() {
+    const data = await AsyncStorage.getItem(AsyncStorageConstants.CREDENTIALS);
+    const credentials = JSON.parse(data);
+  }
+  useEffect(() => {}, []);
 
   return (
     <KeyboardAvoidingView
@@ -82,7 +92,18 @@ const Login = ({navigation}) => {
                 }}></TextInput>
               <TouchableOpacity
                 style={styles.button}
-                onPress={() => login(data)}>
+                onPress={async () => {
+                  const res = await login({name, password});
+                  if (res) {
+                    navigation.navigate('User Pages');
+                    setName('');
+                    setPassword('');
+                  } else {
+                    Alert.alert('Login Failed', 'Invalid Username or Password');
+                    setName('');
+                    setPassword('');
+                  }
+                }}>
                 <Text
                   style={{fontSize: 18, fontWeight: 'bold', color: 'white'}}>
                   Login

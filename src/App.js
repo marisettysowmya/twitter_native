@@ -18,8 +18,10 @@ export default function App() {
   async function handleLogin() {
     const data = await AsyncStorage.getItem(AsyncStorageConstants.CREDENTIALS);
     const credentials = JSON.parse(data);
-    const isSuccessful = await login(credentials);
-    setIsLoggedIn(isSuccessful);
+    if (credentials) {
+      const isSuccessful = await login(credentials);
+      setIsLoggedIn(isSuccessful);
+    }
     setIsLoading(false);
   }
 
@@ -33,13 +35,9 @@ export default function App() {
         <SafeAreaView>
           <Image source={LoadingImage} style={styles.loadingImage} />
         </SafeAreaView>
-      ) : !isLoggedIn ? (
-        <NavigationContainer>
-          <LoginNavigator />
-        </NavigationContainer>
       ) : (
         <NavigationContainer>
-          <AdminDrawerNavigator />
+          {!isLoggedIn ? <LoginNavigator /> : <DrawerNavigator />}
         </NavigationContainer>
       )}
     </>

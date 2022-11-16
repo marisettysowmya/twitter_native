@@ -118,15 +118,7 @@ const Signup = ({navigation}) => {
                       }}
                     />
                   </TouchableOpacity>
-                  <TextInput
-                    placeholder="Type your password..."
-                    style={styles.input}
-                    textContentType="newPassword"
-                    secureTextEntry
-                    value={password}
-                    onChangeText={password => {
-                      setPassword(password);
-                    }}></TextInput>
+
                   <TouchableOpacity></TouchableOpacity>
                 </View>
                 <View>
