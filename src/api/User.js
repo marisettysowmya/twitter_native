@@ -10,7 +10,8 @@ async function getToken() {
 
 export const updateUserDetails = async user => {
   const {userId, token} = await getToken();
-  return Axios.post(`/${userId}/user`, {user}).then(res => {
+  console.log(user)
+  return Axios.post(`/user`, user).then(res => {
     return res.data;
-  });
+  }).catch((error) => console.log( error.response.request._response ) );
 };
