@@ -7,7 +7,8 @@ import { FeedString } from "../constants/Feed";
 import { LoadingImage } from "../assets";
 import { getUserComment } from "../api/Tweet";
 
-export default function CommentPage(){
+export default function CommentPage({route}){
+    const {tweetId} = route.params; 
     const [commentFeed, setcommentFeed] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -28,7 +29,10 @@ export default function CommentPage(){
         <View >
             {/* <CommentCard /> */}
             {isLoading ? (
-                <Image source={LoadingImage} style={styles.loading} />
+                <View style = {{flex: 1,
+                    justifyContent: "center"}}>
+                    <ActivityIndicator size={"large"} color="rgba(42,169,224,255)"/>
+                  </View>  
             ) : (
             <FlatList
                 data={commentFeed}

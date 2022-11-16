@@ -1,6 +1,6 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
-import {AddTweetPage, ChatPage, MessagesPage, SingleTweetPage} from '../pages';
+import {AddTweetPage, ChatPage, CommentPage, MessagesPage, SingleTweetPage} from '../pages';
 
 const Stack = createStackNavigator();
 
@@ -39,6 +39,13 @@ const StackNavigator = () => {
       <Stack.Screen
         name="Single Tweet Page"
         component={SingleTweetPage}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="Comment Page"
+        component={CommentPage}
         options={{
           headerShown: false,
         }}
