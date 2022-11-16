@@ -12,7 +12,6 @@ export const getUserNotifications = async data => {
   const {userId = 8, token} = await getToken();
 
   return Axios.get(`user/notification/${userId}`).then(res => {
-    console.log(res.data);
     return res.data;
   });
 };

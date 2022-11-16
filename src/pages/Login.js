@@ -87,9 +87,11 @@ const Login = ({navigation}) => {
                 placeholder="Type your password..."
                 style={styles.input}
                 value={password}
+                secureTextEntry={true}
                 onChangeText={password => {
                   setPassword(password);
-                }}></TextInput>
+                }}
+              />
               <TouchableOpacity
                 style={styles.button}
                 onPress={async () => {

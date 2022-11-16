@@ -14,6 +14,7 @@ import AdminBlueTickRequestPage from './AdminBlueTickRequestPage';
 import Signup from './Signup';
 import AdminLoginPage from './AdminLoginPage';
 import UserListPage from './UserListPage';
+import Logout from './Logout';
 export {
   Home,
   BookMarkPage,
@@ -31,4 +32,5 @@ export {
   Signup,
   AdminLoginPage,
   UserListPage,
+  Logout,
 };

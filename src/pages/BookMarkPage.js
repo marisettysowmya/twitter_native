@@ -7,7 +7,6 @@ import {
   View,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
-import {LoadingImage} from '../assets';
 import {TweetCard} from '../components';
 import {getUserBookmarkedFeed} from '../api/Feed';
 import {useIsFocused} from '@react-navigation/native';
@@ -21,7 +20,6 @@ export default function BookMarkPage() {
   const isFocused = useIsFocused();
   async function fetchFeed() {
     const data = await getUserBookmarkedFeed(userId);
-    // console.log(data);
     setBookMarkFeed(data);
     setIsLoading(false);
   }
@@ -33,9 +31,8 @@ export default function BookMarkPage() {
   return (
     <>
       {isLoading ? (
-        <View style = {{flex: 1,
-          justifyContent: "center"}}>
-          <ActivityIndicator size="large" color="rgba(42,169,224,255)"/>
+        <View style={{flex: 1, justifyContent: 'center'}}>
+          <ActivityIndicator size="large" color="rgba(42,169,224,255)" />
         </View>
       ) : (
         <FlatList

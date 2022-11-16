@@ -8,7 +8,7 @@ const Stack = createStackNavigator();
 
 const LoginNavigator = () => {
   return (
-    <Stack.Navigator initialRouteName="All Messages">
+    <Stack.Navigator>
       <Stack.Screen
         name="Login Page"
         component={Login}

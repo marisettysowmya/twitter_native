@@ -1,5 +1,3 @@
-// import { View, Text } from 'react-native'
-// import React from 'react'
 import {
   Text,
   View,
@@ -17,6 +15,8 @@ import {
   imageLike,
 } from '../assets/index';
 import {deleteUser} from '../api/AdminApi';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {AsyncStorageConstants} from '../constants/AsyncStorageConstants';
 
 const props = {
   props: {
@@ -29,12 +29,21 @@ const props = {
     commments: 876,
   },
 };
-
+async function handleFollowClick() {
+  console.log('followed');
+}
 export default function AdminUserCard(props) {
   const {data} = props;
+  const [currentUser, setCurrentUser] = useState({});
+
   async function handleDeleteButtonClick() {
     // send userid here
     await deleteUser();
+    const data1 = await AsyncStorage.getItem(
+      AsyncStorageConstants.USER_DETAILS,
+    );
+    const details = JSON.parse(data1);
+    setCurrentUser(details);
   }
   return (
     <View style={styles.tweetContainer}>
@@ -55,9 +64,17 @@ export default function AdminUserCard(props) {
           <Text style={styles.following}>{data.numberOfFollowing}</Text>
         </View>
       </View>
-      <View style={styles.button}>
-        <Button title="delete" onPress={() => handleDeleteButtonClick()} />
-      </View>
+      {currentUser.roles ? (
+        <View style={styles.button}>
+          <Button title="delete" onPress={() => handleDeleteButtonClick()} />
+        </View>
+      ) : data.isFollowing ? (
+        <TouchableOpacity onPress={handleFollowClick}>
+          <Text>Follow</Text>
+        </TouchableOpacity>
+      ) : (
+        <Text>Following</Text>
+      )}
     </View>
   );
 }
